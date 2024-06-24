@@ -26,7 +26,7 @@ const ListTab: React.FC = () => {
     setTabCategory(id);
   };
 
-  // カテゴリ名編集関連//////////////////
+  // カテゴリ名編集機能//////////////////
 
   // タブからカテゴリ名を変更した際に使用する、詳細表示タスクStateの値と更新用関数を定義
   const { showTaskDetail, setShowTaskDetail } = useContext(
@@ -42,7 +42,7 @@ const ListTab: React.FC = () => {
 
   // カテゴリ名変更ボタン押下時に、対象のカテゴリのIDと名前をStateにセット
   const editCategory = (category: Category) => {
-    setEditCategoryId(category.id);
+    setEditCategoryId(category.id!);
     setEditCategoryName(category.name);
     setEditCategoryOrderIndex(category.orderIndex);
   };
@@ -51,9 +51,9 @@ const ListTab: React.FC = () => {
   const commitEdit = async () => {
     // カテゴリStateの更新
     const updateCategory = {
-      id: editCategoryId,
-      name: editCategoryName,
-      orderIndex: editCategoryOrderIndex,
+      id: editCategoryId!,
+      name: editCategoryName!,
+      orderIndex: editCategoryOrderIndex!,
     };
     dispatch(categoryUpdate(updateCategory));
 
@@ -67,7 +67,7 @@ const ListTab: React.FC = () => {
           category: {
             id: updateCategory.id,
             name: updateCategory.name,
-            orderIndex: updateCategory.orderIndex,
+            orderIndex: updateCategory.orderIndex!,
           },
         };
       }
@@ -120,7 +120,7 @@ const ListTab: React.FC = () => {
               {categories.categories.map((category, index) => (
                 <Draggable
                   key={category.id}
-                  draggableId={category.id.toString()}
+                  draggableId={category.id!.toString()}
                   index={index}
                 >
                   {(provided) => (
@@ -141,15 +141,16 @@ const ListTab: React.FC = () => {
                         />
                       ) : (
                         <button
-                          onClick={() => switchTab(category.id)}
+                          onClick={() => switchTab(category.id!)}
                           className={`bg-gray-200 hover:bg-gray-300 text-black py-2 px-4 rounded-t focus:outline-none focus:shadow-outline m-1 ${
                             tabCategory === category.id ? "font-bold" : ""
                           }`}
                         >
                           {category.name}
+                          {/* タブの中の、カテゴリ名編集ボタン */}
                           <span
                             onClick={(e) => {
-                              e.stopPropagation(); // ボタン内のボタンのクリックイベントを阻止
+                              e.stopPropagation(); // ボタン内のボタンのクリックイベントを阻止（カテゴリ名編集ボタンとタブのクリックを独立させる）
                               editCategory(category);
                             }}
                             className="text-xs my-0 ml-3 opacity-50 hover:opacity-100 cursor-pointer"

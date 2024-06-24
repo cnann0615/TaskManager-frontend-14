@@ -38,6 +38,8 @@ const TaskDetail = () => {
     setEditing((prev) => ({ ...prev, [field]: !prev[field] }));
   };
 
+  const [nameEmpty, setNameEmpty] = useState(false);
+
   // 編集内容を保存し、編集モードを終了する関数
   const saveEdit = async (field: string, value: any) => {
     // 更新内容を一時的に保存するオブジェクト

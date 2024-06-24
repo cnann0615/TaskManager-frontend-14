@@ -12,14 +12,11 @@ import { useForm } from "react-hook-form";
 const TaskAdd: React.FC = () => {
   const dispatch = useDispatch();
 
-  // カテゴリStateが最新化された状態でformを表示するための状態管理。
+  // カテゴリStateが最新化（データベース→Redux）された状態でformを表示するための状態管理。
   const [isLoading, setIsLoading] = useState(true);
 
-  // カテゴリStateを取得
-  const categories = useSelector((state) => state.categories);
-
   // APIを経由してデータベースからカテゴリを取得し、カテゴリStateに反映
-  //isLoadingを使用したい都合上、index.tsxのuseEffectにまとめられていない。
+  //isLoadingを使用したい都合上、page.tsx内側のuseEffectにまとめられていない。
   useEffect(() => {
     (async () => {
       const categories: Category[] = await taskApi.categoryGetAll();
@@ -28,20 +25,23 @@ const TaskAdd: React.FC = () => {
     })();
   }, []);
 
+  // カテゴリStateを取得
+  const categories = useSelector((state) => state.categories);
+
   // useFormを利用したフォームの処理
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm({ mode: "onSubmit" });
+  } = useForm<inputTaskItem>({ mode: "onSubmit" });
 
   const onSubmit = async (taskItem: inputTaskItem) => {
     // フォーム入力値のcategoryのidをもとに、APIでカテゴリを取得
     const category: Category = await taskApi.categoryGetById(
       Number(taskItem.category)
     );
-    // APIから新規タスク用のorderIndexを取得
+    // APIから新規タスク用のorderIndexを取得（並び替えに使用）
     let orderIndex = await taskApi.maxTaskOrderIndexGet();
     if (orderIndex) {
       orderIndex += 1;
@@ -104,6 +104,7 @@ const TaskAdd: React.FC = () => {
                 {...register("category")}
                 className="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               >
+                {/* useEffect内で取得したカテゴリを表示 */}
                 {categories.categories.map((category) => (
                   <option key={category.id} value={category.id}>
                     {category.name}
