@@ -15,7 +15,7 @@ const CategoryAdd: React.FC = () => {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm({ mode: "onSubmit" });
+  } = useForm<Category>({ mode: "onSubmit" });
 
   const onSubmit = async (category: Category) => {
     // APIから新規タスク用のorderIndexを取得

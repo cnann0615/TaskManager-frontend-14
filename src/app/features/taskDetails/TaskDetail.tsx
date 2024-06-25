@@ -33,15 +33,25 @@ const TaskDetail = () => {
     memo: false,
   });
 
-  // 編集モードをトグルする関数
-  const toggleEdit = (field: string) => {
-    setEditing((prev) => ({ ...prev, [field]: !prev[field] }));
+  // 編集モードをオンにする関数
+  const toggleEditOn = (field: string) => {
+    setEditing((prev) => ({ ...prev, [field]: true }));
+  };
+  // 編集モードをオフにする関数
+  const toggleEditOff = (field: string) => {
+    setEditing((prev) => ({ ...prev, [field]: false }));
   };
 
   // 編集内容を保存し、編集モードを終了する関数
   const saveEdit = async (field: string, value: any) => {
     // 更新内容を一時的に保存するオブジェクト
     let updatedDetail = { ...showTaskDetail };
+
+    // タイトルが空で送られてきた時は元のタイトルに戻して処理終了
+    if (field === "title" && value === "") {
+      toggleEditOff(field);
+      return;
+    }
 
     // 編集対象がカテゴリの場合、選択されたカテゴリidに一致するカテゴリオブジェクトを取得
     if (field === "category") {
@@ -50,15 +60,15 @@ const TaskDetail = () => {
       );
       // 更新内容を一時的に保存するオブジェクト
       updatedDetail = { ...showTaskDetail, [field]: selectedCategory };
-      // 編集状態のトグル
     } else {
       // 更新内容を一時的に保存するオブジェクト
       updatedDetail = { ...showTaskDetail, [field]: value };
     }
+
     // Contextの更新
     setShowTaskDetail(updatedDetail);
     // 編集状態のトグル
-    toggleEdit(field);
+    toggleEditOff(field);
     // 未完了or完了タスクStateに保存
     dispatch(completedTaskUpdate(updatedDetail));
     dispatch(inCompletedTaskUpdate(updatedDetail));
@@ -73,11 +83,11 @@ const TaskDetail = () => {
     // 上記ポップアップへのアクションがYesの場合
     if (isConfirmed) {
       // 完了フラグに応じて、完了タスクState or 未完了タスクStateから、対象のタスクを削除
-      showTaskDetail.isCompleted
+      showTaskDetail!.isCompleted
         ? dispatch(completedTaskDelete(showTaskDetail))
         : dispatch(inCompletedTaskDelete(showTaskDetail));
       // APIを経由してデータベースから削除
-      await taskApi.taskDelete(showTaskDetail);
+      await taskApi.taskDelete(showTaskDetail!);
       setShowTaskDetail(null);
     }
   };
@@ -106,7 +116,7 @@ const TaskDetail = () => {
                 {editing.title ? (
                   <input
                     type="text"
-                    defaultValue={showTaskDetail.title}
+                    defaultValue={showTaskDetail!.title}
                     onBlur={(e: React.FocusEvent<HTMLInputElement>) =>
                       saveEdit("title", e.target.value)
                     }
@@ -114,8 +124,8 @@ const TaskDetail = () => {
                     className="rounded-md border-none focus:outline-none bg-gray-50 py-2 pl-1"
                   />
                 ) : (
-                  <div onClick={() => toggleEdit("title")} className="pl-1">
-                    {showTaskDetail.title}
+                  <div onClick={() => toggleEditOn("title")} className="pl-1">
+                    {showTaskDetail!.title}
                   </div>
                 )}
               </td>
@@ -129,7 +139,7 @@ const TaskDetail = () => {
                 {editing.deadLine ? (
                   <input
                     type="date"
-                    defaultValue={showTaskDetail.deadLine}
+                    defaultValue={showTaskDetail!.deadLine}
                     onBlur={(e: React.FocusEvent<HTMLInputElement>) =>
                       saveEdit("deadLine", e.target.value)
                     }
@@ -137,8 +147,13 @@ const TaskDetail = () => {
                     className="rounded-md border-gray-300 focus:outline-none bg-gray-50 py-2 pl-1"
                   />
                 ) : (
-                  <div onClick={() => toggleEdit("deadLine")} className="pl-1">
-                    {showTaskDetail.deadLine ? showTaskDetail.deadLine : "なし"}
+                  <div
+                    onClick={() => toggleEditOn("deadLine")}
+                    className="pl-1"
+                  >
+                    {showTaskDetail!.deadLine
+                      ? showTaskDetail!.deadLine
+                      : "なし"}
                   </div>
                 )}
               </td>
@@ -151,7 +166,7 @@ const TaskDetail = () => {
               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                 {editing.category ? (
                   <select
-                    defaultValue={showTaskDetail.category.id}
+                    defaultValue={showTaskDetail!.category.id}
                     onBlur={(
                       e: React.FocusEvent<HTMLSelectElement, Element>
                     ) => {
@@ -167,8 +182,11 @@ const TaskDetail = () => {
                     ))}
                   </select>
                 ) : (
-                  <div onClick={() => toggleEdit("category")} className="pl-1">
-                    {showTaskDetail.category.name}
+                  <div
+                    onClick={() => toggleEditOn("category")}
+                    className="pl-1"
+                  >
+                    {showTaskDetail!.category.name}
                   </div>
                 )}
               </td>
@@ -181,7 +199,7 @@ const TaskDetail = () => {
               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm h-96">
                 {editing.memo ? (
                   <textarea
-                    defaultValue={showTaskDetail.memo}
+                    defaultValue={showTaskDetail!.memo}
                     onBlur={(
                       e: React.FocusEvent<HTMLTextAreaElement, Element>
                     ) => saveEdit("memo", e.target.value)}
@@ -191,15 +209,17 @@ const TaskDetail = () => {
                 ) : (
                   // \nを改行タグ(<br />)に変換して表示
                   <div
-                    onClick={() => toggleEdit("memo")}
+                    onClick={() => toggleEditOn("memo")}
                     className="w-full h-80 rounded-md border-gray-300 focus:outline-none"
                   >
-                    {showTaskDetail.memo.split("\n").map((line, index) => (
-                      <React.Fragment key={index}>
-                        {line}
-                        <br />
-                      </React.Fragment>
-                    ))}
+                    {showTaskDetail!.memo
+                      .split("\n")
+                      .map((line: any, index: number) => (
+                        <React.Fragment key={index}>
+                          {line}
+                          <br />
+                        </React.Fragment>
+                      ))}
                   </div>
                 )}
               </td>

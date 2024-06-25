@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+"use client";
 import React, {
   useState,
   createContext,
@@ -12,25 +12,26 @@ import TaskAdd from "./features/taskAdd/TaskAdd";
 import CategoryAdd from "./features/categoryAdd/CategoryAdd";
 import TaskList from "./features/taskList/TaskList";
 import TaskDetail from "./features/taskDetails/TaskDetail";
-import { Category, TaskItem } from "./@types";
+import { TaskItem } from "./@types";
 import taskApi from "./api/task";
 import { inCompletedTaskAdd } from "./slices/inCompletedTaskSlice";
 import { completedTaskAdd } from "./slices/completedTaskSlice";
-import { categoryAdd } from "./slices/categorySlice";
 
 // 詳細表示対象タスクの状態とその更新関数の型を定義
 type ShowTaskDetail = {
-  showTaskDetail: TaskItem;
-  setShowTaskDetail: Dispatch<SetStateAction<TaskItem>>;
+  showTaskDetail: TaskItem | any;
+  setShowTaskDetail: Dispatch<SetStateAction<TaskItem | any>>;
 };
+
 // 詳細表示対象タスクStateを作成
 export const showTaskDetailContext = createContext<ShowTaskDetail>({
   showTaskDetail: null,
   setShowTaskDetail: () => {}, // この関数はダミー。実際にはuseStateによって提供される関数に置き換わる。
 });
+
 export default function Home() {
   // 詳細表示対象タスクをStateで管理
-  const [showTaskDetail, setShowTaskDetail] = useState<TaskItem>(null);
+  const [showTaskDetail, setShowTaskDetail] = useState<TaskItem | any>(null);
 
   const dispatch = useDispatch();
 
@@ -58,16 +59,18 @@ export default function Home() {
       <showTaskDetailContext.Provider
         value={{ showTaskDetail, setShowTaskDetail }}
       >
-        <div className="md:flex">
-          <div className="md:w-1/3 p-4">
-            <TaskAdd />
-            <CategoryAdd />
+        <main className="m-20">
+          <div className="md:flex">
+            <div className="md:w-1/3 p-4">
+              <TaskAdd />
+              <CategoryAdd />
+            </div>
+            <div className="md:w-2/3 p-4">
+              <TaskList />
+            </div>
           </div>
-          <div className="md:w-2/3 p-4">
-            <TaskList />
-          </div>
-        </div>
-        {showTaskDetail && <TaskDetail />}
+          {showTaskDetail && <TaskDetail />}
+        </main>
       </showTaskDetailContext.Provider>
     </>
   );

@@ -69,7 +69,9 @@ const CompletedTaskList: React.FC = () => {
               ref={provided.innerRef}
             >
               {filteredCompletedTaskItems.length == 0 ? (
-                <div className="text-gray-500">完了タスクはありません。</div>
+                <div className="mt-5 mb-10 text-gray-500">
+                  完了タスクはありません。
+                </div>
               ) : (
                 ""
               )}
