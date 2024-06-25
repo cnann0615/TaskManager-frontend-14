@@ -19,8 +19,8 @@ import { completedTaskAdd } from "./slices/completedTaskSlice";
 
 // 詳細表示対象タスクの状態とその更新関数の型を定義
 type ShowTaskDetail = {
-  showTaskDetail: TaskItem | null;
-  setShowTaskDetail: Dispatch<SetStateAction<TaskItem | null>>;
+  showTaskDetail: TaskItem | any;
+  setShowTaskDetail: Dispatch<SetStateAction<TaskItem | any>>;
 };
 
 // 詳細表示対象タスクStateを作成
@@ -31,7 +31,7 @@ export const showTaskDetailContext = createContext<ShowTaskDetail>({
 
 export default function Home() {
   // 詳細表示対象タスクをStateで管理
-  const [showTaskDetail, setShowTaskDetail] = useState<TaskItem | null>(null);
+  const [showTaskDetail, setShowTaskDetail] = useState<TaskItem | any>(null);
 
   const dispatch = useDispatch();
 
