@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import completedTaskItemsReducer from "../slices/completedTaskSlice";
 import inCompletedTaskItemsReducer from "../slices/inCompletedTaskSlice";
 import categoriesReducer from "../slices/categorySlice";
+import schedulesReducer from "../slices/scheduleSlice";
 
 import {
   useSelector as rawUseSelector,
@@ -16,6 +17,8 @@ export const store = configureStore({
     inCompletedTaskItems: inCompletedTaskItemsReducer,
     // カテゴリを管理
     categories: categoriesReducer,
+    // スケジュールを管理
+    schedules: schedulesReducer,
   },
 });
 

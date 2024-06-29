@@ -1,12 +1,13 @@
-import { inCompletedTaskAdd } from "../../slices/inCompletedTaskSlice";
-import { categoryAdd } from "../../slices/categorySlice";
-import taskApi from "../../api/task";
-import { useSelector } from "../../store/store";
-import { Category, TaskItem, inputTaskItem } from "../../@types";
-
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
+
+import { inCompletedTaskAdd } from "../../slices/inCompletedTaskSlice";
+import { scheduleAdd } from "../../slices/scheduleSlice";
+import { categoryAdd } from "../../slices/categorySlice";
+import taskApi from "../../api/task";
+import { useSelector } from "../../store/store";
+import { Category, Schedule, TaskItem, inputTaskItem } from "../../@types";
 
 // 新規タスク追加画面
 const TaskAdd: React.FC = () => {
@@ -15,18 +16,22 @@ const TaskAdd: React.FC = () => {
   // カテゴリStateが最新化（データベース→Redux）された状態でformを表示するための状態管理。
   const [isLoading, setIsLoading] = useState(true);
 
-  // APIを経由してデータベースからカテゴリを取得し、カテゴリStateに反映
+  // APIを経由してデータベースからカテゴリ、スケジュールを取得し、それぞれのStateに反映
   //isLoadingを使用したい都合上、page.tsx内側のuseEffectにまとめられていない。
   useEffect(() => {
     (async () => {
       const categories: Category[] = await taskApi.categoryGetAll();
+      const schedules: Schedule[] = await taskApi.scheduleGetAll();
       categories.forEach((category) => dispatch(categoryAdd(category)));
+      schedules.forEach((schedule) => dispatch(scheduleAdd(schedule)));
       setIsLoading(false);
     })();
   }, []);
 
   // カテゴリStateを取得
   const categories = useSelector((state) => state.categories);
+  // スケジュールStateを取得
+  const schedules = useSelector((state) => state.schedules);
 
   // useFormを利用したフォームの処理
   const {
@@ -41,6 +46,10 @@ const TaskAdd: React.FC = () => {
     const category: Category = await taskApi.categoryGetById(
       Number(taskItem.category)
     );
+    // フォーム入力値のscheduleのidをもとに、APIでスケジュールを取得
+    const schedule: Schedule = await taskApi.scheduleGetById(
+      Number(taskItem.schedule)
+    );
     // APIから新規タスク用のorderIndexを取得（並び替えに使用）
     let orderIndex = await taskApi.maxTaskOrderIndexGet();
     if (orderIndex) {
@@ -53,6 +62,7 @@ const TaskAdd: React.FC = () => {
       title: taskItem.title,
       deadLine: taskItem.deadLine,
       category: category,
+      schedule: schedule,
       memo: taskItem.memo,
       isCompleted: false,
       orderIndex: orderIndex,
@@ -108,6 +118,22 @@ const TaskAdd: React.FC = () => {
                 {categories.categories.map((category) => (
                   <option key={category.id} value={category.id}>
                     {category.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              スケジュール：
+              <select
+                {...register("schedule")}
+                className="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              >
+                {/* useEffect内で取得したカテゴリを表示 */}
+                {schedules.schedules.map((schedule) => (
+                  <option key={schedule.id} value={schedule.id}>
+                    {schedule.name}
                   </option>
                 ))}
               </select>

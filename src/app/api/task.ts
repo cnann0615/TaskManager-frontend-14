@@ -1,7 +1,7 @@
 // axiosを用いたAPI//////////////////////////////////////////////////////////////
 import axios from "axios";
 
-import { TaskItem, Category } from "../@types";
+import { TaskItem, Category, Schedule } from "../@types";
 
 const ENDPOINT_URL = "http://localhost:8080/taskAPI";
 
@@ -27,6 +27,11 @@ const taskApi = {
   // タスクをカテゴリIDから取得
   async taskGetByCategoryId(categoryId: number) {
     const result = await axios.get(ENDPOINT_URL + "/task/" + categoryId);
+    return result.data;
+  },
+  // タスクをスケジュールIDから取得
+  async taskGetByScheduleId(scheduleId: number) {
+    const result = await axios.get(ENDPOINT_URL + "/task/" + scheduleId);
     return result.data;
   },
   // 最新のタスク取得
@@ -61,6 +66,28 @@ const taskApi = {
     return result.data;
   },
 
+  // スケジュール取得///////////////
+  // 全スケジュール取得
+  async scheduleGetAll() {
+    const result = await axios.get(ENDPOINT_URL + "/schedule");
+    return result.data;
+  },
+  // 最新のスケジュール取得
+  async latestScheduleGet() {
+    const result = await axios.get(ENDPOINT_URL + "/latestSchedule");
+    return result.data;
+  },
+  // スケジュールをidから取得
+  async scheduleGetById(id: number) {
+    const result = await axios.get(ENDPOINT_URL + "/schedule/" + id);
+    return result.data;
+  },
+  // 最大のorderIndex（スケジュール）を取得
+  async maxScheduleOrderIndexGet() {
+    let result = await axios.get(ENDPOINT_URL + "/maxScheduleOrderIndex");
+    return result.data;
+  },
+
   // 追加////////////////////////////////
 
   // タスク追加/////////////////
@@ -74,6 +101,13 @@ const taskApi = {
   // カテゴリ（１件）追加　→　カテゴリ名が重複した場合は、nullを返す。
   async categoryAdd(category: Category) {
     const result = await axios.post(ENDPOINT_URL + "/category", category);
+    return result.data;
+  },
+
+  // スケジュール追加////////////////
+  // スケジュール（１件）追加　→　スケジュール名が重複した場合は、nullを返す。
+  async scheduleAdd(schedule: Schedule) {
+    const result = await axios.post(ENDPOINT_URL + "/schedule", schedule);
     return result.data;
   },
 
@@ -96,6 +130,16 @@ const taskApi = {
     return result.data;
   },
 
+  // スケジュール削除//////////////
+  // スケジュール（１件）削除
+  async scheduleDelete(schedule: Schedule) {
+    console.log(schedule.id);
+    const result = await axios.delete(
+      ENDPOINT_URL + "/schedule/" + schedule.id
+    );
+    return result.data;
+  },
+
   // 更新//////////////////////////////////
 
   // タスク更新////////////////
@@ -108,6 +152,12 @@ const taskApi = {
   // カテゴリ（１件）更新
   async updateCategory(category: Category) {
     await axios.put(ENDPOINT_URL + "/updateCategory", category);
+  },
+
+    // スケジュール更新//////////////
+  // スケジュール（１件）更新
+  async updateSchedule(schedule: Schedule) {
+    await axios.put(ENDPOINT_URL + "/updateSchedule", schedule);
   },
 };
 
