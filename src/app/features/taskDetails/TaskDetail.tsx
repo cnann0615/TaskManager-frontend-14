@@ -12,6 +12,7 @@ import { useSelector } from "../../store/store";
 
 import React, { useState, useContext } from "react";
 import { useDispatch } from "react-redux";
+import { validateHeaderValue } from "http";
 
 // タスク詳細コンポーネント
 const TaskDetail = () => {
@@ -22,14 +23,16 @@ const TaskDetail = () => {
     showTaskDetailContext
   );
 
-  // カテゴリStateを取得
+  // カテゴリとスケジュールStateを取得
   const categories = useSelector((state) => state.categories);
+  const schedules = useSelector((state) => state.schedules);
 
   // 各項目の編集状態を管理するState
   const [editing, setEditing] = useState({
     title: false,
     deadLine: false,
     category: false,
+    schedule: false,
     memo: false,
   });
 
@@ -60,6 +63,13 @@ const TaskDetail = () => {
       );
       // 更新内容を一時的に保存するオブジェクト
       updatedDetail = { ...showTaskDetail, [field]: selectedCategory };
+      // 編集対象がスケジュールの場合、選択されたスケジュールidに一致するスケジュールオブジェクトを取得
+    } else if (field === "schedule") {
+      const selectedSchedule = schedules.schedules.find(
+        (schedule) => schedule.id == value
+      );
+      // 更新内容を一時的に保存するオブジェクト
+      updatedDetail = { ...showTaskDetail, [field]: selectedSchedule };
     } else {
       // 更新内容を一時的に保存するオブジェクト
       updatedDetail = { ...showTaskDetail, [field]: value };
@@ -109,7 +119,7 @@ const TaskDetail = () => {
           <tbody>
             {/* タイトル */}
             <tr className="h-20">
-              <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+              <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm font-bold">
                 タイトル
               </td>
               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -132,7 +142,7 @@ const TaskDetail = () => {
             </tr>
             {/* 期日 */}
             <tr className="h-20">
-              <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+              <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm font-bold">
                 期日
               </td>
               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -160,7 +170,7 @@ const TaskDetail = () => {
             </tr>
             {/* カテゴリ */}
             <tr className="h-20">
-              <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+              <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm font-bold">
                 カテゴリ
               </td>
               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -191,9 +201,42 @@ const TaskDetail = () => {
                 )}
               </td>
             </tr>
+            {/* スケジュール */}
+            <tr className="h-20">
+              <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm font-bold">
+                スケジュール
+              </td>
+              <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                {editing.schedule ? (
+                  <select
+                    defaultValue={showTaskDetail!.schedule.id}
+                    onBlur={(
+                      e: React.FocusEvent<HTMLSelectElement, Element>
+                    ) => {
+                      saveEdit("schedule", e.target.value);
+                    }}
+                    autoFocus
+                    className="rounded-md border-gray-300 focus:outline-none bg-gray-50 py-2"
+                  >
+                    {schedules.schedules.map((schedule) => (
+                      <option key={schedule.id} value={schedule.id}>
+                        {schedule.name}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <div
+                    onClick={() => toggleEditOn("schedule")}
+                    className="pl-1"
+                  >
+                    {showTaskDetail!.schedule.name}
+                  </div>
+                )}
+              </td>
+            </tr>
             {/* メモ */}
             <tr>
-              <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm h-96">
+              <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm h-96 font-bold">
                 メモ
               </td>
               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm h-96">

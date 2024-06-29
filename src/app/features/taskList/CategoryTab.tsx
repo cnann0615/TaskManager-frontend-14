@@ -12,7 +12,7 @@ import { useContext, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 // カテゴリのタブリスト
-const ListTab: React.FC = () => {
+const CategoryTab: React.FC = () => {
   const dispatch = useDispatch();
 
   // カテゴリStateを取得
@@ -107,7 +107,7 @@ const ListTab: React.FC = () => {
           tabCategory === 0 ? "font-bold" : ""
         }`}
       >
-        全てのタスク
+        全てのカテゴリ
       </button>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="tabs" direction="horizontal">
@@ -172,4 +172,4 @@ const ListTab: React.FC = () => {
   );
 };
 
-export default ListTab;
+export default CategoryTab;

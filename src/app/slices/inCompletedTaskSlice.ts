@@ -44,6 +44,16 @@ export const inCompletedTaskItemsSlice = createSlice({
       });
     },
 
+    // タスクのスケジュール名を更新（特定のスケジュールが割り当てられているものを一括して更新）
+    inCompletedTaskUpdateSchedule: (state, action) => {
+      const updateSchedule = action.payload;
+      state.inCompletedTaskItems.forEach((inCompletedTaskItem) => {
+        if (inCompletedTaskItem.schedule.id === updateSchedule.id) {
+          inCompletedTaskItem.schedule.name = updateSchedule.name;
+        }
+      });
+    },
+
     // タスク削除
     inCompletedTaskDelete: (state, action) => {
       const deleteTask = action.payload;
@@ -58,6 +68,7 @@ export const {
   inCompletedTaskAdd,
   inCompletedTaskUpdate,
   inCompletedTaskUpdateCategory,
+  inCompletedTaskUpdateSchedule,
   inCompletedTaskDelete,
 } = inCompletedTaskItemsSlice.actions;
 

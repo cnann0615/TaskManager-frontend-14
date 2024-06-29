@@ -43,6 +43,15 @@ export const completedTaskItemsSlice = createSlice({
         }
       });
     },
+    // タスクのスケジュール名を更新（特定のスケジュールが割り当てられているものを一括して更新）
+    completedTaskUpdateSchedule: (state, action) => {
+      const updateSchedule = action.payload;
+      state.completedTaskItems.forEach((completedTaskItem) => {
+        if (completedTaskItem.schedule.id === updateSchedule.id) {
+          completedTaskItem.schedule.name = updateSchedule.name;
+        }
+      });
+    },
 
     // タスク削除
     completedTaskDelete: (state, action) => {
@@ -58,6 +67,7 @@ export const {
   completedTaskAdd,
   completedTaskUpdate,
   completedTaskUpdateCategory,
+  completedTaskUpdateSchedule,
   completedTaskDelete,
 } = completedTaskItemsSlice.actions;
 export default completedTaskItemsSlice.reducer;

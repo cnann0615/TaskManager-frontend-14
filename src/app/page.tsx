@@ -16,6 +16,7 @@ import { TaskItem } from "./@types";
 import taskApi from "./api/task";
 import { inCompletedTaskAdd } from "./slices/inCompletedTaskSlice";
 import { completedTaskAdd } from "./slices/completedTaskSlice";
+import ScheduleAdd from "./features/scheduleAdd/ScheduleAdd";
 
 // 詳細表示対象タスクの状態とその更新関数の型を定義
 type ShowTaskDetail = {
@@ -35,7 +36,7 @@ export default function Home() {
 
   const dispatch = useDispatch();
 
-  // APIを経由してデータベースから未完了タスクと完了タスク、カテゴリを取得し、それぞれのStateに反映
+  // APIを経由してデータベースから未完了タスクと完了タスクを取得し、それぞれのStateに反映
   useEffect(() => {
     (async () => {
       // 未完了タスク取得
@@ -64,6 +65,7 @@ export default function Home() {
             <div className="md:w-1/3 p-4">
               <TaskAdd />
               <CategoryAdd />
+              <ScheduleAdd />
             </div>
             <div className="md:w-2/3 p-4">
               <TaskList />

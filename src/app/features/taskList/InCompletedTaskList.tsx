@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "../../store/store";
-import { tabCategoryContext } from "./TaskList";
+import { tabCategoryContext, tabScheduleContext } from "./TaskList";
 import { TaskItem } from "../../@types";
 import { inCompletedTaskDelete } from "../../slices/inCompletedTaskSlice";
 import { completedTaskAdd } from "../../slices/completedTaskSlice";
@@ -18,18 +18,35 @@ const InCompletedTaskList: React.FC = () => {
     (state) => state.inCompletedTaskItems
   );
 
-  // タブカテゴリ管理State
+  // タブカテゴリとタブスケジュール管理Stateの値を取得
   const { tabCategory } = useContext(tabCategoryContext);
+  const { tabSchedule } = useContext(tabScheduleContext);
 
-  // リストに表示するタスクをtabCategoryの値で絞って抽出
+  // リストに表示するタスクをtabCategoryとtabScheduleの値で絞って抽出（パターン）
+
+  // 全てのカテゴリのパターン
   const filteredInCompletedTaskItems =
     tabCategory === 0
-      ? inCompletedTaskItems.inCompletedTaskItems
-      : inCompletedTaskItems.inCompletedTaskItems.filter(
+      ? tabSchedule === 0
+        ? // カテゴリもスケジュールも「全て」の場合
+          inCompletedTaskItems.inCompletedTaskItems
+        : // スケジュールのみ指定がある場合
+          inCompletedTaskItems.inCompletedTaskItems.filter(
+            (inCompletedTaskItem) =>
+              inCompletedTaskItem.schedule.id == tabSchedule
+          )
+      : tabSchedule === 0
+      ? // カテゴリのみ指定がある場合
+        inCompletedTaskItems.inCompletedTaskItems.filter(
           (inCompletedTaskItem) =>
             inCompletedTaskItem.category.id == tabCategory
+        )
+      : // カテゴリもスケジュールも指定がある場合
+        inCompletedTaskItems.inCompletedTaskItems.filter(
+          (inCompletedTaskItem) =>
+            inCompletedTaskItem.category.id == tabCategory &&
+            inCompletedTaskItem.schedule.id == tabSchedule
         );
-
   // タスク完了処理（buttonのonClick時に発火）
   const switchCompleted = async (updateTask: TaskItem) => {
     dispatch(inCompletedTaskDelete(updateTask));
