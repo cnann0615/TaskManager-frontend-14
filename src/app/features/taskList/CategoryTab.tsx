@@ -100,14 +100,14 @@ const CategoryTab: React.FC = () => {
   };
 
   return (
-    <div className="border-b border-gray-300">
+    <div className=" ml-10 border-b border-gray-300">
       <button
         onClick={() => switchTab(0)}
-        className={`bg-gray-200 hover:bg-gray-300 text-black py-2 px-4 rounded-t focus:outline-none focus:shadow-outline m-1 ${
-          tabCategory === 0 ? "font-bold" : ""
+        className={`bg-teal-100 hover:bg-teal-300 text-black py-2 px-4 rounded-t focus:outline-none focus:shadow-outline mr-[6.5px] ${
+          tabCategory === 0 ? "font-bold bg-teal-300" : ""
         }`}
       >
-        全てのカテゴリ
+        All
       </button>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="tabs" direction="horizontal">
@@ -142,8 +142,10 @@ const CategoryTab: React.FC = () => {
                       ) : (
                         <button
                           onClick={() => switchTab(category.id!)}
-                          className={`bg-gray-200 hover:bg-gray-300 text-black py-2 px-4 rounded-t focus:outline-none focus:shadow-outline m-1 ${
-                            tabCategory === category.id ? "font-bold" : ""
+                          className={`bg-teal-100 hover:bg-teal-300 text-black py-2 px-4 rounded-t focus:outline-none focus:shadow-outline mr-[6.5px] ${
+                            tabCategory === category.id
+                              ? "font-bold bg-teal-300"
+                              : ""
                           }`}
                         >
                           {category.name}
@@ -153,7 +155,7 @@ const CategoryTab: React.FC = () => {
                               e.stopPropagation(); // ボタン内のボタンのクリックイベントを阻止（カテゴリ名編集ボタンとタブのクリックを独立させる）
                               editCategory(category);
                             }}
-                            className="text-xs my-0 ml-3 opacity-50 hover:opacity-100 cursor-pointer"
+                            className="text-xs my-0 ml-3 opacity-50 hover:opacity-100 cursor-pointer "
                           >
                             ✏️
                           </span>

@@ -5,7 +5,7 @@ import { tabCategoryContext, tabScheduleContext } from "./TaskList";
 import { TaskItem } from "../../@types";
 import { completedTaskDelete } from "../../slices/completedTaskSlice";
 import { inCompletedTaskAdd } from "../../slices/inCompletedTaskSlice";
-import { showTaskDetailContext } from "../../page";
+import { showTaskDetailContext, taskDetailOpenContext } from "../../page";
 import taskApi from "../../api/task";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
@@ -54,8 +54,11 @@ const CompletedTaskList: React.FC = () => {
 
   // タスク詳細表示処理
   const { setShowTaskDetail } = useContext(showTaskDetailContext);
+  // 詳細表示展開Stateを定義
+  const { setTaskDetailOpen } = useContext(taskDetailOpenContext);
   const openTaskDetail = (taskItem: TaskItem) => {
     setShowTaskDetail(taskItem);
+    setTaskDetailOpen(true);
     window.scrollTo({
       top: document.documentElement.scrollHeight,
       behavior: "smooth",
@@ -76,7 +79,7 @@ const CompletedTaskList: React.FC = () => {
 
   return (
     <div className="mt-4">
-      <h2 className="text-xl font-bold mb-2">完了タスク</h2>
+      <h2 className="text-xl font-bold mb-2">Completed Task</h2>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="completedTasks">
           {(provided) => (
@@ -86,9 +89,7 @@ const CompletedTaskList: React.FC = () => {
               ref={provided.innerRef}
             >
               {filteredCompletedTaskItems.length == 0 ? (
-                <div className="mt-5 mb-10 text-gray-500">
-                  完了タスクはありません。
-                </div>
+                <div className="mt-5 mb-10 text-gray-500">No Task</div>
               ) : (
                 ""
               )}
@@ -99,7 +100,7 @@ const CompletedTaskList: React.FC = () => {
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                       ref={provided.innerRef}
-                      className="bg-white flex items-center justify-between mb-2 p-2 border"
+                      className="bg-white flex items-center justify-between mb-2 px-2 py-3 border"
                     >
                       <button
                         onClick={() => switchInCompleted(task)}
@@ -113,8 +114,8 @@ const CompletedTaskList: React.FC = () => {
                       >
                         {task.title}
                       </span>
-                      <span className="text-center w-32">
-                        〆 {task.deadLine ? task.deadLine : "なし"}
+                      <span className="text-left w-32">
+                        〆 {task.deadLine ? task.deadLine : "None"}
                       </span>
                     </li>
                   )}

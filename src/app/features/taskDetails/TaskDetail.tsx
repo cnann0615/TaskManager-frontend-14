@@ -1,4 +1,8 @@
-import { showTaskDetailContext } from "../../page";
+import {
+  showTaskDetailContext,
+  showTaskDetailEditingContext,
+  taskDetailOpenContext,
+} from "../../page";
 import taskApi from "../../api/task";
 import {
   completedTaskDelete,
@@ -12,7 +16,10 @@ import { useSelector } from "../../store/store";
 
 import React, { useState, useContext } from "react";
 import { useDispatch } from "react-redux";
-import { validateHeaderValue } from "http";
+import CloseButtonY from "@/app/components/CloseButtonY";
+import OpenButtonY from "@/app/components/OpenButtonY";
+import CloseButtonX from "@/app/components/CloseButtonX";
+import OpenButtonX from "@/app/components/OpenButtonX";
 
 // タスク詳細コンポーネント
 const TaskDetail = () => {
@@ -21,6 +28,14 @@ const TaskDetail = () => {
   // 詳細表示タスクStateを定義
   const { showTaskDetail, setShowTaskDetail } = useContext(
     showTaskDetailContext
+  );
+
+  // 詳細表示タスク編集状態管理Stateを定義
+  const { setShowTaskDetailEditing } = useContext(showTaskDetailEditingContext);
+
+  // 詳細表示展開Stateを定義
+  const { taskDetailOpen, setTaskDetailOpen } = useContext(
+    taskDetailOpenContext
   );
 
   // カテゴリとスケジュールStateを取得
@@ -38,10 +53,12 @@ const TaskDetail = () => {
 
   // 編集モードをオンにする関数
   const toggleEditOn = (field: string) => {
+    setShowTaskDetailEditing(true);
     setEditing((prev) => ({ ...prev, [field]: true }));
   };
   // 編集モードをオフにする関数
   const toggleEditOff = (field: string) => {
+    setShowTaskDetailEditing(false);
     setEditing((prev) => ({ ...prev, [field]: false }));
   };
 
@@ -104,179 +121,245 @@ const TaskDetail = () => {
 
   return (
     <>
-      <div className="overflow-hidden border rounded-lg">
-        <table className="min-w-full leading-normal">
-          <thead>
-            <tr>
-              <th className="w-1/4 px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                項目
-              </th>
-              <th className="w-3/4 px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                内容
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* タイトル */}
-            <tr className="h-20">
-              <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm font-bold">
-                タイトル
-              </td>
-              <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                {editing.title ? (
-                  <input
-                    type="text"
-                    defaultValue={showTaskDetail!.title}
-                    onBlur={(e: React.FocusEvent<HTMLInputElement>) =>
-                      saveEdit("title", e.target.value)
-                    }
-                    autoFocus
-                    className="rounded-md border-none focus:outline-none bg-gray-50 py-2 pl-1"
-                  />
+      <div className=" bg-gray-50 mx-auto mt-4 p-4 border shadow xl:w-3/5  overflow-hidden rounded-lg">
+        <div>
+          <button
+            onClick={() => {
+              setTaskDetailOpen(!taskDetailOpen);
+            }}
+            className="text-blue-500 text-xl m-2 font-bold"
+          >
+            <div className=" flex ">
+              <h1 className=" mr-1 ">Task Detail</h1>
+              {window.innerWidth <= 1280 ? (
+                taskDetailOpen ? (
+                  <CloseButtonY />
                 ) : (
-                  <div onClick={() => toggleEditOn("title")} className="pl-1">
-                    {showTaskDetail!.title}
-                  </div>
-                )}
-              </td>
-            </tr>
-            {/* 期日 */}
-            <tr className="h-20">
-              <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm font-bold">
-                期日
-              </td>
-              <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                {editing.deadLine ? (
-                  <input
-                    type="date"
-                    defaultValue={showTaskDetail!.deadLine}
-                    onBlur={(e: React.FocusEvent<HTMLInputElement>) =>
-                      saveEdit("deadLine", e.target.value)
-                    }
-                    autoFocus
-                    className="rounded-md border-gray-300 focus:outline-none bg-gray-50 py-2 pl-1"
-                  />
-                ) : (
-                  <div
-                    onClick={() => toggleEditOn("deadLine")}
-                    className="pl-1"
-                  >
-                    {showTaskDetail!.deadLine
-                      ? showTaskDetail!.deadLine
-                      : "なし"}
-                  </div>
-                )}
-              </td>
-            </tr>
-            {/* カテゴリ */}
-            <tr className="h-20">
-              <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm font-bold">
-                カテゴリ
-              </td>
-              <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                {editing.category ? (
-                  <select
-                    defaultValue={showTaskDetail!.category.id}
-                    onBlur={(
-                      e: React.FocusEvent<HTMLSelectElement, Element>
-                    ) => {
-                      saveEdit("category", e.target.value);
-                    }}
-                    autoFocus
-                    className="rounded-md border-gray-300 focus:outline-none bg-gray-50 py-2"
-                  >
-                    {categories.categories.map((category) => (
-                      <option key={category.id} value={category.id}>
-                        {category.name}
-                      </option>
-                    ))}
-                  </select>
-                ) : (
-                  <div
-                    onClick={() => toggleEditOn("category")}
-                    className="pl-1"
-                  >
-                    {showTaskDetail!.category.name}
-                  </div>
-                )}
-              </td>
-            </tr>
-            {/* スケジュール */}
-            <tr className="h-20">
-              <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm font-bold">
-                スケジュール
-              </td>
-              <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                {editing.schedule ? (
-                  <select
-                    defaultValue={showTaskDetail!.schedule.id}
-                    onBlur={(
-                      e: React.FocusEvent<HTMLSelectElement, Element>
-                    ) => {
-                      saveEdit("schedule", e.target.value);
-                    }}
-                    autoFocus
-                    className="rounded-md border-gray-300 focus:outline-none bg-gray-50 py-2"
-                  >
-                    {schedules.schedules.map((schedule) => (
-                      <option key={schedule.id} value={schedule.id}>
-                        {schedule.name}
-                      </option>
-                    ))}
-                  </select>
-                ) : (
-                  <div
-                    onClick={() => toggleEditOn("schedule")}
-                    className="pl-1"
-                  >
-                    {showTaskDetail!.schedule.name}
-                  </div>
-                )}
-              </td>
-            </tr>
-            {/* メモ */}
-            <tr>
-              <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm h-96 font-bold">
-                メモ
-              </td>
-              <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm h-96">
-                {editing.memo ? (
-                  <textarea
-                    defaultValue={showTaskDetail!.memo}
-                    onBlur={(
-                      e: React.FocusEvent<HTMLTextAreaElement, Element>
-                    ) => saveEdit("memo", e.target.value)}
-                    autoFocus
-                    className="w-full h-80 rounded-md border-gray-300 focus:outline-none bg-gray-50"
-                  />
-                ) : (
-                  // \nを改行タグ(<br />)に変換して表示
-                  <div
-                    onClick={() => toggleEditOn("memo")}
-                    className="w-full h-80 rounded-md border-gray-300 focus:outline-none"
-                  >
-                    {showTaskDetail!.memo
-                      .split("\n")
-                      .map((line: any, index: number) => (
-                        <React.Fragment key={index}>
-                          {line}
-                          <br />
-                        </React.Fragment>
-                      ))}
-                  </div>
-                )}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                  <OpenButtonY />
+                )
+              ) : (
+                ""
+              )}
+            </div>
+          </button>
+        </div>
+        {taskDetailOpen ? (
+          <div className=" mt-3 ">
+            <table className="min-w-full leading-normal border ">
+              <thead>
+                <tr>
+                  <th className=" w-1/6 sm:w-1/5 px-7 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                    Column
+                  </th>
+                  <th className=" w-5/6 sm:w-4/5 px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                    Contents
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {/* タイトル */}
+                <tr className="h-20">
+                  <td className="px-7 py-5 border-b border-gray-200 bg-white text-sm font-bold">
+                    Title
+                  </td>
+                  {showTaskDetail ? (
+                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                      {editing.title ? (
+                        <input
+                          type="text"
+                          defaultValue={showTaskDetail!.title}
+                          onBlur={(e: React.FocusEvent<HTMLInputElement>) =>
+                            saveEdit("title", e.target.value)
+                          }
+                          autoFocus
+                          className="rounded-md border-none focus:outline-none bg-gray-50 py-2 pl-1"
+                        />
+                      ) : (
+                        <div
+                          onClick={() => toggleEditOn("title")}
+                          className="pl-1"
+                        >
+                          {showTaskDetail!.title}
+                        </div>
+                      )}
+                    </td>
+                  ) : (
+                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                      <p className="pl-1">ー</p>
+                    </td>
+                  )}
+                </tr>
+                {/* 期日 */}
+                <tr className="h-20">
+                  <td className="px-7 py-5 border-b border-gray-200 bg-white text-sm font-bold">
+                    Dead Line
+                  </td>
+                  {showTaskDetail ? (
+                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                      {editing.deadLine ? (
+                        <input
+                          type="date"
+                          defaultValue={showTaskDetail!.deadLine}
+                          onBlur={(e: React.FocusEvent<HTMLInputElement>) =>
+                            saveEdit("deadLine", e.target.value)
+                          }
+                          autoFocus
+                          className="rounded-md border-gray-300 focus:outline-none bg-gray-50 py-2 pl-1"
+                        />
+                      ) : (
+                        <div
+                          onClick={() => toggleEditOn("deadLine")}
+                          className="pl-1"
+                        >
+                          {showTaskDetail!.deadLine
+                            ? showTaskDetail!.deadLine
+                            : "None"}
+                        </div>
+                      )}
+                    </td>
+                  ) : (
+                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                      <p className="pl-1">ー</p>
+                    </td>
+                  )}
+                </tr>
+                {/* カテゴリ */}
+                <tr className="h-20">
+                  <td className="px-7 py-5 border-b border-gray-200 bg-white text-sm font-bold">
+                    Category
+                  </td>
+                  {showTaskDetail ? (
+                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                      {editing.category ? (
+                        <select
+                          defaultValue={showTaskDetail!.category.id}
+                          onBlur={(
+                            e: React.FocusEvent<HTMLSelectElement, Element>
+                          ) => {
+                            saveEdit("category", e.target.value);
+                          }}
+                          autoFocus
+                          className="rounded-md border-gray-300 focus:outline-none bg-gray-50 py-2"
+                        >
+                          {categories.categories.map((category) => (
+                            <option key={category.id} value={category.id}>
+                              {category.name}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <div
+                          onClick={() => toggleEditOn("category")}
+                          className="pl-1"
+                        >
+                          {showTaskDetail!.category.name}
+                        </div>
+                      )}
+                    </td>
+                  ) : (
+                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                      <p className="pl-1">ー</p>
+                    </td>
+                  )}
+                </tr>
+                {/* スケジュール */}
+                <tr className="h-20">
+                  <td className="px-7 py-5 border-b border-gray-200 bg-white text-sm font-bold">
+                    Schedule
+                  </td>
+                  {showTaskDetail ? (
+                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                      {editing.schedule ? (
+                        <select
+                          defaultValue={showTaskDetail!.schedule.id}
+                          onBlur={(
+                            e: React.FocusEvent<HTMLSelectElement, Element>
+                          ) => {
+                            saveEdit("schedule", e.target.value);
+                          }}
+                          autoFocus
+                          className="rounded-md border-gray-300 focus:outline-none bg-gray-50 py-2"
+                        >
+                          {schedules.schedules.map((schedule) => (
+                            <option key={schedule.id} value={schedule.id}>
+                              {schedule.name}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <div
+                          onClick={() => toggleEditOn("schedule")}
+                          className="pl-1"
+                        >
+                          {showTaskDetail!.schedule.name}
+                        </div>
+                      )}
+                    </td>
+                  ) : (
+                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                      <p className="pl-1">ー</p>
+                    </td>
+                  )}
+                </tr>
+                {/* メモ */}
+                <tr>
+                  <td className="px-7 py-5 border-b border-gray-200 bg-white text-sm h-96 font-bold">
+                    Memo
+                  </td>
+                  {showTaskDetail ? (
+                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm h-96">
+                      {editing.memo ? (
+                        <textarea
+                          defaultValue={showTaskDetail!.memo}
+                          onBlur={(
+                            e: React.FocusEvent<HTMLTextAreaElement, Element>
+                          ) => saveEdit("memo", e.target.value)}
+                          autoFocus
+                          className="w-full h-80 rounded-md border-gray-300 focus:outline-none bg-gray-50"
+                        />
+                      ) : (
+                        // \nを改行タグ(<br />)に変換して表示
+                        <div
+                          onClick={() => toggleEditOn("memo")}
+                          className="w-full h-80 rounded-md border-gray-300 focus:outline-none"
+                        >
+                          {showTaskDetail!.memo
+                            .split("\n")
+                            .map((line: any, index: number) => (
+                              <React.Fragment key={index}>
+                                {line}
+                                <br />
+                              </React.Fragment>
+                            ))}
+                        </div>
+                      )}
+                    </td>
+                  ) : (
+                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                      <p className="pl-1">ー</p>
+                    </td>
+                  )}
+                </tr>
+              </tbody>
+            </table>
+            {showTaskDetail ? (
+              <div className=" flex justify-end">
+                <button
+                  type="submit"
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  onClick={deleteTask}
+                >
+                  Delete
+                </button>
+              </div>
+            ) : (
+              ""
+            )}
+          </div>
+        ) : (
+          ""
+        )}
       </div>
-      <button
-        type="submit"
-        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-        onClick={deleteTask}
-      >
-        削除
-      </button>
     </>
   );
 };
