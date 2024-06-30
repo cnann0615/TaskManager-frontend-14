@@ -1,3 +1,4 @@
+import AddButton from "@/app/components/AddButton";
 import { Category } from "../../@types";
 import taskApi from "../../api/task";
 import { categoryAdd } from "../../slices/categorySlice";
@@ -45,31 +46,29 @@ const CategoryAdd: React.FC = () => {
 
   return (
     <div>
-      <h3 className="font-bold">カテゴリ追加</h3>
+      <h3 className="font-bold">New Category</h3>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="mx-auto mt-4 mb-10 p-4 border rounded-lg shadow"
+        className="bg-white mx-auto mt-4 mb-10 p-4 border rounded-lg shadow"
       >
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">
-            カテゴリ名：
+            <div className=" flex justify-between">
+              <p>Category</p>
+              <p className="text-red-500 text-xs ">
+                {errors.name?.message as React.ReactNode}
+              </p>
+            </div>
+
             <input
               type="text"
-              {...register("name", { required: "カテゴリ名は必須です。" })}
+              {...register("name", { required: "Category is required." })}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
-            <p className="text-red-500 text-xs italic">
-              {errors.name?.message as React.ReactNode}
-            </p>
           </label>
         </div>
-        <div>
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          >
-            追加
-          </button>
+        <div className=" flex justify-end">
+          <AddButton />
         </div>
       </form>
     </div>
