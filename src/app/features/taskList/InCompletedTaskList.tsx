@@ -11,7 +11,6 @@ import {
   taskDetailOpenContext,
 } from "../../page";
 import taskApi from "../../api/task";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 // 未完了タスクリスト
 const InCompletedTaskList: React.FC = () => {
@@ -78,72 +77,36 @@ const InCompletedTaskList: React.FC = () => {
     });
   };
 
-  // ドラッグ＆ドロップ処理
-  const onDragEnd = (result: any) => {
-    const startIndex = result.source.index;
-    const endIndex = result.destination.index;
-
-    if (startIndex === endIndex) {
-      return;
-    } else if (startIndex < endIndex) {
-    } else if (startIndex > endIndex) {
-    }
-  };
-
   return (
     <>
       <div className="mt-4">
         <h2 className="text-xl font-bold mb-2">Incomplete Task</h2>
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="inCompleteTasks">
-            {(provided, snapshot) => (
-              <ul
-                className="list-none w-full"
-                {...provided.droppableProps}
-                ref={provided.innerRef}
+        <ul className="list-none w-full">
+          {filteredInCompletedTaskItems.length == 0 ? (
+            <div className="mt-5 mb-10 text-gray-500">No Task</div>
+          ) : (
+            ""
+          )}
+          {filteredInCompletedTaskItems.map((task, index) => (
+            <li className="bg-white flex items-center justify-between mb-2 px-2 py-3 border">
+              <button
+                onClick={() => switchCompleted(task)}
+                className="text-xl text-blue-500 hover:text-blue-700 font-bold"
               >
-                {filteredInCompletedTaskItems.length == 0 ? (
-                  <div className="mt-5 mb-10 text-gray-500">No Task</div>
-                ) : (
-                  ""
-                )}
-                {filteredInCompletedTaskItems.map((task, index) => (
-                  <Draggable
-                    key={task.id}
-                    draggableId={task.title}
-                    index={index}
-                  >
-                    {(provided, snapshot) => (
-                      <li
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        ref={provided.innerRef}
-                        className="bg-white flex items-center justify-between mb-2 px-2 py-3 border"
-                      >
-                        <button
-                          onClick={() => switchCompleted(task)}
-                          className="text-xl text-blue-500 hover:text-blue-700 font-bold"
-                        >
-                          ◻︎
-                        </button>
-                        <span
-                          onClick={() => openTaskDetail(task)}
-                          className="cursor-pointer hover:bg-gray-100 flex-grow mx-2"
-                        >
-                          {task.title}
-                        </span>
-                        <span className="text-left w-32">
-                          〆 {task.deadLine ? task.deadLine : "None"}
-                        </span>
-                      </li>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </ul>
-            )}
-          </Droppable>
-        </DragDropContext>
+                ◻︎
+              </button>
+              <span
+                onClick={() => openTaskDetail(task)}
+                className="cursor-pointer hover:bg-gray-100 flex-grow mx-2"
+              >
+                {task.title}
+              </span>
+              <span className="text-left w-32">
+                〆 {task.deadLine ? task.deadLine : "None"}
+              </span>
+            </li>
+          ))}
+        </ul>
       </div>
       <span id="dummy"></span>
     </>
