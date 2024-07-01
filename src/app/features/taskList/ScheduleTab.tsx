@@ -9,7 +9,6 @@ import { inCompletedTaskUpdateSchedule } from "../../slices/inCompletedTaskSlice
 import { completedTaskUpdateSchedule } from "../../slices/completedTaskSlice";
 
 import { useContext, useState } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 // カテゴリのタブリスト
 const ScheduleTab: React.FC = () => {
@@ -87,18 +86,6 @@ const ScheduleTab: React.FC = () => {
     setEditScheduleId(null);
   };
 
-  // ドラッグ＆ドロップ処理
-  const onDragEnd = (result: any) => {
-    const startIndex = result.source.index;
-    const endIndex = result.destination.index;
-
-    if (startIndex === endIndex) {
-      return;
-    } else if (startIndex < endIndex) {
-    } else if (startIndex > endIndex) {
-    }
-  };
-
   return (
     <div
       className="border-r border-gray-300"
@@ -113,74 +100,49 @@ const ScheduleTab: React.FC = () => {
       >
         All
       </button>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="tabs" direction="vertical">
-          {(provided) => (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              className="inline-block"
-              style={{ display: "flex", flexDirection: "column" }}
-            >
-              {schedules.schedules.map((schedule, index) => (
-                <Draggable
-                  key={schedule.id}
-                  draggableId={schedule.id!.toString()}
-                  index={index}
+      <div
+        className="inline-block"
+        style={{ display: "flex", flexDirection: "column" }}
+      >
+        {schedules.schedules.map((schedule, index) => (
+          <div className="block" style={{ whiteSpace: "nowrap" }}>
+            {editScheduleId === schedule.id ? (
+              <input
+                type="text"
+                value={editScheduleName}
+                onChange={(e) => setEditScheduleName(e.target.value)}
+                onBlur={commitEdit}
+                autoFocus
+                className="py-4 px-2 rounded-l m-1"
+                style={{ writingMode: "vertical-lr" }}
+              />
+            ) : (
+              <button
+                onClick={() => switchTab(schedule.id!)}
+                className={` bg-purple-100 hover:bg-purple-300 text-black py-4 px-2 rounded-l focus:outline-none focus:shadow-outline ${
+                  tabSchedule === schedule.id ? "font-bold bg-purple-300" : ""
+                }`}
+                style={{
+                  writingMode: "vertical-lr",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {schedule.name}
+                {/* タブの中の、スケジュール名編集ボタン */}
+                <span
+                  onClick={(e) => {
+                    e.stopPropagation(); // ボタン内のボタンのクリックイベントを阻止（スケジュール名編集ボタンとタブのクリックを独立させる）
+                    editSchedule(schedule);
+                  }}
+                  className="text-xs my-0 ml-3 opacity-50 hover:opacity-100 cursor-pointer"
                 >
-                  {(provided) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      className="block"
-                      style={{ whiteSpace: "nowrap" }}
-                    >
-                      {editScheduleId === schedule.id ? (
-                        <input
-                          type="text"
-                          value={editScheduleName}
-                          onChange={(e) => setEditScheduleName(e.target.value)}
-                          onBlur={commitEdit}
-                          autoFocus
-                          className="py-4 px-2 rounded-l m-1"
-                          style={{ writingMode: "vertical-lr" }}
-                        />
-                      ) : (
-                        <button
-                          onClick={() => switchTab(schedule.id!)}
-                          className={` bg-purple-100 hover:bg-purple-300 text-black py-4 px-2 rounded-l focus:outline-none focus:shadow-outline ${
-                            tabSchedule === schedule.id
-                              ? "font-bold bg-purple-300"
-                              : ""
-                          }`}
-                          style={{
-                            writingMode: "vertical-lr",
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          {schedule.name}
-                          {/* タブの中の、スケジュール名編集ボタン */}
-                          <span
-                            onClick={(e) => {
-                              e.stopPropagation(); // ボタン内のボタンのクリックイベントを阻止（スケジュール名編集ボタンとタブのクリックを独立させる）
-                              editSchedule(schedule);
-                            }}
-                            className="text-xs my-0 ml-3 opacity-50 hover:opacity-100 cursor-pointer"
-                          >
-                            ✏️
-                          </span>
-                        </button>
-                      )}
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+                  ✏️
+                </span>
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

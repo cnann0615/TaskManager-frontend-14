@@ -9,7 +9,6 @@ import { inCompletedTaskUpdateCategory } from "../../slices/inCompletedTaskSlice
 import { completedTaskUpdateCategory } from "../../slices/completedTaskSlice";
 
 import { useContext, useState } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 // カテゴリのタブリスト
 const CategoryTab: React.FC = () => {
@@ -87,18 +86,6 @@ const CategoryTab: React.FC = () => {
     setEditCategoryId(null);
   };
 
-  // ドラッグ＆ドロップ処理
-  const onDragEnd = (result: any) => {
-    const startIndex = result.source.index;
-    const endIndex = result.destination.index;
-
-    if (startIndex === endIndex) {
-      return;
-    } else if (startIndex < endIndex) {
-    } else if (startIndex > endIndex) {
-    }
-  };
-
   return (
     <div className=" ml-10 border-b border-gray-300">
       <button
@@ -109,67 +96,41 @@ const CategoryTab: React.FC = () => {
       >
         All
       </button>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="tabs" direction="horizontal">
-          {(provided) => (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              className="inline-block"
-            >
-              {categories.categories.map((category, index) => (
-                <Draggable
-                  key={category.id}
-                  draggableId={category.id!.toString()}
-                  index={index}
+      <div className="inline-block">
+        {categories.categories.map((category, index) => (
+          <div className="inline-block">
+            {editCategoryId === category.id ? (
+              <input
+                type="text"
+                value={editCategoryName}
+                onChange={(e) => setEditCategoryName(e.target.value)}
+                onBlur={commitEdit}
+                autoFocus
+                className="py-2 px-4 rounded-t m-1"
+              />
+            ) : (
+              <button
+                onClick={() => switchTab(category.id!)}
+                className={`bg-teal-100 hover:bg-teal-300 text-black py-2 px-4 rounded-t focus:outline-none focus:shadow-outline mr-[6.5px] ${
+                  tabCategory === category.id ? "font-bold bg-teal-300" : ""
+                }`}
+              >
+                {category.name}
+                {/* タブの中の、カテゴリ名編集ボタン */}
+                <span
+                  onClick={(e) => {
+                    e.stopPropagation(); // ボタン内のボタンのクリックイベントを阻止（カテゴリ名編集ボタンとタブのクリックを独立させる）
+                    editCategory(category);
+                  }}
+                  className="text-xs my-0 ml-3 opacity-50 hover:opacity-100 cursor-pointer "
                 >
-                  {(provided) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      className="inline-block"
-                    >
-                      {editCategoryId === category.id ? (
-                        <input
-                          type="text"
-                          value={editCategoryName}
-                          onChange={(e) => setEditCategoryName(e.target.value)}
-                          onBlur={commitEdit}
-                          autoFocus
-                          className="py-2 px-4 rounded-t m-1"
-                        />
-                      ) : (
-                        <button
-                          onClick={() => switchTab(category.id!)}
-                          className={`bg-teal-100 hover:bg-teal-300 text-black py-2 px-4 rounded-t focus:outline-none focus:shadow-outline mr-[6.5px] ${
-                            tabCategory === category.id
-                              ? "font-bold bg-teal-300"
-                              : ""
-                          }`}
-                        >
-                          {category.name}
-                          {/* タブの中の、カテゴリ名編集ボタン */}
-                          <span
-                            onClick={(e) => {
-                              e.stopPropagation(); // ボタン内のボタンのクリックイベントを阻止（カテゴリ名編集ボタンとタブのクリックを独立させる）
-                              editCategory(category);
-                            }}
-                            className="text-xs my-0 ml-3 opacity-50 hover:opacity-100 cursor-pointer "
-                          >
-                            ✏️
-                          </span>
-                        </button>
-                      )}
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+                  ✏️
+                </span>
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
