@@ -9,7 +9,7 @@ import {
   showTaskDetailContext,
   showTaskDetailEditingContext,
   taskDetailOpenContext,
-} from "../../page";
+} from "../../Main";
 import taskApi from "../../api/task";
 
 // 未完了タスクリスト

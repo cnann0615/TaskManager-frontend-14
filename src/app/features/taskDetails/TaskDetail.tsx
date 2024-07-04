@@ -2,7 +2,7 @@ import {
   showTaskDetailContext,
   showTaskDetailEditingContext,
   taskDetailOpenContext,
-} from "../../page";
+} from "../../Main";
 import taskApi from "../../api/task";
 import {
   completedTaskDelete,

@@ -1,141 +1,79 @@
 "use client";
-import React, {
-  useState,
-  createContext,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-} from "react";
-import { useDispatch } from "react-redux";
+import { signInWithPopup } from "firebase/auth";
+import React from "react";
+import { auth, provider } from "./firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+import Main from "./Main";
 
-import TaskList from "./features/taskList/TaskList";
-import TaskDetail from "./features/taskDetails/TaskDetail";
-import { Category, Schedule, TaskItem } from "./@types";
-import taskApi from "./api/task";
-import { inCompletedTaskAdd } from "./slices/inCompletedTaskSlice";
-import { completedTaskAdd } from "./slices/completedTaskSlice";
-import { categoryAdd } from "./slices/categorySlice";
-import { scheduleAdd } from "./slices/scheduleSlice";
-import CloseButtonY from "./components/button/CloseButtonY";
-import OpenButtonY from "./components/button/OpenButtonY";
-import NewContents from "./features/newContents/NewContents";
-
-// 詳細表示対象Stateで使用する型を定義
-type ShowTaskDetail = {
-  showTaskDetail: TaskItem | any;
-  setShowTaskDetail: Dispatch<SetStateAction<TaskItem | any>>;
-};
-
-// 詳細表示対象タスクStateを作成
-export const showTaskDetailContext = createContext<ShowTaskDetail>({
-  showTaskDetail: null,
-  setShowTaskDetail: () => {}, // この関数はダミー。実際にはuseStateによって提供される関数に置き換わる。
-});
-
-// 詳細表示対象タスク編集状態管理Stateで使用する型を定義
-type ShowTaskDetailEditing = {
-  showTaskDetailEditing: TaskItem | any;
-  setShowTaskDetailEditing: Dispatch<SetStateAction<TaskItem | any>>;
-};
-
-// 詳細表示対象タスク編集状態管理Stateを作成
-export const showTaskDetailEditingContext =
-  createContext<ShowTaskDetailEditing>({
-    showTaskDetailEditing: null,
-    setShowTaskDetailEditing: () => {}, // この関数はダミー。実際にはuseStateによって提供される関数に置き換わる。
-  });
-
-// 詳細表示展開Stateで使用する型を定義
-type taskDetailOpen = {
-  taskDetailOpen: boolean;
-  setTaskDetailOpen: Dispatch<SetStateAction<boolean>>;
-};
-
-// 詳細表示展開Stateを作成
-export const taskDetailOpenContext = createContext<taskDetailOpen>({
-  taskDetailOpen: false,
-  setTaskDetailOpen: () => {}, // この関数はダミー。実際にはuseStateによって提供される関数に置き換わる。
-});
-
-export default function Home() {
-  // ADDコンテンツ展開State
-  const [addOpen, setAddOpen] = useState(true);
-
-  // 詳細表示対象タスクState
-  const [showTaskDetail, setShowTaskDetail] = useState<TaskItem | any>(null);
-
-  // 詳細表示対象タスク編集状態管理State
-  const [showTaskDetailEditing, setShowTaskDetailEditing] =
-    useState<boolean>(false);
-
-  // 詳細表示展開State
-  const [taskDetailOpen, setTaskDetailOpen] = useState<boolean>(true);
-
-  const dispatch = useDispatch();
-
-  // APIを経由してデータベースの情報を取得し、それぞれのStateに反映
-  useEffect(() => {
-    (async () => {
-      // 未完了タスク取得
-      const inCompletedTaskItems: TaskItem[] =
-        await taskApi.inCompletedTaskGet();
-      // 完了タスク取得
-      const completedTaskItems: TaskItem[] = await taskApi.completedTaskGet();
-      // カテゴリ取得
-      const categories: Category[] = await taskApi.categoryGetAll();
-      // スケジュール取得
-      const schedules: Schedule[] = await taskApi.scheduleGetAll();
-      // 取得した未完了タスクを未完了タスクStateに反映
-      inCompletedTaskItems.forEach((inCompletedTaskItem) =>
-        dispatch(inCompletedTaskAdd(inCompletedTaskItem))
-      );
-      // 取得した完了タスクを完了タスクStateに反映
-      completedTaskItems.forEach((completedTaskItem) =>
-        dispatch(completedTaskAdd(completedTaskItem))
-      );
-      // 取得したカテゴリをカテゴリStateに反映
-      categories.forEach((category) => dispatch(categoryAdd(category)));
-      // 取得したスケジュールをスケジュールStateに反映
-      schedules.forEach((schedule) => dispatch(scheduleAdd(schedule)));
-    })();
-  }, []);
+const SignIn = () => {
+  // ログイン状態を管理する
+  const [user] = useAuthState(auth);
 
   return (
     <>
-      <showTaskDetailContext.Provider
-        value={{ showTaskDetail, setShowTaskDetail }}
-      >
-        <main className=" mx-10 md:mx-20 my-8">
-          <div className=" bg-gray-50 mx-auto my-4 p-4 border rounded-lg shadow">
-            <div>
-              <button
-                onClick={() => {
-                  setAddOpen(!addOpen);
-                }}
-                className="text-blue-500 text-xl m-2 font-bold"
-              >
-                <div className=" flex ">
-                  <h1 className=" mr-1 ">New Contents</h1>
-                  {addOpen ? <CloseButtonY /> : <OpenButtonY />}
-                </div>
-              </button>
-            </div>
-            {addOpen ? <NewContents /> : ""}
+      {user ? (
+        <>
+          <div className=" flex ">
+            <UserInfo />
+            <SignOutButton />
           </div>
-          <taskDetailOpenContext.Provider
-            value={{ taskDetailOpen, setTaskDetailOpen }}
-          >
-            <showTaskDetailEditingContext.Provider
-              value={{ showTaskDetailEditing, setShowTaskDetailEditing }}
-            >
-              <div className="xl:flex xl:gap-8">
-                <TaskList />
-                <TaskDetail />
-              </div>
-            </showTaskDetailEditingContext.Provider>
-          </taskDetailOpenContext.Provider>
-        </main>
-      </showTaskDetailContext.Provider>
+          <Main />
+        </>
+      ) : (
+        <SignInButton />
+      )}
     </>
+  );
+};
+
+export default SignIn;
+
+// Googleボタンでサインイン
+function SignInButton() {
+  const signInWithGoogle = () => {
+    signInWithPopup(auth, provider);
+  };
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-slate-300">
+      <div className="bg-white p-8 rounded-lg shadow-lg text-center">
+        <h1 className="text-5xl mb-8">Get started with Task Manager!</h1>
+        <button
+          onClick={signInWithGoogle}
+          className="text-2xl bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition duration-300"
+        >
+          Googleでサインイン
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// Googleボタンでサインアウト
+export function SignOutButton() {
+  return (
+    <button onClick={() => auth.signOut()}>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        className="size-8"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
+        />
+      </svg>
+    </button>
+  );
+}
+
+export function UserInfo() {
+  return (
+    <div className="userInfo">
+      <img src={auth.currentUser?.photoURL!} alt="" className=" size-12" />
+    </div>
   );
 }
