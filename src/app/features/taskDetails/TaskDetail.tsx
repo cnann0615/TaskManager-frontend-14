@@ -16,9 +16,9 @@ import { useSelector } from "../../store/store";
 
 import React, { useState, useContext } from "react";
 import { useDispatch } from "react-redux";
-import CloseButtonY from "@/app/components/CloseButtonY";
-import OpenButtonY from "@/app/components/OpenButtonY";
-import CloseButtonX from "@/app/components/CloseButtonX";
+import CloseButtonY from "@/app/components/button/CloseButtonY";
+import OpenButtonY from "@/app/components/button/OpenButtonY";
+import CloseButtonX from "@/app/components/button/CloseButtonX";
 import OpenButtonX from "@/app/components/OpenButtonX";
 
 // タスク詳細コンポーネント

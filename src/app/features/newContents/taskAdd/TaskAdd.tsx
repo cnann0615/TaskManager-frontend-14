@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 
-import { inCompletedTaskAdd } from "../../slices/inCompletedTaskSlice";
-import taskApi from "../../api/task";
-import { useSelector } from "../../store/store";
-import { Category, Schedule, TaskItem, inputTaskItem } from "../../@types";
-import AddButton from "@/app/components/AddButton";
-import CloseButtonY from "@/app/components/CloseButtonY";
-import OpenButtonY from "@/app/components/OpenButtonY";
+import { inCompletedTaskAdd } from "../../../slices/inCompletedTaskSlice";
+import taskApi from "../../../api/task";
+import { useSelector } from "../../../store/store";
+import { Category, Schedule, TaskItem, inputTaskItem } from "../../../@types";
+import AddButton from "@/app/components/button/AddButton";
+import CloseButtonY from "@/app/components/button/CloseButtonY";
+import OpenButtonY from "@/app/components/button/OpenButtonY";
 
 // 新規タスク追加画面
 const TaskAdd: React.FC = () => {

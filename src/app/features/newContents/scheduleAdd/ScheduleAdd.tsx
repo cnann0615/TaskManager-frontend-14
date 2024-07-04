@@ -1,7 +1,7 @@
-import AddButton from "@/app/components/AddButton";
-import { Schedule } from "../../@types";
-import taskApi from "../../api/task";
-import { scheduleAdd } from "../../slices/scheduleSlice";
+import AddButton from "@/app/components/button/AddButton";
+import { Schedule } from "../../../@types";
+import taskApi from "../../../api/task";
+import { scheduleAdd } from "../../../slices/scheduleSlice";
 import { useForm } from "react-hook-form";
 
 import { useDispatch } from "react-redux";

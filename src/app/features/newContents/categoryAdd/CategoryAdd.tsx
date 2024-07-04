@@ -1,10 +1,10 @@
-import AddButton from "@/app/components/AddButton";
-import { Category } from "../../@types";
-import taskApi from "../../api/task";
-import { categoryAdd } from "../../slices/categorySlice";
 import { useForm } from "react-hook-form";
-
 import { useDispatch } from "react-redux";
+
+import AddButton from "@/app/components/button/AddButton";
+import { Category } from "../../../@types";
+import taskApi from "../../../api/task";
+import { categoryAdd } from "../../../slices/categorySlice";
 
 // 新規カテゴリ追加画面
 const CategoryAdd: React.FC = () => {

@@ -8,19 +8,17 @@ import React, {
 } from "react";
 import { useDispatch } from "react-redux";
 
-import TaskAdd from "./features/taskAdd/TaskAdd";
-import CategoryAdd from "./features/categoryAdd/CategoryAdd";
 import TaskList from "./features/taskList/TaskList";
 import TaskDetail from "./features/taskDetails/TaskDetail";
 import { Category, Schedule, TaskItem } from "./@types";
 import taskApi from "./api/task";
 import { inCompletedTaskAdd } from "./slices/inCompletedTaskSlice";
 import { completedTaskAdd } from "./slices/completedTaskSlice";
-import ScheduleAdd from "./features/scheduleAdd/ScheduleAdd";
 import { categoryAdd } from "./slices/categorySlice";
 import { scheduleAdd } from "./slices/scheduleSlice";
-import CloseButtonY from "./components/CloseButtonY";
-import OpenButtonY from "./components/OpenButtonY";
+import CloseButtonY from "./components/button/CloseButtonY";
+import OpenButtonY from "./components/button/OpenButtonY";
+import NewContents from "./features/newContents/NewContents";
 
 // 詳細表示対象Stateで使用する型を定義
 type ShowTaskDetail = {
@@ -122,21 +120,7 @@ export default function Home() {
                 </div>
               </button>
             </div>
-            {addOpen ? (
-              <div className=" xl:flex xl:gap-x-7 p-4 ">
-                <div className=" xl:w-2/4">
-                  <TaskAdd />
-                </div>
-                <div className=" xl:w-1/4">
-                  <CategoryAdd />
-                </div>
-                <div className=" xl:w-1/4">
-                  <ScheduleAdd />
-                </div>
-              </div>
-            ) : (
-              ""
-            )}
+            {addOpen ? <NewContents /> : ""}
           </div>
           <taskDetailOpenContext.Provider
             value={{ taskDetailOpen, setTaskDetailOpen }}
