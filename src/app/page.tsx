@@ -34,9 +34,11 @@ function SignInButton() {
     signInWithPopup(auth, provider);
   };
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-300">
+    <div className="min-h-screen -mt-[60px] flex items-center justify-center bg-slate-300 ">
       <div className="bg-white p-8 rounded-lg shadow-lg text-center">
-        <h1 className="text-5xl mb-8">Get started with Task Manager!</h1>
+        <h1 className="text-5xl mb-8 font-bold ">
+          Get started with Task Manager!
+        </h1>
         <button
           onClick={signInWithGoogle}
           className="text-2xl bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition duration-300"
