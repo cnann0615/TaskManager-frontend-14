@@ -1,11 +1,12 @@
 import { useContext } from "react";
 import { useDispatch } from "react-redux";
+
 import { useSelector } from "../../store/store";
 import { tabCategoryContext, tabScheduleContext } from "./TaskList";
 import { TaskItem } from "../../@types";
 import { completedTaskDelete } from "../../slices/completedTaskSlice";
 import { inCompletedTaskAdd } from "../../slices/inCompletedTaskSlice";
-import { showTaskDetailContext, taskDetailOpenContext } from "../../page";
+import { showTaskDetailContext, taskDetailOpenContext } from "../../Main";
 import taskApi from "../../api/task";
 
 // 完了タスクリスト

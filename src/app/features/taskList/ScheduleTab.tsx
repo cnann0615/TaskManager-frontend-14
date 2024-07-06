@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { Schedule } from "../../@types";
 import { scheduleUpdate } from "../../slices/scheduleSlice";
 import taskApi from "../../api/task";
-import { showTaskDetailContext } from "../../page";
+import { showTaskDetailContext } from "../../Main";
 import { inCompletedTaskUpdateSchedule } from "../../slices/inCompletedTaskSlice";
 import { completedTaskUpdateSchedule } from "../../slices/completedTaskSlice";
 

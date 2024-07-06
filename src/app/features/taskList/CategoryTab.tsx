@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { Category } from "../../@types";
 import { categoryUpdate } from "../../slices/categorySlice";
 import taskApi from "../../api/task";
-import { showTaskDetailContext } from "../../page";
+import { showTaskDetailContext } from "../../Main";
 import { inCompletedTaskUpdateCategory } from "../../slices/inCompletedTaskSlice";
 import { completedTaskUpdateCategory } from "../../slices/completedTaskSlice";
 
