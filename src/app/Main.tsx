@@ -19,39 +19,40 @@ import { scheduleAdd } from "./slices/scheduleSlice";
 import CloseButtonY from "./components/button/CloseButtonY";
 import OpenButtonY from "./components/button/OpenButtonY";
 import NewContents from "./features/newContents/NewContents";
+import Account from "./features/account/Account";
 
-// 詳細表示対象Stateで使用する型を定義
+// 詳細表示対象Contextで使用する型を定義
 type ShowTaskDetail = {
   showTaskDetail: TaskItem | any;
   setShowTaskDetail: Dispatch<SetStateAction<TaskItem | any>>;
 };
 
-// 詳細表示対象タスクStateを作成
+// 詳細表示対象タスクContextを作成
 export const showTaskDetailContext = createContext<ShowTaskDetail>({
   showTaskDetail: null,
   setShowTaskDetail: () => {}, // この関数はダミー。実際にはuseStateによって提供される関数に置き換わる。
 });
 
-// 詳細表示対象タスク編集状態管理Stateで使用する型を定義
+// 詳細表示対象タスク編集状態管理Contextで使用する型を定義
 type ShowTaskDetailEditing = {
   showTaskDetailEditing: TaskItem | any;
   setShowTaskDetailEditing: Dispatch<SetStateAction<TaskItem | any>>;
 };
 
-// 詳細表示対象タスク編集状態管理Stateを作成
+// 詳細表示対象タスク編集状態管理Contextを作成
 export const showTaskDetailEditingContext =
   createContext<ShowTaskDetailEditing>({
     showTaskDetailEditing: null,
     setShowTaskDetailEditing: () => {}, // この関数はダミー。実際にはuseStateによって提供される関数に置き換わる。
   });
 
-// 詳細表示展開Stateで使用する型を定義
+// 詳細表示展開Contextで使用する型を定義
 type taskDetailOpen = {
   taskDetailOpen: boolean;
   setTaskDetailOpen: Dispatch<SetStateAction<boolean>>;
 };
 
-// 詳細表示展開Stateを作成
+// 詳細表示展開Contextを作成
 export const taskDetailOpenContext = createContext<taskDetailOpen>({
   taskDetailOpen: false,
   setTaskDetailOpen: () => {}, // この関数はダミー。実際にはuseStateによって提供される関数に置き換わる。
@@ -106,6 +107,7 @@ export default function Main() {
         value={{ showTaskDetail, setShowTaskDetail }}
       >
         <main className=" mx-10 md:mx-20 my-8">
+          <Account />
           <div className=" bg-gray-50 mx-auto my-4 p-4 border rounded-lg shadow">
             <div>
               <button

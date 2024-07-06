@@ -18,8 +18,6 @@ import React, { useState, useContext } from "react";
 import { useDispatch } from "react-redux";
 import CloseButtonY from "@/app/components/button/CloseButtonY";
 import OpenButtonY from "@/app/components/button/OpenButtonY";
-import CloseButtonX from "@/app/components/button/CloseButtonX";
-import OpenButtonX from "@/app/components/OpenButtonX";
 
 // タスク詳細コンポーネント
 const TaskDetail = () => {

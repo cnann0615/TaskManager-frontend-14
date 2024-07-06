@@ -2,13 +2,14 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { GoogleAuthProvider } from "firebase/auth";
 
+// firebase設定ファイル
 const firebaseConfig = {
-  apiKey: "AIzaSyCzPeCJieinG7SlYasVoKs9McfNrDcY1II",
-  authDomain: "taskmanager-9a3bd.firebaseapp.com",
-  projectId: "taskmanager-9a3bd",
-  storageBucket: "taskmanager-9a3bd.appspot.com",
-  messagingSenderId: "916929100141",
-  appId: "1:916929100141:web:6ea39dff04674de1120264",
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGE_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);
