@@ -77,7 +77,10 @@ const CompletedTaskList: React.FC = () => {
           ""
         )}
         {filteredCompletedTaskItems.map((task, index) => (
-          <li className="bg-white flex items-center justify-between mb-2 px-2 py-3 border">
+          <li
+            className="bg-white flex items-center justify-between mb-2 px-2 py-3 border"
+            key={index}
+          >
             <button
               onClick={() => switchInCompleted(task)}
               className=" text-xl text-blue-500 hover:text-blue-700"

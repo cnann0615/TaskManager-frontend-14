@@ -145,20 +145,21 @@ const CategoryTab: React.FC = () => {
       await taskApi.categoryDelete(deleteCategory);
     }
   };
-
   return (
-    <div className=" ml-10 border-b border-gray-300">
+    <div className="ml-10 border-b border-gray-300">
       <button
         onClick={() => switchTab(0)}
         className={`bg-teal-100 hover:bg-teal-300 text-black py-2 px-4 rounded-t focus:outline-none focus:shadow-outline mr-[6.5px] ${
-          tabCategory === 0 ? "font-bold bg-teal-300" : ""
+          tabCategory === 0
+            ? "font-bold bg-teal-300 border-b-2 border-teal-500"
+            : "border-b-2 border-teal-300"
         }`}
       >
         All
       </button>
       <div className="inline-block">
         {categories.map((category, index) => (
-          <div className="inline-block">
+          <div className="inline-block" key={index}>
             {editCategoryId === category.id ? (
               <input
                 type="text"
@@ -172,7 +173,9 @@ const CategoryTab: React.FC = () => {
               <button
                 onClick={() => switchTab(category.id!)}
                 className={`bg-teal-100 hover:bg-teal-300 text-black py-2 px-4 rounded-t focus:outline-none focus:shadow-outline mr-[6.5px] ${
-                  tabCategory === category.id ? "font-bold bg-teal-300" : ""
+                  tabCategory === category.id
+                    ? "font-bold bg-teal-300 border-b-2 border-teal-500"
+                    : "border-b-2 border-teal-300"
                 }`}
               >
                 {category.name}
@@ -182,7 +185,7 @@ const CategoryTab: React.FC = () => {
                     e.stopPropagation(); // ボタン内のボタンのクリックイベントを阻止（カテゴリ名編集ボタンとタブのクリックを独立させる）
                     editCategory(category);
                   }}
-                  className="text-xs my-0 ml-3 opacity-50 hover:opacity-100 cursor-pointer "
+                  className="text-xs my-0 ml-3 opacity-50 hover:opacity-100 cursor-pointer"
                 >
                   ✏️
                 </span>
@@ -192,7 +195,7 @@ const CategoryTab: React.FC = () => {
                     e.stopPropagation(); // ボタン内のボタンのクリックイベントを阻止（カテゴリ名編集ボタンとタブのクリックを独立させる）
                     deleteCategory(category);
                   }}
-                  className=" text-[5px] my-0 ml-3 opacity-50 hover:opacity-100 cursor-pointer "
+                  className="text-[5px] my-0 ml-3 opacity-50 hover:opacity-100 cursor-pointer"
                 >
                   ❌
                 </span>

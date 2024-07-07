@@ -3,17 +3,14 @@ import React, {
   createContext,
   Dispatch,
   SetStateAction,
-  useEffect,
 } from "react";
+import { MdOutlineExpandLess, MdOutlineExpandMore } from "react-icons/md";
+import { GoTasklist } from "react-icons/go";
 
 import CompletedTaskList from "./CompletedTaskList";
 import InCompletedTaskList from "./InCompletedTaskList";
 import CategoryTab from "./CategoryTab";
 import ScheduleTab from "./ScheduleTab";
-import OpenButtonY from "@/app/components/button/OpenButtonY";
-import CloseButtonY from "@/app/components/button/CloseButtonY";
-import CloseButtonX from "@/app/components/button/CloseButtonX";
-import OpenButtonX from "@/app/components/OpenButtonX";
 
 // tabCategoryとtabScheduleの状態とその更新関数の型を定義
 type TabCategory = {
@@ -49,28 +46,31 @@ const TaskList: React.FC = () => {
         <tabScheduleContext.Provider value={{ tabSchedule, setTabSchedule }}>
           <div>
             <div>
-              <button
-                onClick={() => {
-                  setTaskListOpen(!taskListOpen);
-                }}
-                className="text-blue-500 text-xl m-2 font-bold"
-              >
-                <div className=" flex ">
+              <div className=" flex items-center text-blue-500 text-2xl m-2 font-bold">
+                <div className=" flex items-center gap-2">
+                  <GoTasklist size={35} />
                   <h1 className=" mr-1 ">Task List</h1>
-                  {window.innerWidth <= 1280 ? (
-                    taskListOpen ? (
-                      <CloseButtonY />
-                    ) : (
-                      <OpenButtonY />
-                    )
-                  ) : (
-                    ""
-                  )}
                 </div>
-              </button>
+                {window.innerWidth <= 1280 ? (
+                  <button
+                    onClick={() => {
+                      setTaskListOpen(!taskListOpen);
+                    }}
+                    className=""
+                  >
+                    {taskListOpen ? (
+                      <MdOutlineExpandLess size={35} />
+                    ) : (
+                      <MdOutlineExpandMore size={35} />
+                    )}
+                  </button>
+                ) : (
+                  ""
+                )}
+              </div>
             </div>
             {taskListOpen ? (
-              <div className=" mt-3">
+              <div className=" mt-6">
                 <CategoryTab />
                 <div className=" flex">
                   <ScheduleTab />

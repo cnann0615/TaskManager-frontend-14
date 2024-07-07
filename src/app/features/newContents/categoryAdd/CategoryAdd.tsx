@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
+import { MdOutlineCategory } from "react-icons/md";
 
 import AddButton from "@/app/components/button/AddButton";
 import { Category } from "../../../@types";
@@ -46,7 +47,10 @@ const CategoryAdd: React.FC = () => {
 
   return (
     <div>
-      <h3 className="font-bold">New Category</h3>
+      <div className=" flex items-center gap-2">
+        <MdOutlineCategory size={25} />
+        <h3 className="font-bold">New Category</h3>
+      </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="bg-white mx-auto mt-4 mb-10 p-4 border rounded-lg shadow"

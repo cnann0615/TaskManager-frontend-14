@@ -3,6 +3,7 @@ import { Schedule } from "../../../@types";
 import taskApi from "../../../api/task";
 import { scheduleAdd } from "../../../slices/scheduleSlice";
 import { useForm } from "react-hook-form";
+import { GrSchedules } from "react-icons/gr";
 
 import { useDispatch } from "react-redux";
 
@@ -46,7 +47,10 @@ const ScheduleAdd: React.FC = () => {
 
   return (
     <div>
-      <h3 className="font-bold">New Schedule</h3>
+      <div className=" flex items-center gap-2">
+        <GrSchedules size={25} />
+        <h3 className="font-bold">New Schedule</h3>
+      </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="bg-white mx-auto mt-4 mb-10 p-4 border rounded-lg shadow"

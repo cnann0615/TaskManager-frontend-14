@@ -1,8 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useDispatch } from "react-redux";
+import { BiDetail } from "react-icons/bi";
 
-import CloseButtonY from "@/app/components/button/CloseButtonY";
-import OpenButtonY from "@/app/components/button/OpenButtonY";
 import {
   showTaskDetailContext,
   showTaskDetailEditingContext,
@@ -18,6 +17,7 @@ import {
   inCompletedTaskUpdate,
 } from "../../slices/inCompletedTaskSlice";
 import { useSelector } from "../../store/store";
+import { MdOutlineExpandLess, MdOutlineExpandMore } from "react-icons/md";
 
 // タスク詳細コンポーネント
 const TaskDetail = () => {
@@ -121,28 +121,32 @@ const TaskDetail = () => {
     <>
       <div className=" bg-gray-50 mx-auto mt-4 p-4 border shadow xl:w-3/5  overflow-hidden rounded-lg">
         <div>
-          <button
-            onClick={() => {
-              setTaskDetailOpen(!taskDetailOpen);
-            }}
-            className="text-blue-500 text-xl m-2 font-bold"
-          >
-            <div className=" flex ">
+          <div className=" flex items-center text-blue-500 text-2xl m-2 font-bold">
+            <div className=" flex items-center gap-2">
+              <BiDetail size={35} />
               <h1 className=" mr-1 ">Task Detail</h1>
-              {window.innerWidth <= 1280 ? (
-                taskDetailOpen ? (
-                  <CloseButtonY />
-                ) : (
-                  <OpenButtonY />
-                )
-              ) : (
-                ""
-              )}
             </div>
-          </button>
+
+            {window.innerWidth <= 1280 ? (
+              <button
+                onClick={() => {
+                  setTaskDetailOpen(!taskDetailOpen);
+                }}
+                className=""
+              >
+                {taskDetailOpen ? (
+                  <MdOutlineExpandLess size={35} />
+                ) : (
+                  <MdOutlineExpandMore size={35} />
+                )}
+              </button>
+            ) : (
+              ""
+            )}
+          </div>
         </div>
         {taskDetailOpen ? (
-          <div className=" mt-3 ">
+          <div className=" mt-6 ">
             <table className="min-w-full leading-normal border ">
               <thead>
                 <tr>

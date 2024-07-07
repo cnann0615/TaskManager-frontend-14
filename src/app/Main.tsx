@@ -7,6 +7,8 @@ import React, {
   useEffect,
 } from "react";
 import { useDispatch } from "react-redux";
+import { MdOutlineExpandMore, MdOutlineExpandLess } from "react-icons/md";
+import { TbCategoryPlus } from "react-icons/tb";
 
 import TaskList from "./features/taskList/TaskList";
 import TaskDetail from "./features/taskDetails/TaskDetail";
@@ -16,8 +18,6 @@ import { inCompletedTaskAdd } from "./slices/inCompletedTaskSlice";
 import { completedTaskAdd } from "./slices/completedTaskSlice";
 import { categoryAdd } from "./slices/categorySlice";
 import { scheduleAdd } from "./slices/scheduleSlice";
-import CloseButtonY from "./components/button/CloseButtonY";
-import OpenButtonY from "./components/button/OpenButtonY";
 import NewContents from "./features/newContents/NewContents";
 import Account from "./features/account/Account";
 
@@ -106,21 +106,26 @@ export default function Main() {
       <showTaskDetailContext.Provider
         value={{ showTaskDetail, setShowTaskDetail }}
       >
-        <main className=" mx-10 md:mx-20 my-8">
+        <main className=" mx-10 md:mx-20 my-4">
           <Account />
           <div className=" bg-gray-50 mx-auto my-4 p-4 border rounded-lg shadow">
             <div>
-              <button
-                onClick={() => {
-                  setAddOpen(!addOpen);
-                }}
-                className="text-blue-500 text-xl m-2 font-bold"
-              >
-                <div className=" flex ">
-                  <h1 className=" mr-1 ">New Contents</h1>
-                  {addOpen ? <CloseButtonY /> : <OpenButtonY />}
-                </div>
-              </button>
+              <div className=" flex items-center gap-2 text-blue-500 text-2xl m-2 font-bold">
+                <TbCategoryPlus size={35} />
+                <h1>New Contents</h1>
+                <button
+                  onClick={() => {
+                    setAddOpen(!addOpen);
+                  }}
+                  className=""
+                >
+                  {addOpen ? (
+                    <MdOutlineExpandLess size={35} />
+                  ) : (
+                    <MdOutlineExpandMore size={35} />
+                  )}
+                </button>
+              </div>
             </div>
             {addOpen ? <NewContents /> : ""}
           </div>
