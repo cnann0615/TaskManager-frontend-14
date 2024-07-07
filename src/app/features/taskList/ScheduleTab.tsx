@@ -156,7 +156,9 @@ const ScheduleTab: React.FC = () => {
       <button
         onClick={() => switchTab(0)}
         className={`bg-purple-100 hover:bg-purple-300 text-black py-4 px-2 rounded-l focus:outline-none focus:shadow-outline mb-[6.5px] ${
-          tabSchedule === 0 ? "font-bold bg-purple-300" : ""
+          tabSchedule === 0
+            ? "font-bold bg-purple-300 border-b-2 border-purple-500"
+            : "border-b-2 border-purple-300"
         }`}
         style={{ writingMode: "vertical-lr", whiteSpace: "nowrap" }}
       >
@@ -167,7 +169,7 @@ const ScheduleTab: React.FC = () => {
         style={{ display: "flex", flexDirection: "column" }}
       >
         {schedules.map((schedule, index) => (
-          <div className="block" style={{ whiteSpace: "nowrap" }}>
+          <div className="block" style={{ whiteSpace: "nowrap" }} key={index}>
             {editScheduleId === schedule.id ? (
               <input
                 type="text"
@@ -182,7 +184,9 @@ const ScheduleTab: React.FC = () => {
               <button
                 onClick={() => switchTab(schedule.id!)}
                 className={` bg-purple-100 hover:bg-purple-300 text-black py-4 px-2 rounded-l focus:outline-none focus:shadow-outline ${
-                  tabSchedule === schedule.id ? "font-bold bg-purple-300" : ""
+                  tabSchedule === schedule.id
+                    ? "font-bold bg-purple-300 border-b-2 border-purple-500 "
+                    : " border-b-2 border-purple-300"
                 }`}
                 style={{
                   writingMode: "vertical-lr",
@@ -196,7 +200,7 @@ const ScheduleTab: React.FC = () => {
                     e.stopPropagation(); // ボタン内のボタンのクリックイベントを阻止（スケジュール名編集ボタンとタブのクリックを独立させる）
                     editSchedule(schedule);
                   }}
-                  className="text-xs my-0 ml-3 opacity-50 hover:opacity-100 cursor-pointer"
+                  className="text-xs my-0 ml-3 opacity-50 hover:opacity-100 cursor-pointer mt-2"
                 >
                   ✏️
                 </span>
@@ -206,7 +210,7 @@ const ScheduleTab: React.FC = () => {
                     e.stopPropagation(); // ボタン内のボタンのクリックイベントを阻止（カテゴリ名編集ボタンとタブのクリックを独立させる）
                     deleteSchedule(schedule);
                   }}
-                  className=" text-[5px] my-0 ml-3 opacity-50 hover:opacity-100 cursor-pointer "
+                  className=" text-[5px] my-0 ml-3 opacity-50 hover:opacity-100 cursor-pointer mt-2"
                 >
                   ❌
                 </span>

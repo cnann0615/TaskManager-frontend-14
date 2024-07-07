@@ -12,8 +12,6 @@ import CategoryTab from "./CategoryTab";
 import ScheduleTab from "./ScheduleTab";
 import OpenButtonY from "@/app/components/button/OpenButtonY";
 import CloseButtonY from "@/app/components/button/CloseButtonY";
-import CloseButtonX from "@/app/components/button/CloseButtonX";
-import OpenButtonX from "@/app/components/OpenButtonX";
 
 // tabCategoryとtabScheduleの状態とその更新関数の型を定義
 type TabCategory = {

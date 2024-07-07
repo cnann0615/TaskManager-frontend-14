@@ -106,7 +106,7 @@ export default function Main() {
       <showTaskDetailContext.Provider
         value={{ showTaskDetail, setShowTaskDetail }}
       >
-        <main className=" mx-10 md:mx-20 my-8">
+        <main className=" mx-10 md:mx-20 my-4">
           <Account />
           <div className=" bg-gray-50 mx-auto my-4 p-4 border rounded-lg shadow">
             <div>
