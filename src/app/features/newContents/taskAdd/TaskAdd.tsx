@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
+import {
+  MdOutlineExpandLess,
+  MdOutlineExpandMore,
+  MdOutlineAddTask,
+} from "react-icons/md";
 
 import { inCompletedTaskAdd } from "../../../slices/inCompletedTaskSlice";
 import taskApi from "../../../api/task";
 import { useSelector } from "../../../store/store";
 import { Category, Schedule, TaskItem, inputTaskItem } from "../../../@types";
 import AddButton from "@/app/components/button/AddButton";
-import CloseButtonY from "@/app/components/button/CloseButtonY";
-import OpenButtonY from "@/app/components/button/OpenButtonY";
 
 // 新規タスク追加画面
 const TaskAdd: React.FC = () => {
@@ -80,7 +83,10 @@ const TaskAdd: React.FC = () => {
 
   return (
     <div>
-      <h3 className="font-bold">New Task</h3>
+      <div className=" flex items-center gap-2">
+        <MdOutlineAddTask size={25} />
+        <h3 className="font-bold">New Task</h3>
+      </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className=" bg-white mx-auto mt-4 mb-10 p-4 border rounded-lg shadow"
@@ -167,9 +173,13 @@ const TaskAdd: React.FC = () => {
               }}
               className="text-blue-500"
             >
-              <div className=" flex ">
+              <div className=" flex items-center ">
                 <p className=" ml-1 ">Detail</p>
-                {formOpen ? <CloseButtonY /> : <OpenButtonY />}
+                {formOpen ? (
+                  <MdOutlineExpandLess size={30} />
+                ) : (
+                  <MdOutlineExpandMore size={30} />
+                )}
               </div>
             </button>
           </div>
