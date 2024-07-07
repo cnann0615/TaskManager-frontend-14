@@ -4,9 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 // カテゴリState///////////////////////////////////////////////////////////
 
 // 初期値
-const initialState: { categories: Category[] } = {
-  categories: [],
-};
+const initialState: Category[] = [];
 
 export const categoriesSlice = createSlice({
   name: "categories",
@@ -14,7 +12,7 @@ export const categoriesSlice = createSlice({
   reducers: {
     // カテゴリ追加
     categoryAdd: (state, action) => {
-      state.categories.push(action.payload);
+      state.push(action.payload);
     },
 
     // カテゴリ更新
@@ -22,13 +20,11 @@ export const categoriesSlice = createSlice({
       // action.payloadからidと更新するデータを取得
       const { id, ...updatedData } = action.payload;
       // 更新するタスクのインデックスを見つける
-      const index = state.categories.findIndex(
-        (category) => category.id === id
-      );
+      const index = state.findIndex((category) => category.id === id);
       // インデックスが見つかった場合、そのタスクを更新
       if (index !== -1) {
-        state.categories[index] = {
-          ...state.categories[index],
+        state[index] = {
+          ...state[index],
           ...updatedData,
         };
       }
@@ -37,9 +33,12 @@ export const categoriesSlice = createSlice({
     // カテゴリ削除
     categoryDelete: (state, action) => {
       const deleteCategory = action.payload;
-      state.categories = state.categories.filter(
-        (category) => category.id !== deleteCategory.id
+      const index = state.findIndex(
+        (category) => category.id === deleteCategory.id
       );
+      if (index !== -1) {
+        state.splice(index, 1);
+      }
     },
   },
 });

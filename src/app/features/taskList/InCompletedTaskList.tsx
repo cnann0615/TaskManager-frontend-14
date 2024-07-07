@@ -32,20 +32,20 @@ const InCompletedTaskList: React.FC = () => {
     tabCategory === 0
       ? tabSchedule === 0
         ? // カテゴリもスケジュールも「全て」の場合
-          inCompletedTaskItems.inCompletedTaskItems
+          inCompletedTaskItems
         : // スケジュールのみ指定がある場合
-          inCompletedTaskItems.inCompletedTaskItems.filter(
+          inCompletedTaskItems.filter(
             (inCompletedTaskItem) =>
               inCompletedTaskItem.schedule.id == tabSchedule
           )
       : tabSchedule === 0
       ? // カテゴリのみ指定がある場合
-        inCompletedTaskItems.inCompletedTaskItems.filter(
+        inCompletedTaskItems.filter(
           (inCompletedTaskItem) =>
             inCompletedTaskItem.category.id == tabCategory
         )
       : // カテゴリもスケジュールも指定がある場合
-        inCompletedTaskItems.inCompletedTaskItems.filter(
+        inCompletedTaskItems.filter(
           (inCompletedTaskItem) =>
             inCompletedTaskItem.category.id == tabCategory &&
             inCompletedTaskItem.schedule.id == tabSchedule

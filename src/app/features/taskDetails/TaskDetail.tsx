@@ -1,3 +1,8 @@
+import React, { useState, useContext } from "react";
+import { useDispatch } from "react-redux";
+
+import CloseButtonY from "@/app/components/button/CloseButtonY";
+import OpenButtonY from "@/app/components/button/OpenButtonY";
 import {
   showTaskDetailContext,
   showTaskDetailEditingContext,
@@ -13,11 +18,6 @@ import {
   inCompletedTaskUpdate,
 } from "../../slices/inCompletedTaskSlice";
 import { useSelector } from "../../store/store";
-
-import React, { useState, useContext } from "react";
-import { useDispatch } from "react-redux";
-import CloseButtonY from "@/app/components/button/CloseButtonY";
-import OpenButtonY from "@/app/components/button/OpenButtonY";
 
 // タスク詳細コンポーネント
 const TaskDetail = () => {
@@ -73,14 +73,14 @@ const TaskDetail = () => {
 
     // 編集対象がカテゴリの場合、選択されたカテゴリidに一致するカテゴリオブジェクトを取得
     if (field === "category") {
-      const selectedCategory = categories.categories.find(
+      const selectedCategory = categories.find(
         (category) => category.id == value
       );
       // 更新内容を一時的に保存するオブジェクト
       updatedDetail = { ...showTaskDetail, [field]: selectedCategory };
       // 編集対象がスケジュールの場合、選択されたスケジュールidに一致するスケジュールオブジェクトを取得
     } else if (field === "schedule") {
-      const selectedSchedule = schedules.schedules.find(
+      const selectedSchedule = schedules.find(
         (schedule) => schedule.id == value
       );
       // 更新内容を一時的に保存するオブジェクト
@@ -239,7 +239,7 @@ const TaskDetail = () => {
                           autoFocus
                           className="rounded-md border-gray-300 focus:outline-none bg-gray-50 py-2"
                         >
-                          {categories.categories.map((category) => (
+                          {categories.map((category) => (
                             <option key={category.id} value={category.id}>
                               {category.name}
                             </option>
@@ -278,7 +278,7 @@ const TaskDetail = () => {
                           autoFocus
                           className="rounded-md border-gray-300 focus:outline-none bg-gray-50 py-2"
                         >
-                          {schedules.schedules.map((schedule) => (
+                          {schedules.map((schedule) => (
                             <option key={schedule.id} value={schedule.id}>
                               {schedule.name}
                             </option>

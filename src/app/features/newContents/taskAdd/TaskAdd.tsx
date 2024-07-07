@@ -120,7 +120,7 @@ const TaskAdd: React.FC = () => {
                   className="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                 >
                   {/* useEffect内で取得したカテゴリを表示 */}
-                  {categories.categories.map((category) => (
+                  {categories.map((category) => (
                     <option key={category.id} value={category.id}>
                       {category.name}
                     </option>
@@ -136,7 +136,7 @@ const TaskAdd: React.FC = () => {
                   className="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                 >
                   {/* useEffect内で取得したカテゴリを表示 */}
-                  {schedules.schedules.map((schedule) => (
+                  {schedules.map((schedule) => (
                     <option key={schedule.id} value={schedule.id}>
                       {schedule.name}
                     </option>

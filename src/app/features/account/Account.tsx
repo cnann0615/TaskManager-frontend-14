@@ -1,15 +1,21 @@
-import { auth } from "@/app/firebase";
+import { useDispatch } from "react-redux";
 import { useAuthState } from "react-firebase-hooks/auth";
+
+import { auth } from "@/app/firebase";
 
 // サインインアカウント情報を表示
 
 const Account = () => {
+  const dispatch = useDispatch();
+
   // サインイン情報取得
   const [user] = useAuthState(auth);
 
   //   サインアウトボタンが押されたらサインアウトする
   const signOut = () => {
     auth.signOut();
+    // ブラウザをリロードする（状態管理をリセットするため）
+    location.reload();
   };
   return (
     <div className=" flex gap-2 justify-end">

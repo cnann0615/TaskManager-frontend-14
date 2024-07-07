@@ -9,9 +9,9 @@ const SignIn = () => {
   const [user] = useAuthState(auth);
 
   // サインインボタン押下時
-  const signInWithGoogle = async () => {
+  const signInWithGoogle = () => {
     // Googleアカウント認証を実行（認証されると上記userがtrueになる。）
-    await signInWithPopup(auth, provider)
+    signInWithPopup(auth, provider)
       .then((result) => {
         // ユーザーが正常にサインインした場合の処理
         console.log("サインイン成功:", result.user);

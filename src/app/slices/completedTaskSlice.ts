@@ -4,9 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 // 完了タスクState///////////////////////////////////////////////////
 
 // 初期値
-const initialState: { completedTaskItems: TaskItem[] } = {
-  completedTaskItems: [],
-};
+const initialState: TaskItem[] = [];
 
 export const completedTaskItemsSlice = createSlice({
   name: "completedTaskItems",
@@ -14,7 +12,7 @@ export const completedTaskItemsSlice = createSlice({
   reducers: {
     // タスク追加
     completedTaskAdd: (state, action) => {
-      state.completedTaskItems.push(action.payload);
+      state.push(action.payload);
     },
 
     // タスク更新
@@ -22,13 +20,11 @@ export const completedTaskItemsSlice = createSlice({
       // action.payloadからidと更新するデータを取得
       const { id, ...updatedData } = action.payload;
       // 更新するタスクのインデックスを見つける
-      const index = state.completedTaskItems.findIndex(
-        (task) => task.id === id
-      );
+      const index = state.findIndex((task) => task.id === id);
       // インデックスが見つかった場合、そのタスクを更新
       if (index !== -1) {
-        state.completedTaskItems[index] = {
-          ...state.completedTaskItems[index],
+        state[index] = {
+          ...state[index],
           ...updatedData,
         };
       }
@@ -37,7 +33,7 @@ export const completedTaskItemsSlice = createSlice({
     // タスクのカテゴリ名を更新（特定のカテゴリが割り当てられているものを一括して更新）
     completedTaskUpdateCategory: (state, action) => {
       const updateCategory = action.payload;
-      state.completedTaskItems.forEach((completedTaskItem) => {
+      state.forEach((completedTaskItem) => {
         if (completedTaskItem.category.id === updateCategory.id) {
           completedTaskItem.category.name = updateCategory.name;
         }
@@ -46,7 +42,7 @@ export const completedTaskItemsSlice = createSlice({
     // タスクのスケジュール名を更新（特定のスケジュールが割り当てられているものを一括して更新）
     completedTaskUpdateSchedule: (state, action) => {
       const updateSchedule = action.payload;
-      state.completedTaskItems.forEach((completedTaskItem) => {
+      state.forEach((completedTaskItem) => {
         if (completedTaskItem.schedule.id === updateSchedule.id) {
           completedTaskItem.schedule.name = updateSchedule.name;
         }
@@ -56,9 +52,10 @@ export const completedTaskItemsSlice = createSlice({
     // タスク削除
     completedTaskDelete: (state, action) => {
       const deleteTask = action.payload;
-      state.completedTaskItems = state.completedTaskItems.filter(
-        (completedTaskItem) => completedTaskItem.id !== deleteTask.id
-      );
+      const index = state.findIndex((task) => task.id === deleteTask.id);
+      if (index !== -1) {
+        state.splice(index, 1); // stateを直接操作してタスクを削除する
+      }
     },
   },
 });

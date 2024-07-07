@@ -4,9 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 // カテゴリState///////////////////////////////////////////////////////////
 
 // 初期値
-const initialState: { schedules: Schedule[] } = {
-  schedules: [],
-};
+const initialState: Schedule[] = [];
 
 export const schedulesSlice = createSlice({
   name: "schedules",
@@ -14,7 +12,7 @@ export const schedulesSlice = createSlice({
   reducers: {
     // カテゴリ追加
     scheduleAdd: (state, action) => {
-      state.schedules.push(action.payload);
+      state.push(action.payload);
     },
 
     // カテゴリ更新
@@ -22,11 +20,11 @@ export const schedulesSlice = createSlice({
       // action.payloadからidと更新するデータを取得
       const { id, ...updatedData } = action.payload;
       // 更新するタスクのインデックスを見つける
-      const index = state.schedules.findIndex((schedule) => schedule.id === id);
+      const index = state.findIndex((schedule) => schedule.id === id);
       // インデックスが見つかった場合、そのタスクを更新
       if (index !== -1) {
-        state.schedules[index] = {
-          ...state.schedules[index],
+        state[index] = {
+          ...state[index],
           ...updatedData,
         };
       }
@@ -35,9 +33,12 @@ export const schedulesSlice = createSlice({
     // カテゴリ削除
     scheduleDelete: (state, action) => {
       const deleteSchedule = action.payload;
-      state.schedules = state.schedules.filter(
-        (schedule) => schedule.id !== deleteSchedule.id
+      const index = state.findIndex(
+        (schedule) => schedule.id === deleteSchedule.id
       );
+      if (index !== -1) {
+        state.splice(index, 1);
+      }
     },
   },
 });
