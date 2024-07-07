@@ -123,7 +123,6 @@ const taskApi = {
   // カテゴリ削除//////////////
   // カテゴリ（１件）削除
   async categoryDelete(category: Category) {
-    console.log(category.id);
     const result = await axios.delete(
       ENDPOINT_URL + "/category/" + category.id
     );
@@ -133,7 +132,6 @@ const taskApi = {
   // スケジュール削除//////////////
   // スケジュール（１件）削除
   async scheduleDelete(schedule: Schedule) {
-    console.log(schedule.id);
     const result = await axios.delete(
       ENDPOINT_URL + "/schedule/" + schedule.id
     );
@@ -154,7 +152,7 @@ const taskApi = {
     await axios.put(ENDPOINT_URL + "/updateCategory", category);
   },
 
-    // スケジュール更新//////////////
+  // スケジュール更新//////////////
   // スケジュール（１件）更新
   async updateSchedule(schedule: Schedule) {
     await axios.put(ENDPOINT_URL + "/updateSchedule", schedule);

@@ -2,11 +2,17 @@ import { useSelector } from "../../store/store";
 import { tabCategoryContext } from "./TaskList";
 import { useDispatch } from "react-redux";
 import { Category } from "../../@types";
-import { categoryUpdate } from "../../slices/categorySlice";
+import { categoryDelete, categoryUpdate } from "../../slices/categorySlice";
 import taskApi from "../../api/task";
 import { showTaskDetailContext } from "../../Main";
-import { inCompletedTaskUpdateCategory } from "../../slices/inCompletedTaskSlice";
-import { completedTaskUpdateCategory } from "../../slices/completedTaskSlice";
+import {
+  inCompletedTaskDelete,
+  inCompletedTaskUpdateCategory,
+} from "../../slices/inCompletedTaskSlice";
+import {
+  completedTaskDelete,
+  completedTaskUpdateCategory,
+} from "../../slices/completedTaskSlice";
 
 import { useContext, useState } from "react";
 
@@ -14,8 +20,12 @@ import { useContext, useState } from "react";
 const CategoryTab: React.FC = () => {
   const dispatch = useDispatch();
 
-  // カテゴリStateを取得
+  // 必要なStateを取得
   const categories = useSelector((state) => state.categories);
+  const inCompletedTaskItems = useSelector(
+    (state) => state.inCompletedTaskItems
+  );
+  const completedTaskItems = useSelector((state) => state.completedTaskItems);
 
   // タブカテゴリ管理State（どのタブが選択されているかを管理）
   const { tabCategory, setTabCategory } = useContext(tabCategoryContext);
@@ -48,42 +58,92 @@ const CategoryTab: React.FC = () => {
 
   // 編集内容を確定し、Stateを更新（対象のカテゴリからカーソルが離れた時）
   const commitEdit = async () => {
-    // カテゴリStateの更新
-    const updateCategory = {
-      id: editCategoryId!,
-      name: editCategoryName!,
-      orderIndex: editCategoryOrderIndex!,
-    };
-    dispatch(categoryUpdate(updateCategory));
+    if (editCategoryName) {
+      // カテゴリStateの更新
+      const updateCategory = {
+        id: editCategoryId!,
+        name: editCategoryName!,
+        orderIndex: editCategoryOrderIndex!,
+      };
+      dispatch(categoryUpdate(updateCategory));
 
-    // 詳細表示されているタスクのカテゴリを動的に更新
-    if (showTaskDetail) {
-      let updateShowTaskDetail = { ...showTaskDetail };
-      // 更新したカテゴリが詳細表示対象のタスクのカテゴリだった場合、カテゴリ名を動的に更新する
-      if (showTaskDetail.category.id === updateCategory.id) {
-        updateShowTaskDetail = {
-          ...showTaskDetail,
-          category: {
-            id: updateCategory.id,
-            name: updateCategory.name,
-            orderIndex: updateCategory.orderIndex!,
-          },
-        };
+      // 詳細表示されているタスクのカテゴリを動的に更新
+      if (showTaskDetail) {
+        let updateShowTaskDetail = { ...showTaskDetail };
+        // 更新したカテゴリが詳細表示対象のタスクのカテゴリだった場合、カテゴリ名を動的に更新する
+        if (showTaskDetail.category.id === updateCategory.id) {
+          updateShowTaskDetail = {
+            ...showTaskDetail,
+            category: {
+              id: updateCategory.id,
+              name: updateCategory.name,
+              orderIndex: updateCategory.orderIndex!,
+            },
+          };
+        }
+        setShowTaskDetail(updateShowTaskDetail);
       }
-      setShowTaskDetail(updateShowTaskDetail);
+
+      // 未完了タスクStateのカテゴリを動的に更新
+      dispatch(inCompletedTaskUpdateCategory(updateCategory));
+
+      // 完了タスクStateのカテゴリを動的に更新
+      dispatch(completedTaskUpdateCategory(updateCategory));
+
+      // APIを経由してデータベースに保存（更新）
+      await taskApi.updateCategory(updateCategory);
     }
-
-    // 未完了タスクStateのカテゴリを動的に更新
-    dispatch(inCompletedTaskUpdateCategory(updateCategory));
-
-    // 完了タスクStateのカテゴリを動的に更新
-    dispatch(completedTaskUpdateCategory(updateCategory));
-
-    // APIを経由してデータベースに保存（更新）
-    await taskApi.updateCategory(updateCategory);
-
     // 編集状態をクリア
     setEditCategoryId(null);
+  };
+
+  // カテゴリ削除
+  const deleteCategory = async (deleteCategory: Category) => {
+    // 確認ポップアップを表示
+    const isConfirmed = window.confirm(
+      "カテゴリに割り当てられたタスクも削除されます。本当に削除しますか？"
+    );
+    // 上記ポップアップへのアクションがYesの場合
+    if (isConfirmed) {
+      // 削除対象カテゴリに割り当てられているタスクを全て削除
+      // 未完了タスクから削除
+      const deleteInCompletedTaskItems = inCompletedTaskItems.filter(
+        (inCompletedTaskItem) =>
+          inCompletedTaskItem.category.id === deleteCategory.id
+      );
+      const inCompletedTaskPromises = deleteInCompletedTaskItems.map(
+        async (inCompletedTaskItem) => {
+          dispatch(inCompletedTaskDelete(inCompletedTaskItem));
+          await taskApi.taskDelete(inCompletedTaskItem);
+        }
+      );
+
+      // 完了タスクから削除
+      const deleteCompletedTaskItems = completedTaskItems.filter(
+        (completedTaskItem) =>
+          completedTaskItem.category.id === deleteCategory.id
+      );
+      const completedTaskPromises = deleteCompletedTaskItems.map(
+        async (completedTaskItem) => {
+          dispatch(completedTaskDelete(completedTaskItem));
+          await taskApi.taskDelete(completedTaskItem);
+        }
+      );
+
+      // 全てのタスク削除処理が完了するのを待つ（削除対象のカテゴリに紐づくタスクを先に消しておかないと、タスクのカテゴリ参照先がなくなりエラーとなるため。）
+      await Promise.all([...inCompletedTaskPromises, ...completedTaskPromises]);
+
+      // 詳細表示タスクに割り当てられている場合、詳細表示タスクをnullにする。
+      if (showTaskDetail && showTaskDetail.category.id === deleteCategory.id) {
+        setShowTaskDetail(null);
+      }
+
+      // カテゴリStateから削除
+      dispatch(categoryDelete(deleteCategory));
+
+      // APIを経由してデータベースから削除
+      await taskApi.categoryDelete(deleteCategory);
+    }
   };
 
   return (
@@ -97,7 +157,7 @@ const CategoryTab: React.FC = () => {
         All
       </button>
       <div className="inline-block">
-        {categories.categories.map((category, index) => (
+        {categories.map((category, index) => (
           <div className="inline-block">
             {editCategoryId === category.id ? (
               <input
@@ -125,6 +185,16 @@ const CategoryTab: React.FC = () => {
                   className="text-xs my-0 ml-3 opacity-50 hover:opacity-100 cursor-pointer "
                 >
                   ✏️
+                </span>
+                {/* タブの中の、カテゴリ削除ボタン */}
+                <span
+                  onClick={(e) => {
+                    e.stopPropagation(); // ボタン内のボタンのクリックイベントを阻止（カテゴリ名編集ボタンとタブのクリックを独立させる）
+                    deleteCategory(category);
+                  }}
+                  className=" text-[5px] my-0 ml-3 opacity-50 hover:opacity-100 cursor-pointer "
+                >
+                  ❌
                 </span>
               </button>
             )}
