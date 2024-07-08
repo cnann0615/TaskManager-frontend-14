@@ -32,13 +32,13 @@ const SignIn = () => {
   };
   return (
     <div className="flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg text-center">
-        <h3 className="text-gray-700 text-3xl mb-8 font-bold ">
+      <div className="bg-white p-8 text-center">
+        <h3 className="text-gray-700 text-2xl md:text-5xl mb-8 font-bold ">
           Get started with
         </h3>
-        <div className="flex items-center gap-2 mb-8">
-          <MdOutlineTaskAlt size={55} />
-          <h1 className="text-5xl font-bold ">Task Manager！</h1>
+        <div className="flex items-center gap-3 mb-8">
+          <MdOutlineTaskAlt className=" size-10  md:size-20" />
+          <h1 className="text-4xl md:text-7xl font-bold ">Task Manager！</h1>
         </div>
         {/* サインインボタン */}
         <button
@@ -46,8 +46,8 @@ const SignIn = () => {
           className="bg-white text-blue-500 font-bold py-2 px-4 rounded-xl hover:bg-gray-100 transition duration-300 border-2 border-gray-200"
         >
           <div className=" flex items-center gap-2">
-            <FcGoogle size={30} />
-            <h3 className=" text-xl ">サインイン</h3>
+            <FcGoogle className=" size-6 md:size-12" />
+            <h3 className=" text-lg md:text-2xl ">Sign In</h3>
           </div>
         </button>
       </div>

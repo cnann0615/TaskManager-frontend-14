@@ -6,10 +6,14 @@ import { useForm } from "react-hook-form";
 import { GrSchedules } from "react-icons/gr";
 
 import { useDispatch } from "react-redux";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "@/app/firebase";
 
 // 新規スケジュール追加画面
 const ScheduleAdd: React.FC = () => {
   const dispatch = useDispatch();
+  const [user] = useAuthState(auth);
+  const userId = auth.currentUser!.uid;
 
   // useFormを使用したフォームの処理///////////
   const {
@@ -21,7 +25,7 @@ const ScheduleAdd: React.FC = () => {
 
   const onSubmit = async (schedule: Schedule) => {
     // APIから新規タスク用のorderIndexを取得
-    let orderIndex = await taskApi.maxScheduleOrderIndexGet();
+    let orderIndex = await taskApi.maxScheduleOrderIndexGet(userId);
     if (orderIndex) {
       orderIndex += 1;
     } else {
@@ -38,7 +42,7 @@ const ScheduleAdd: React.FC = () => {
     scheduleAddSuccess &&
       (async () => {
         // IDが設定された新しいスケジュールを再度APIを経由してデータベースから取得
-        const _newSchedule: Schedule = await taskApi.latestScheduleGet();
+        const _newSchedule: Schedule = await taskApi.latestScheduleGet(userId);
         // 新しいスケジュールをスケジュールのStateに追加
         dispatch(scheduleAdd(_newSchedule));
       })();

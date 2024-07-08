@@ -10,81 +10,101 @@ const taskApi = {
 
   // タスク取得///////////////
   // 全タスク取得
-  async taskGetAll() {
-    const result = await axios.get(ENDPOINT_URL + "/task");
+  async taskGetAll(userId: string) {
+    const result = await axios.get(`${ENDPOINT_URL}/task?userId=${userId}`);
     return result.data;
   },
   // 未完了タスク取得
-  async inCompletedTaskGet() {
-    const result = await axios.get(ENDPOINT_URL + "/inCompletedTask");
+  async inCompletedTaskGet(userId: string) {
+    const result = await axios.get(
+      `${ENDPOINT_URL}/inCompletedTask?userId=${userId}`
+    );
     return result.data;
   },
   // 完了タスク取得
-  async completedTaskGet() {
-    const result = await axios.get(ENDPOINT_URL + "/completedTask");
+  async completedTaskGet(userId: string) {
+    const result = await axios.get(
+      `${ENDPOINT_URL}/completedTask?userId=${userId}`
+    );
     return result.data;
   },
   // タスクをカテゴリIDから取得
-  async taskGetByCategoryId(categoryId: number) {
-    const result = await axios.get(ENDPOINT_URL + "/task/" + categoryId);
+  async taskGetByCategoryId(userId: string, categoryId: number) {
+    const result = await axios.get(
+      `${ENDPOINT_URL}/task/${categoryId}?userId=${userId}`
+    );
     return result.data;
   },
   // タスクをスケジュールIDから取得
-  async taskGetByScheduleId(scheduleId: number) {
-    const result = await axios.get(ENDPOINT_URL + "/task/" + scheduleId);
+  async taskGetByScheduleId(userId: string, scheduleId: number) {
+    const result = await axios.get(
+      `${ENDPOINT_URL}/task/${scheduleId}?userId=${userId}`
+    );
     return result.data;
   },
   // 最新のタスク取得
-  async latestTaskGet() {
-    const result = await axios.get(ENDPOINT_URL + "/latestTask");
+  async latestTaskGet(userId: string) {
+    const result = await axios.get(
+      `${ENDPOINT_URL}/latestTask?userId=${userId}`
+    );
     return result.data;
   },
   // 最大のorderIndex（タスク）を取得
-  async maxTaskOrderIndexGet() {
-    let result = await axios.get(ENDPOINT_URL + "/maxTaskOrderIndex");
+  async maxTaskOrderIndexGet(userId: string) {
+    let result = await axios.get(
+      `${ENDPOINT_URL}/maxTaskOrderIndex?userId=${userId}`
+    );
     return result.data;
   },
   // カテゴリ取得///////////////
   // 全カテゴリ取得
-  async categoryGetAll() {
-    const result = await axios.get(ENDPOINT_URL + "/category");
+  async categoryGetAll(userId: string) {
+    const result = await axios.get(`${ENDPOINT_URL}/category?userId=${userId}`);
     return result.data;
   },
   // 最新のカテゴリ取得
-  async latestCategoryGet() {
-    const result = await axios.get(ENDPOINT_URL + "/latestCategory");
+  async latestCategoryGet(userId: string) {
+    const result = await axios.get(
+      `${ENDPOINT_URL}/latestCategory?userId=${userId}`
+    );
     return result.data;
   },
   // カテゴリをidから取得
   async categoryGetById(id: number) {
-    const result = await axios.get(ENDPOINT_URL + "/category/" + id);
+    const result = await axios.get(`${ENDPOINT_URL}/category/${id}`);
     return result.data;
   },
   // 最大のorderIndex（カテゴリ）を取得
-  async maxCategoryOrderIndexGet() {
-    let result = await axios.get(ENDPOINT_URL + "/maxCategoryOrderIndex");
+  async maxCategoryOrderIndexGet(userId: string) {
+    let result = await axios.get(
+      `${ENDPOINT_URL}/maxCategoryOrderIndex?userId=${userId}`
+    );
     return result.data;
   },
 
   // スケジュール取得///////////////
   // 全スケジュール取得
-  async scheduleGetAll() {
-    const result = await axios.get(ENDPOINT_URL + "/schedule");
+  async scheduleGetAll(userId: string) {
+    const result = await axios.get(`${ENDPOINT_URL}/schedule?userId=${userId}`);
     return result.data;
   },
   // 最新のスケジュール取得
-  async latestScheduleGet() {
-    const result = await axios.get(ENDPOINT_URL + "/latestSchedule");
+  async latestScheduleGet(userId: string) {
+    const result = await axios.get(
+      `${ENDPOINT_URL}/latestSchedule?userId=${userId}`
+    );
     return result.data;
   },
   // スケジュールをidから取得
   async scheduleGetById(id: number) {
-    const result = await axios.get(ENDPOINT_URL + "/schedule/" + id);
+    const result = await axios.get(`${ENDPOINT_URL}/schedule/${id}`);
     return result.data;
   },
   // 最大のorderIndex（スケジュール）を取得
-  async maxScheduleOrderIndexGet() {
-    let result = await axios.get(ENDPOINT_URL + "/maxScheduleOrderIndex");
+  async maxScheduleOrderIndexGet(userId: string) {
+    let result = await axios.get(
+      `${ENDPOINT_URL}/maxScheduleOrderIndex?userId=${userId}`
+    );
     return result.data;
   },
 
