@@ -12,10 +12,14 @@ import taskApi from "../../../api/task";
 import { useSelector } from "../../../store/store";
 import { Category, Schedule, TaskItem, inputTaskItem } from "../../../@types";
 import AddButton from "@/app/components/button/AddButton";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "@/app/firebase";
 
 // 新規タスク追加画面
 const TaskAdd: React.FC = () => {
   const dispatch = useDispatch();
+  const [user] = useAuthState(auth);
+  const userId = auth.currentUser!.uid;
 
   // フォーム展開State
   const [formOpen, setFormOpen] = useState(false);
@@ -37,14 +41,14 @@ const TaskAdd: React.FC = () => {
     // フォーム入力値のcategoryのidをもとに、APIでカテゴリを取得（フォーム詳細が閉じられたままタイトルのみで送られてきた場合は、Noneで登録）
     const category: Category = formOpen
       ? await taskApi.categoryGetById(Number(taskItem.category))
-      : { id: 1, name: "None", orderIndex: 1 };
+      : { id: 1, userId: userId, name: "None", orderIndex: 1 };
     // フォーム入力値のscheduleのidをもとに、APIでスケジュールを取得（フォーム詳細が閉じられたままタイトルのみで送られてきた場合は、Noneで登録）
     const schedule: Schedule = formOpen
       ? await taskApi.scheduleGetById(Number(taskItem.schedule))
-      : { id: 1, name: "None", orderIndex: 1 };
+      : { id: 1, userId: userId, name: "None", orderIndex: 1 };
 
     // APIから新規タスク用のorderIndexを取得（並び替えに使用）
-    let orderIndex = await taskApi.maxTaskOrderIndexGet();
+    let orderIndex = await taskApi.maxTaskOrderIndexGet(userId);
     if (orderIndex) {
       orderIndex += 1;
     } else {
@@ -53,6 +57,7 @@ const TaskAdd: React.FC = () => {
     // 新しいタスクオブジェクトを作成
     const newTask: TaskItem = formOpen
       ? {
+          userId: userId,
           title: taskItem.title,
           deadLine: taskItem.deadLine,
           category: category,
@@ -63,6 +68,7 @@ const TaskAdd: React.FC = () => {
         }
       : // フォーム詳細が閉じられたままタイトルのみで送られてきた場合
         {
+          userId: userId,
           title: taskItem.title,
           deadLine: "",
           category: category,
@@ -75,7 +81,7 @@ const TaskAdd: React.FC = () => {
     // 新しいタスクをAPI経由でデータベースに追加
     await taskApi.taskAdd(newTask);
     // IDが設定された新しいタスクを再度APIを経由してデータベースから取得
-    const _newTask: TaskItem = await taskApi.latestTaskGet();
+    const _newTask: TaskItem = await taskApi.latestTaskGet(userId);
     // 新しいタスクを未完了タスクのStateに追加
     dispatch(inCompletedTaskAdd(_newTask));
     reset();

@@ -20,6 +20,8 @@ import { categoryAdd } from "./slices/categorySlice";
 import { scheduleAdd } from "./slices/scheduleSlice";
 import NewContents from "./features/newContents/NewContents";
 import Account from "./features/account/Account";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "./firebase";
 
 // 詳細表示対象Contextで使用する型を定義
 type ShowTaskDetail = {
@@ -59,6 +61,9 @@ export const taskDetailOpenContext = createContext<taskDetailOpen>({
 });
 
 export default function Main() {
+  const [user] = useAuthState(auth);
+  const userId = auth.currentUser!.uid;
+
   // ADDコンテンツ展開State
   const [addOpen, setAddOpen] = useState(true);
 
@@ -78,14 +83,17 @@ export default function Main() {
   useEffect(() => {
     (async () => {
       // 未完了タスク取得
-      const inCompletedTaskItems: TaskItem[] =
-        await taskApi.inCompletedTaskGet();
+      const inCompletedTaskItems: TaskItem[] = await taskApi.inCompletedTaskGet(
+        userId
+      );
       // 完了タスク取得
-      const completedTaskItems: TaskItem[] = await taskApi.completedTaskGet();
+      const completedTaskItems: TaskItem[] = await taskApi.completedTaskGet(
+        userId
+      );
       // カテゴリ取得
-      const categories: Category[] = await taskApi.categoryGetAll();
+      const categories: Category[] = await taskApi.categoryGetAll(userId);
       // スケジュール取得
-      const schedules: Schedule[] = await taskApi.scheduleGetAll();
+      const schedules: Schedule[] = await taskApi.scheduleGetAll(userId);
       // 取得した未完了タスクを未完了タスクStateに反映
       inCompletedTaskItems.forEach((inCompletedTaskItem) =>
         dispatch(inCompletedTaskAdd(inCompletedTaskItem))

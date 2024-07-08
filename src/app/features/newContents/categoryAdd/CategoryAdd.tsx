@@ -6,10 +6,14 @@ import AddButton from "@/app/components/button/AddButton";
 import { Category } from "../../../@types";
 import taskApi from "../../../api/task";
 import { categoryAdd } from "../../../slices/categorySlice";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "@/app/firebase";
 
 // 新規カテゴリ追加画面
 const CategoryAdd: React.FC = () => {
   const dispatch = useDispatch();
+  const [user] = useAuthState(auth);
+  const userId = auth.currentUser!.uid;
 
   // useFormを使用したフォームの処理///////////
   const {
@@ -21,7 +25,7 @@ const CategoryAdd: React.FC = () => {
 
   const onSubmit = async (category: Category) => {
     // APIから新規タスク用のorderIndexを取得
-    let orderIndex = await taskApi.maxCategoryOrderIndexGet();
+    let orderIndex = await taskApi.maxCategoryOrderIndexGet(userId);
     if (orderIndex) {
       orderIndex += 1;
     } else {
@@ -29,6 +33,7 @@ const CategoryAdd: React.FC = () => {
     }
     // 新しいカテゴリオブジェクトを作成
     const newCategory: Category = {
+      userId: userId,
       name: category.name,
       orderIndex: orderIndex,
     };
@@ -38,7 +43,7 @@ const CategoryAdd: React.FC = () => {
     categoryAddSuccess &&
       (async () => {
         // IDが設定された新しいカテゴリを再度APIを経由してデータベースから取得
-        const _newCategory: Category = await taskApi.latestCategoryGet();
+        const _newCategory: Category = await taskApi.latestCategoryGet(userId);
         // 新しいカテゴリをカテゴリのStateに追加
         dispatch(categoryAdd(_newCategory));
       })();

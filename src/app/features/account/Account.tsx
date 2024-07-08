@@ -29,14 +29,14 @@ const Account = () => {
   return (
     <div className=" flex justify-between">
       <div className=" flex items-center">
-        <p>
-          {auth.currentUser?.displayName}さん、{greeting}
+        <p className=" ml-3 ">
+          {auth.currentUser!.displayName}さん、{greeting}
         </p>
       </div>
       <div className=" flex gap-2 justify-end">
         {/* アイコン（Googleアカウントのアイコン） */}
         <img
-          src={auth.currentUser?.photoURL!}
+          src={auth.currentUser!.photoURL!}
           alt=""
           className=" size-12 rounded-full"
         />
