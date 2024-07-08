@@ -41,11 +41,11 @@ const TaskAdd: React.FC = () => {
     // フォーム入力値のcategoryのidをもとに、APIでカテゴリを取得（フォーム詳細が閉じられたままタイトルのみで送られてきた場合は、Noneで登録）
     const category: Category = formOpen
       ? await taskApi.categoryGetById(Number(taskItem.category))
-      : { id: 1, name: "None", orderIndex: 1 };
+      : { id: 1, userId: userId, name: "None", orderIndex: 1 };
     // フォーム入力値のscheduleのidをもとに、APIでスケジュールを取得（フォーム詳細が閉じられたままタイトルのみで送られてきた場合は、Noneで登録）
     const schedule: Schedule = formOpen
       ? await taskApi.scheduleGetById(Number(taskItem.schedule))
-      : { id: 1, name: "None", orderIndex: 1 };
+      : { id: 1, userId: userId, name: "None", orderIndex: 1 };
 
     // APIから新規タスク用のorderIndexを取得（並び替えに使用）
     let orderIndex = await taskApi.maxTaskOrderIndexGet(userId);
@@ -57,6 +57,7 @@ const TaskAdd: React.FC = () => {
     // 新しいタスクオブジェクトを作成
     const newTask: TaskItem = formOpen
       ? {
+          userId: userId,
           title: taskItem.title,
           deadLine: taskItem.deadLine,
           category: category,
@@ -67,6 +68,7 @@ const TaskAdd: React.FC = () => {
         }
       : // フォーム詳細が閉じられたままタイトルのみで送られてきた場合
         {
+          userId: userId,
           title: taskItem.title,
           deadLine: "",
           category: category,

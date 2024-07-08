@@ -15,10 +15,14 @@ import {
 } from "../../slices/completedTaskSlice";
 
 import { useContext, useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "@/app/firebase";
 
 // カテゴリのタブリスト
 const CategoryTab: React.FC = () => {
   const dispatch = useDispatch();
+  const [user] = useAuthState(auth);
+  const userId = auth.currentUser!.uid;
 
   // 必要なStateを取得
   const categories = useSelector((state) => state.categories);
@@ -62,6 +66,7 @@ const CategoryTab: React.FC = () => {
       // カテゴリStateの更新
       const updateCategory = {
         id: editCategoryId!,
+        userId: userId,
         name: editCategoryName!,
         orderIndex: editCategoryOrderIndex!,
       };

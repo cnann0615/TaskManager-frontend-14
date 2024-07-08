@@ -33,6 +33,7 @@ const CategoryAdd: React.FC = () => {
     }
     // 新しいカテゴリオブジェクトを作成
     const newCategory: Category = {
+      userId: userId,
       name: category.name,
       orderIndex: orderIndex,
     };

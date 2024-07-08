@@ -1,6 +1,7 @@
 // カテゴリ型
 export interface Category {
   id?: number;
+  userId: string;
   name: string;
   orderIndex: number;
 }
@@ -8,6 +9,7 @@ export interface Category {
 // スケジュール型
 export interface Schedule {
   id?: number;
+  userId: string;
   name: string;
   orderIndex: number;
 }
@@ -15,6 +17,7 @@ export interface Schedule {
 // タスク型
 export interface TaskItem {
   id?: number;
+  userId: string;
   title: string;
   deadLine: string;
   category: Category;

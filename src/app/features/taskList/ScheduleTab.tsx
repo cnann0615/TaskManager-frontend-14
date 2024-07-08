@@ -15,10 +15,14 @@ import {
 } from "../../slices/completedTaskSlice";
 
 import { useContext, useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "@/app/firebase";
 
 // カテゴリのタブリスト
 const ScheduleTab: React.FC = () => {
   const dispatch = useDispatch();
+  const [user] = useAuthState(auth);
+  const userId = auth.currentUser!.uid;
 
   // 必要なStateを取得
   const schedules = useSelector((state) => state.schedules);
@@ -62,6 +66,7 @@ const ScheduleTab: React.FC = () => {
       // カテゴリStateの更新
       const updateSchedule = {
         id: editScheduleId!,
+        userId: userId,
         name: editScheduleName!,
         orderIndex: editScheduleOrderIndex!,
       };

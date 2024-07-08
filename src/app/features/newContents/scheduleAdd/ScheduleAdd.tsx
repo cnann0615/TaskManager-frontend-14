@@ -33,6 +33,7 @@ const ScheduleAdd: React.FC = () => {
     }
     // 新しいスケジュールオブジェクトを作成
     const newSchedule: Schedule = {
+      userId: userId,
       name: schedule.name,
       orderIndex: orderIndex,
     };
