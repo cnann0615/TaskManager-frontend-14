@@ -82,6 +82,23 @@ export default function Main() {
   // APIを経由してデータベースの情報を取得し、それぞれのStateに反映
   useEffect(() => {
     (async () => {
+      // カテゴリの初期値
+      const defaultCategory: Category = {
+        userId: auth.currentUser!.uid,
+        name: "なし",
+        orderIndex: 1,
+      };
+      // スケジュールの初期値
+      const defaultSchedule: Schedule = {
+        userId: auth.currentUser!.uid,
+        name: "なし",
+        orderIndex: 1,
+      };
+      // カテゴリの初期値を設定
+      await taskApi.categoryAdd(defaultCategory);
+      // スケジュールの初期値を設定
+      await taskApi.scheduleAdd(defaultSchedule);
+
       // 未完了タスク取得
       const inCompletedTaskItems: TaskItem[] = await taskApi.inCompletedTaskGet(
         userId
