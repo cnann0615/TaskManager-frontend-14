@@ -2,7 +2,12 @@ import { useSelector } from "../../store/store";
 import { tabCategoryContext } from "./TaskList";
 import { useDispatch } from "react-redux";
 import { Category } from "../../@types";
-import { categoryDelete, categoryUpdate } from "../../slices/categorySlice";
+import {
+  categoryDelete,
+  categoryUpdate,
+  deleteCategoryThunk,
+  updateCategoryThunk,
+} from "../../slices/categorySlice";
 import taskApi from "../../api/task";
 import { showTaskDetailContext } from "../../Main";
 import {
@@ -60,7 +65,7 @@ const CategoryTab: React.FC = () => {
     setEditCategoryOrderIndex(category.orderIndex);
   };
 
-  // 編集内容を確定し、Stateを更新（対象のカテゴリからカーソルが離れた時）
+  // 編集内容を確定（対象のカテゴリからカーソルが離れた時）
   const commitEdit = async () => {
     if (editCategoryName) {
       // カテゴリStateの更新
@@ -70,7 +75,9 @@ const CategoryTab: React.FC = () => {
         name: editCategoryName!,
         orderIndex: editCategoryOrderIndex!,
       };
-      dispatch(categoryUpdate(updateCategory));
+
+      // DB,Stateに反映
+      dispatch(updateCategoryThunk(updateCategory));
 
       // 詳細表示されているタスクのカテゴリを動的に更新
       if (showTaskDetail) {
@@ -94,9 +101,6 @@ const CategoryTab: React.FC = () => {
 
       // 完了タスクStateのカテゴリを動的に更新
       dispatch(completedTaskUpdateCategory(updateCategory));
-
-      // APIを経由してデータベースに保存（更新）
-      await taskApi.updateCategory(updateCategory);
     }
     // 編集状態をクリア
     setEditCategoryId(null);
@@ -143,11 +147,8 @@ const CategoryTab: React.FC = () => {
         setShowTaskDetail(null);
       }
 
-      // カテゴリStateから削除
-      dispatch(categoryDelete(deleteCategory));
-
-      // APIを経由してデータベースから削除
-      await taskApi.categoryDelete(deleteCategory);
+      // DB,Stateから削除
+      dispatch(deleteCategoryThunk(deleteCategory));
     }
   };
   return (
@@ -185,25 +186,29 @@ const CategoryTab: React.FC = () => {
               >
                 {category.name}
                 {/* タブの中の、カテゴリ名編集ボタン */}
-                <span
-                  onClick={(e) => {
-                    e.stopPropagation(); // ボタン内のボタンのクリックイベントを阻止（カテゴリ名編集ボタンとタブのクリックを独立させる）
-                    editCategory(category);
-                  }}
-                  className="text-xs my-0 ml-3 opacity-50 hover:opacity-100 cursor-pointer"
-                >
-                  ✏️
-                </span>
+                {category.orderIndex !== 1 && (
+                  <span
+                    onClick={(e) => {
+                      e.stopPropagation(); // ボタン内のボタンのクリックイベントを阻止（カテゴリ名編集ボタンとタブのクリックを独立させる）
+                      editCategory(category);
+                    }}
+                    className="text-xs my-0 ml-3 opacity-50 hover:opacity-100 cursor-pointer"
+                  >
+                    ✏️
+                  </span>
+                )}
                 {/* タブの中の、カテゴリ削除ボタン */}
-                <span
-                  onClick={(e) => {
-                    e.stopPropagation(); // ボタン内のボタンのクリックイベントを阻止（カテゴリ名編集ボタンとタブのクリックを独立させる）
-                    deleteCategory(category);
-                  }}
-                  className="text-[5px] my-0 ml-3 opacity-50 hover:opacity-100 cursor-pointer"
-                >
-                  ❌
-                </span>
+                {category.orderIndex !== 1 && (
+                  <span
+                    onClick={(e) => {
+                      e.stopPropagation(); // ボタン内のボタンのクリックイベントを阻止（カテゴリ名編集ボタンとタブのクリックを独立させる）
+                      deleteCategory(category);
+                    }}
+                    className="text-[5px] my-0 ml-3 opacity-50 hover:opacity-100 cursor-pointer"
+                  >
+                    ❌
+                  </span>
+                )}
               </button>
             )}
           </div>

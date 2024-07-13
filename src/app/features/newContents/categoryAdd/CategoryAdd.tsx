@@ -5,7 +5,7 @@ import { MdOutlineCategory } from "react-icons/md";
 import AddButton from "@/app/components/button/AddButton";
 import { Category } from "../../../@types";
 import taskApi from "../../../api/task";
-import { categoryAdd } from "../../../slices/categorySlice";
+import { addCategoryThunk, categoryAdd } from "../../../slices/categorySlice";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/app/firebase";
 
@@ -37,16 +37,8 @@ const CategoryAdd: React.FC = () => {
       name: category.name,
       orderIndex: orderIndex,
     };
-    // 新しいカテゴリをAPI経由でデータベースに追加し、結果を取得（カテゴリ名が既存のカテゴリと重複した場合、nullが返させる。）
-    const categoryAddSuccess: Category = await taskApi.categoryAdd(newCategory);
-    // カテゴリ名が重複せず追加された場合のみ処理を行う。（重複した場合、nullが返されるため以下の処理は行われない。）
-    categoryAddSuccess &&
-      (async () => {
-        // IDが設定された新しいカテゴリを再度APIを経由してデータベースから取得
-        const _newCategory: Category = await taskApi.latestCategoryGet(userId);
-        // 新しいカテゴリをカテゴリのStateに追加
-        dispatch(categoryAdd(_newCategory));
-      })();
+    // 新規タスクをDB,Stateに反映
+    dispatch(addCategoryThunk({ userId, newCategory }));
     reset();
   };
 

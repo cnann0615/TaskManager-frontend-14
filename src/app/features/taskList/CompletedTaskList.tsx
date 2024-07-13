@@ -4,10 +4,8 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "../../store/store";
 import { tabCategoryContext, tabScheduleContext } from "./TaskList";
 import { TaskItem } from "../../@types";
-import { completedTaskDelete } from "../../slices/completedTaskSlice";
-import { inCompletedTaskAdd } from "../../slices/inCompletedTaskSlice";
+import { switchInCompletedThunk } from "../../slices/completedTaskSlice";
 import { showTaskDetailContext, taskDetailOpenContext } from "../../Main";
-import taskApi from "../../api/task";
 
 // 完了タスクリスト
 const CompletedTaskList: React.FC = () => {
@@ -44,14 +42,6 @@ const CompletedTaskList: React.FC = () => {
             completedTaskItem.schedule.id == tabSchedule
         );
 
-  // タスク未完了処理
-  const switchInCompleted = async (updateTask: TaskItem) => {
-    dispatch(completedTaskDelete(updateTask));
-    const _updateTask = { ...updateTask, completed: false };
-    dispatch(inCompletedTaskAdd(_updateTask));
-    await taskApi.updateTask(_updateTask);
-  };
-
   // タスク詳細表示処理
   const { setShowTaskDetail } = useContext(showTaskDetailContext);
   // 詳細表示展開Stateを定義
@@ -82,7 +72,7 @@ const CompletedTaskList: React.FC = () => {
             key={index}
           >
             <button
-              onClick={() => switchInCompleted(task)}
+              onClick={() => dispatch(switchInCompletedThunk(task))}
               className=" text-xl text-blue-500 hover:text-blue-700"
             >
               ☑︎

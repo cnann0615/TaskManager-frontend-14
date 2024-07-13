@@ -3,14 +3,14 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "../../store/store";
 import { tabCategoryContext, tabScheduleContext } from "./TaskList";
 import { TaskItem } from "../../@types";
-import { inCompletedTaskDelete } from "../../slices/inCompletedTaskSlice";
-import { completedTaskAdd } from "../../slices/completedTaskSlice";
+import {
+  switchCompletedThunk,
+} from "../../slices/inCompletedTaskSlice";
 import {
   showTaskDetailContext,
   showTaskDetailEditingContext,
   taskDetailOpenContext,
 } from "../../Main";
-import taskApi from "../../api/task";
 
 // 未完了タスクリスト
 const InCompletedTaskList: React.FC = () => {
@@ -50,13 +50,6 @@ const InCompletedTaskList: React.FC = () => {
             inCompletedTaskItem.category.id == tabCategory &&
             inCompletedTaskItem.schedule.id == tabSchedule
         );
-  // タスク完了処理（buttonのonClick時に発火）
-  const switchCompleted = async (updateTask: TaskItem) => {
-    dispatch(inCompletedTaskDelete(updateTask));
-    const _updateTask = { ...updateTask, completed: true };
-    dispatch(completedTaskAdd(_updateTask));
-    await taskApi.updateTask(_updateTask);
-  };
 
   // タスク詳細表示処理
   const { setShowTaskDetail } = useContext(showTaskDetailContext);
@@ -93,7 +86,7 @@ const InCompletedTaskList: React.FC = () => {
               key={index}
             >
               <button
-                onClick={() => switchCompleted(task)}
+                onClick={() => dispatch(switchCompletedThunk(task))}
                 className="text-xl text-blue-500 hover:text-blue-700 font-bold"
               >
                 ◻︎

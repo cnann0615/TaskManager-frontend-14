@@ -7,14 +7,15 @@ import {
   showTaskDetailEditingContext,
   taskDetailOpenContext,
 } from "../../Main";
-import taskApi from "../../api/task";
 import {
   completedTaskDelete,
   completedTaskUpdate,
+  deleteCompletedTaskItemThunk,
+  updateCompletedTaskItemThunk,
 } from "../../slices/completedTaskSlice";
 import {
-  inCompletedTaskDelete,
-  inCompletedTaskUpdate,
+  deleteInCompletedTaskItemThunk,
+  updateInCompletedTaskItemThunk,
 } from "../../slices/inCompletedTaskSlice";
 import { useSelector } from "../../store/store";
 import { MdOutlineExpandLess, MdOutlineExpandMore } from "react-icons/md";
@@ -95,10 +96,9 @@ const TaskDetail = () => {
     // 編集状態のトグル
     toggleEditOff(field);
     // 未完了or完了タスクStateに保存
-    dispatch(completedTaskUpdate(updatedDetail));
-    dispatch(inCompletedTaskUpdate(updatedDetail));
-    // APIを経由してデータベースに保存（更新）
-    await taskApi.updateTask(updatedDetail);
+    updatedDetail.isCompleted
+      ? dispatch(updateCompletedTaskItemThunk(updatedDetail))
+      : dispatch(updateInCompletedTaskItemThunk(updatedDetail));
   };
 
   // タスクの削除
@@ -109,10 +109,8 @@ const TaskDetail = () => {
     if (isConfirmed) {
       // 完了フラグに応じて、完了タスクState or 未完了タスクStateから、対象のタスクを削除
       showTaskDetail!.isCompleted
-        ? dispatch(completedTaskDelete(showTaskDetail))
-        : dispatch(inCompletedTaskDelete(showTaskDetail));
-      // APIを経由してデータベースから削除
-      await taskApi.taskDelete(showTaskDetail!);
+        ? dispatch(deleteCompletedTaskItemThunk(showTaskDetail))
+        : dispatch(deleteInCompletedTaskItemThunk(showTaskDetail));
       setShowTaskDetail(null);
     }
   };

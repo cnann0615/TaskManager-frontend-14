@@ -14,10 +14,13 @@ import TaskList from "./features/taskList/TaskList";
 import TaskDetail from "./features/taskDetails/TaskDetail";
 import { Category, Schedule, TaskItem } from "./@types";
 import taskApi from "./api/task";
-import { inCompletedTaskAdd } from "./slices/inCompletedTaskSlice";
-import { completedTaskAdd } from "./slices/completedTaskSlice";
-import { categoryAdd } from "./slices/categorySlice";
-import { scheduleAdd } from "./slices/scheduleSlice";
+import { getAllInCompletedTaskItemsThunk } from "./slices/inCompletedTaskSlice";
+import {
+  completedTaskAdd,
+  getAllCompletedTaskItemsThunk,
+} from "./slices/completedTaskSlice";
+import { categoryAdd, getAllCategoriesThunk } from "./slices/categorySlice";
+import { getAllSchedulesThunk, scheduleAdd } from "./slices/scheduleSlice";
 import NewContents from "./features/newContents/NewContents";
 import Account from "./features/account/Account";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -79,19 +82,19 @@ export default function Main() {
 
   const dispatch = useDispatch();
 
-  // APIを経由してデータベースの情報を取得し、それぞれのStateに反映
+  // APIを経由してDBの情報を取得し、それぞれのStateに反映
   useEffect(() => {
     (async () => {
       // カテゴリの初期値
       const defaultCategory: Category = {
         userId: auth.currentUser!.uid,
-        name: "なし",
+        name: "None",
         orderIndex: 1,
       };
       // スケジュールの初期値
       const defaultSchedule: Schedule = {
         userId: auth.currentUser!.uid,
-        name: "なし",
+        name: "None",
         orderIndex: 1,
       };
       // カテゴリの初期値を設定
@@ -99,30 +102,11 @@ export default function Main() {
       // スケジュールの初期値を設定
       await taskApi.scheduleAdd(defaultSchedule);
 
-      // 未完了タスク取得
-      const inCompletedTaskItems: TaskItem[] = await taskApi.inCompletedTaskGet(
-        userId
-      );
-      // 完了タスク取得
-      const completedTaskItems: TaskItem[] = await taskApi.completedTaskGet(
-        userId
-      );
-      // カテゴリ取得
-      const categories: Category[] = await taskApi.categoryGetAll(userId);
-      // スケジュール取得
-      const schedules: Schedule[] = await taskApi.scheduleGetAll(userId);
-      // 取得した未完了タスクを未完了タスクStateに反映
-      inCompletedTaskItems.forEach((inCompletedTaskItem) =>
-        dispatch(inCompletedTaskAdd(inCompletedTaskItem))
-      );
-      // 取得した完了タスクを完了タスクStateに反映
-      completedTaskItems.forEach((completedTaskItem) =>
-        dispatch(completedTaskAdd(completedTaskItem))
-      );
-      // 取得したカテゴリをカテゴリStateに反映
-      categories.forEach((category) => dispatch(categoryAdd(category)));
-      // 取得したスケジュールをスケジュールStateに反映
-      schedules.forEach((schedule) => dispatch(scheduleAdd(schedule)));
+      // APIから未完了タスク、完了タスク、カテゴリ、スケジュールを取得＆各Stateに反映
+      dispatch(getAllInCompletedTaskItemsThunk(userId));
+      dispatch(getAllCompletedTaskItemsThunk(userId));
+      dispatch(getAllCategoriesThunk(userId));
+      dispatch(getAllSchedulesThunk(userId));
     })();
   }, []);
 
