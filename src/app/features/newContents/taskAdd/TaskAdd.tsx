@@ -7,7 +7,10 @@ import {
   MdOutlineAddTask,
 } from "react-icons/md";
 
-import { inCompletedTaskAdd } from "../../../slices/inCompletedTaskSlice";
+import {
+  addInCompletedTaskItemThunk,
+  inCompletedTaskAdd,
+} from "../../../slices/inCompletedTaskSlice";
 import taskApi from "../../../api/task";
 import { useSelector } from "../../../store/store";
 import { Category, Schedule, TaskItem, inputTaskItem } from "../../../@types";
@@ -77,13 +80,7 @@ const TaskAdd: React.FC = () => {
           isCompleted: false,
           orderIndex: orderIndex,
         };
-
-    // 新しいタスクをAPI経由でデータベースに追加
-    await taskApi.taskAdd(newTask);
-    // IDが設定された新しいタスクを再度APIを経由してデータベースから取得
-    const _newTask: TaskItem = await taskApi.latestTaskGet(userId);
-    // 新しいタスクを未完了タスクのStateに追加
-    dispatch(inCompletedTaskAdd(_newTask));
+    dispatch(addInCompletedTaskItemThunk({ userId, newTask }));
     reset();
   };
 

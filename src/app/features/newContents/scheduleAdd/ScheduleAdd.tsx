@@ -1,7 +1,7 @@
 import AddButton from "@/app/components/button/AddButton";
 import { Schedule } from "../../../@types";
 import taskApi from "../../../api/task";
-import { scheduleAdd } from "../../../slices/scheduleSlice";
+import { addScheduleThunk, scheduleAdd } from "../../../slices/scheduleSlice";
 import { useForm } from "react-hook-form";
 import { GrSchedules } from "react-icons/gr";
 
@@ -37,16 +37,8 @@ const ScheduleAdd: React.FC = () => {
       name: schedule.name,
       orderIndex: orderIndex,
     };
-    // 新しいスケジュールをAPI経由でデータベースに追加し、結果を取得（スケジュール名が既存のスケジュールと重複した場合、nullが返させる。）
-    const scheduleAddSuccess: Schedule = await taskApi.scheduleAdd(newSchedule);
-    // スケジュール名が重複せず追加された場合のみ処理を行う。（重複した場合、nullが返されるため以下の処理は行われない。）
-    scheduleAddSuccess &&
-      (async () => {
-        // IDが設定された新しいスケジュールを再度APIを経由してデータベースから取得
-        const _newSchedule: Schedule = await taskApi.latestScheduleGet(userId);
-        // 新しいスケジュールをスケジュールのStateに追加
-        dispatch(scheduleAdd(_newSchedule));
-      })();
+    // 新規スケジュールをDB,Stateに反映
+    dispatch(addScheduleThunk({ userId, newSchedule }));
     reset();
   };
 
