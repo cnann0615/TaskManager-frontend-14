@@ -1,19 +1,21 @@
-import AddButton from "@/app/components/button/AddButton";
-import { Schedule } from "../../../@types";
-import taskApi from "../../../api/task";
-import { addScheduleThunk, scheduleAdd } from "../../../slices/scheduleSlice";
 import { useForm } from "react-hook-form";
 import { GrSchedules } from "react-icons/gr";
-
 import { useDispatch } from "react-redux";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/app/firebase";
 
+import AddButton from "@/app/components/button/AddButton";
+import { Schedule } from "../../../@types";
+import taskApi from "../../../api/task";
+import { addScheduleThunk } from "../../../slices/scheduleSlice";
+
 // 新規スケジュール追加画面
 const ScheduleAdd: React.FC = () => {
-  const dispatch = useDispatch();
+  // サインイン情報取得
   const [user] = useAuthState(auth);
   const userId = auth.currentUser!.uid;
+  // Reduxのdispatchを使用可能にする
+  const dispatch = useDispatch();
 
   // useFormを使用したフォームの処理///////////
   const {
@@ -37,7 +39,7 @@ const ScheduleAdd: React.FC = () => {
       name: schedule.name,
       orderIndex: orderIndex,
     };
-    // 新規スケジュールをDB,Stateに反映
+    // 新規スケジュールをDB,スケジュールRedux Stateに反映
     dispatch(addScheduleThunk({ userId, newSchedule }));
     reset();
   };

@@ -1,11 +1,13 @@
+import { useDispatch } from "react-redux";
+import { useContext, useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "@/app/firebase";
+
 import { useSelector } from "../../store/store";
 import { tabScheduleContext } from "./TaskList";
-import { useDispatch } from "react-redux";
 import { Schedule } from "../../@types";
 import {
   deleteScheduleThunk,
-  scheduleDelete,
-  scheduleUpdate,
   updateScheduleThunk,
 } from "../../slices/scheduleSlice";
 import taskApi from "../../api/task";
@@ -19,17 +21,16 @@ import {
   completedTaskUpdateSchedule,
 } from "../../slices/completedTaskSlice";
 
-import { useContext, useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "@/app/firebase";
-
 // スケジュールのタブリスト
 const ScheduleTab: React.FC = () => {
-  const dispatch = useDispatch();
+  // サインイン情報取得
   const [user] = useAuthState(auth);
   const userId = auth.currentUser!.uid;
 
-  // 必要なStateを取得
+  // Reduxのdispatchを使用可能にする
+  const dispatch = useDispatch();
+
+  // 必要なRedux Stateを取得
   const schedules = useSelector((state) => state.schedules);
   const inCompletedTaskItems = useSelector(
     (state) => state.inCompletedTaskItems
@@ -39,18 +40,17 @@ const ScheduleTab: React.FC = () => {
   // タブスケジュール管理State（どのタブが選択されているかを管理）
   const { tabSchedule, setTabSchedule } = useContext(tabScheduleContext);
 
-  // タブクリック時にタブスケジュールにセットする
+  // タブクリック時にタブスケジュール管理Stateにセットする
   const switchTab = (id: number) => {
     setTabSchedule(id);
   };
 
   // スケジュール名編集機能//////////////////
 
-  // タブからスケジュール名を変更した際に使用する、詳細表示タスクStateの値と更新用関数を定義
+  // タブからスケジュール名を変更した際に詳細表示中タスクのスケジュール名も変更する必要があるため、詳細表示タスクStateの値と更新用関数を定義
   const { showTaskDetail, setShowTaskDetail } = useContext(
     showTaskDetailContext
   );
-
   // 編集中のスケジュールIDとスケジュール名を保持するためのState
   const [editScheduleId, setEditScheduleId] = useState<number | null>(null);
   const [editScheduleOrderIndex, setEditScheduleOrderIndex] = useState<
@@ -76,7 +76,7 @@ const ScheduleTab: React.FC = () => {
         orderIndex: editScheduleOrderIndex!,
       };
 
-      // DB,Stateに反映
+      // DB,Redux Stateに反映
       dispatch(updateScheduleThunk(updateSchedule));
 
       // 詳細表示されているタスクのスケジュールを動的に更新
@@ -96,10 +96,10 @@ const ScheduleTab: React.FC = () => {
         setShowTaskDetail(updateShowTaskDetail);
       }
 
-      // 未完了タスクStateのスケジュールを動的に更新
+      // 変更されたスケジュールが割り当てられた未完了タスクRedux Stateを動的に更新
       dispatch(inCompletedTaskUpdateSchedule(updateSchedule));
 
-      // 完了タスクStateのスケジュールを動的に更新
+      // 変更されたスケジュールが割り当てられた完了タスクRedux Stateを動的に更新
       dispatch(completedTaskUpdateSchedule(updateSchedule));
     }
 
@@ -116,7 +116,7 @@ const ScheduleTab: React.FC = () => {
     // 上記ポップアップへのアクションがYesの場合
     if (isConfirmed) {
       // 削除対象スケジュールに割り当てられているタスクを全て削除
-      // 未完了タスクから削除
+      // 未完了タスクから対象抽出
       const deleteInCompletedTaskItems = inCompletedTaskItems.filter(
         (inCompletedTaskItem) =>
           inCompletedTaskItem.schedule.id === deleteSchedule.id
@@ -128,8 +128,7 @@ const ScheduleTab: React.FC = () => {
           await taskApi.taskDelete(inCompletedTaskItem);
         }
       );
-
-      // 完了タスクから削除
+      // 完了タスクから対象抽出
       const deleteCompletedTaskItems = completedTaskItems.filter(
         (completedTaskItem) =>
           completedTaskItem.schedule.id === deleteSchedule.id
@@ -149,7 +148,7 @@ const ScheduleTab: React.FC = () => {
         setShowTaskDetail(null);
       }
 
-      // DB,Stateから削除
+      // DB,Redux Stateから削除
       dispatch(deleteScheduleThunk(deleteSchedule));
     }
   };
@@ -176,6 +175,7 @@ const ScheduleTab: React.FC = () => {
       >
         {schedules.map((schedule, index) => (
           <div className="block" style={{ whiteSpace: "nowrap" }} key={index}>
+        {/* スケジュール名編集中はinput BOXを表示。通常は、スケジュール名と編集、削除ボタンを表示　*/}
             {editScheduleId === schedule.id ? (
               <input
                 type="text"

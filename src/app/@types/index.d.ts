@@ -36,3 +36,35 @@ export interface inputTaskItem {
   memo: "";
   isCompleted: false;
 }
+
+//contextで使用する型////////////////////////////////
+
+// 詳細表示タスクContext
+type ShowTaskDetail = {
+  showTaskDetail: TaskItem | any;
+  setShowTaskDetail: Dispatch<SetStateAction<TaskItem | any>>;
+};
+
+// 詳細表示タスク編集状態管理Context
+type ShowTaskDetailEditing = {
+  showTaskDetailEditing: TaskItem | any;
+  setShowTaskDetailEditing: Dispatch<SetStateAction<TaskItem | any>>;
+};
+
+// 詳細表示画面展開Context
+type taskDetailOpen = {
+  taskDetailOpen: boolean;
+  setTaskDetailOpen: Dispatch<SetStateAction<boolean>>;
+};
+
+// タブカテゴリContext
+type TabCategory = {
+  tabCategory: number;
+  setTabCategory: Dispatch<SetStateAction<number>>;
+};
+
+// タブスケジュールContext
+type TabSchedule = {
+  tabSchedule: number;
+  setTabSchedule: Dispatch<SetStateAction<number>>;
+};

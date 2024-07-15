@@ -5,13 +5,18 @@ import { useSelector } from "../../store/store";
 import { tabCategoryContext, tabScheduleContext } from "./TaskList";
 import { TaskItem } from "../../@types";
 import { switchInCompletedThunk } from "../../slices/completedTaskSlice";
-import { showTaskDetailContext, taskDetailOpenContext } from "../../Main";
+import {
+  showTaskDetailContext,
+  showTaskDetailEditingContext,
+  taskDetailOpenContext,
+} from "../../Main";
 
 // 完了タスクリスト
 const CompletedTaskList: React.FC = () => {
+  // Reduxのdispatchを使用可能にする
   const dispatch = useDispatch();
 
-  // 完了タスクStateを取得
+  // 完了タスクRedux Stateを取得
   const completedTaskItems = useSelector((state) => state.completedTaskItems);
 
   // タブカテゴリとタブスケジュール管理Stateの値を取得
@@ -44,12 +49,16 @@ const CompletedTaskList: React.FC = () => {
 
   // タスク詳細表示処理
   const { setShowTaskDetail } = useContext(showTaskDetailContext);
+  // 詳細表示対象タスク編集状態管理State
+  const { showTaskDetailEditing } = useContext(showTaskDetailEditingContext);
   // 詳細表示展開Stateを定義
   const { setTaskDetailOpen } = useContext(taskDetailOpenContext);
 
   // タスククリック時に詳細を表示する。
   const openTaskDetail = (taskItem: TaskItem) => {
-    setShowTaskDetail(taskItem);
+    // 他のタスクの編集中でない時に、クリックしたタスクを詳細表示タスクStateにsetする。
+    showTaskDetailEditing || setShowTaskDetail(taskItem);
+    // 詳細表示画面を展開する
     setTaskDetailOpen(true);
     window.scrollTo({
       top: document.documentElement.scrollHeight,

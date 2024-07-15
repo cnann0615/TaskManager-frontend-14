@@ -1,5 +1,6 @@
-import { Category } from "../@types";
 import { createSlice, Dispatch } from "@reduxjs/toolkit";
+
+import { Category } from "../@types";
 import taskApi from "../api/task";
 
 // カテゴリState///////////////////////////////////////////////////////////
@@ -11,18 +12,15 @@ export const categoriesSlice = createSlice({
   name: "categories",
   initialState,
   reducers: {
-    // カテゴリ追加
+    // 追加
     categoryAdd: (state, action) => {
       state.push(action.payload);
     },
 
-    // カテゴリ更新
+    // 更新
     categoryUpdate: (state, action) => {
-      // action.payloadからidと更新するデータを取得
       const { id, ...updatedData } = action.payload;
-      // 更新するタスクのインデックスを見つける
       const index = state.findIndex((category) => category.id === id);
-      // インデックスが見つかった場合、そのタスクを更新
       if (index !== -1) {
         state[index] = {
           ...state[index],
@@ -31,7 +29,7 @@ export const categoriesSlice = createSlice({
       }
     },
 
-    // カテゴリ削除
+    // 削除
     categoryDelete: (state, action) => {
       const deleteCategory = action.payload;
       const index = state.findIndex(
@@ -45,16 +43,14 @@ export const categoriesSlice = createSlice({
 });
 
 // ReduxThunk /////////////////////////////////////////////
-// 全カテゴリ取得＆Stateに反映
+// DBから全カテゴリ取得＆Redux Stateに反映
 const getAllCategoriesThunk = (payload: string) => {
   return async (dispatch: Dispatch, getState: Category) => {
-    // カテゴリ取得
     const categories: Category[] = await taskApi.categoryGetAll(payload);
-    // 取得したカテゴリをカテゴリStateに反映
     categories.forEach((category) => dispatch(categoryAdd(category)));
   };
 };
-// 新規カテゴリ登録
+// 新規カテゴリ登録（DB, Rudex State)
 const addCategoryThunk = ({
   userId,
   newCategory,
@@ -63,10 +59,13 @@ const addCategoryThunk = ({
   newCategory: Category;
 }) => {
   return async (dispatch: Dispatch, getState: Category) => {
+    // idが空の状態の新規カテゴリをDBに登録し、結果を得る
     const categoryAddSuccess: Category = await taskApi.categoryAdd(newCategory);
+    // 登録成功した場合、idが付与された新規カテゴリ（直近に登録されたカテゴリ）をDBから取得
     console.log(categoryAddSuccess);
     if (categoryAddSuccess) {
       const _newCategory: Category = await taskApi.latestCategoryGet(userId);
+      // idが付与された状態でRedux Stateに反映
       dispatch(categoryAdd(_newCategory));
     }
   };
@@ -74,18 +73,14 @@ const addCategoryThunk = ({
 // カテゴリ更新
 const updateCategoryThunk = (payload: Category) => {
   return async (dispatch: Dispatch, getState: Category) => {
-    // DBを更新
     const hoge = await taskApi.updateCategory(payload);
-    // Stateを更新
     dispatch(categoryUpdate(payload));
   };
 };
 // スケジュール削除
 const deleteCategoryThunk = (payload: Category) => {
   return async (dispatch: Dispatch, getState: Category) => {
-    // DBから削除
     await taskApi.categoryDelete(payload);
-    // Stateから削除
     dispatch(categoryUpdate(payload));
   };
 };

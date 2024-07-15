@@ -1,5 +1,6 @@
 import { MdOutlineTaskAlt } from "react-icons/md";
 
+// layout.tsxのヘッダー
 function Header() {
   return (
     <header className="bg-blue-500 text-white py-4 px-10 md:px-20 font-bold ">
