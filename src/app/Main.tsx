@@ -45,7 +45,6 @@ export const taskDetailOpenContext = createContext<taskDetailOpen>({
 
 export default function Main() {
   // サインイン情報取得
-  const [user] = useAuthState(auth);
   const userId = auth.currentUser!.uid;
 
   // Reduxのdispatchを使用可能にする
@@ -66,27 +65,34 @@ export default function Main() {
 
   useEffect(() => {
     (async () => {
-      //　カテゴリとスケジュールの初期値「None」をDBに登録
-      const defaultCategory: Category = {
-        userId: auth.currentUser!.uid,
-        name: "None",
-        orderIndex: 1,
-      };
-      const defaultSchedule: Schedule = {
-        userId: auth.currentUser!.uid,
-        name: "None",
-        orderIndex: 1,
-      };
-      await taskApi.categoryAdd(defaultCategory);
-      await taskApi.scheduleAdd(defaultSchedule);
+      try {
+        //　カテゴリとスケジュールの初期値「None」をDBに登録
+        const defaultCategory: Category = {
+          userId: userId,
+          name: "None",
+          orderIndex: 1,
+        };
+        const defaultSchedule: Schedule = {
+          userId: userId,
+          name: "None",
+          orderIndex: 1,
+        };
+        await taskApi.categoryAdd(defaultCategory);
+        await taskApi.scheduleAdd(defaultSchedule);
 
-      // APIから未完了タスク、完了タスク、カテゴリ、スケジュールを取得＆各Redux Stateに反映
-      dispatch(getAllInCompletedTaskItemsThunk(userId));
-      dispatch(getAllCompletedTaskItemsThunk(userId));
-      dispatch(getAllCategoriesThunk(userId));
-      dispatch(getAllSchedulesThunk(userId));
+        // APIから未完了タスク、完了タスク、カテゴリ、スケジュールを取得＆各Redux Stateに反映
+        dispatch(getAllInCompletedTaskItemsThunk(userId));
+        dispatch(getAllCompletedTaskItemsThunk(userId));
+        dispatch(getAllCategoriesThunk(userId));
+        dispatch(getAllSchedulesThunk(userId));
+      } catch (err) {
+        console.error("Error fetching data: ", err);
+        alert(
+          "データの取得中にエラーが発生しました。しばらくしてからもう一度お試しください。"
+        );
+      }
     })();
-  }, []);
+  }, [dispatch, userId]);
 
   return (
     <>

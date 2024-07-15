@@ -24,7 +24,6 @@ import {
 // スケジュールのタブリスト
 const ScheduleTab: React.FC = () => {
   // サインイン情報取得
-  const [user] = useAuthState(auth);
   const userId = auth.currentUser!.uid;
 
   // Reduxのdispatchを使用可能にする
@@ -76,31 +75,36 @@ const ScheduleTab: React.FC = () => {
         orderIndex: editScheduleOrderIndex!,
       };
 
-      // DB,Redux Stateに反映
-      dispatch(updateScheduleThunk(updateSchedule));
+      try {
+        // DB,Redux Stateに反映
+        dispatch(updateScheduleThunk(updateSchedule));
 
-      // 詳細表示されているタスクのスケジュールを動的に更新
-      if (showTaskDetail) {
-        let updateShowTaskDetail = { ...showTaskDetail };
-        // 更新したスケジュールが詳細表示対象のタスクのスケジュールだった場合、スケジュール名を動的に更新する
-        if (showTaskDetail.schedule.id === updateSchedule.id) {
-          updateShowTaskDetail = {
-            ...showTaskDetail,
-            schedule: {
-              id: updateSchedule.id,
-              name: updateSchedule.name,
-              orderIndex: updateSchedule.orderIndex!,
-            },
-          };
+        // 詳細表示されているタスクのスケジュールを動的に更新
+        if (showTaskDetail) {
+          let updateShowTaskDetail = { ...showTaskDetail };
+          // 更新したスケジュールが詳細表示対象のタスクのスケジュールだった場合、スケジュール名を動的に更新する
+          if (showTaskDetail.schedule.id === updateSchedule.id) {
+            updateShowTaskDetail = {
+              ...showTaskDetail,
+              schedule: {
+                id: updateSchedule.id,
+                name: updateSchedule.name,
+                orderIndex: updateSchedule.orderIndex!,
+              },
+            };
+          }
+          setShowTaskDetail(updateShowTaskDetail);
         }
-        setShowTaskDetail(updateShowTaskDetail);
+
+        // 変更されたスケジュールが割り当てられた未完了タスクRedux Stateを動的に更新
+        dispatch(inCompletedTaskUpdateSchedule(updateSchedule));
+
+        // 変更されたスケジュールが割り当てられた完了タスクRedux Stateを動的に更新
+        dispatch(completedTaskUpdateSchedule(updateSchedule));
+      } catch (error) {
+        console.error("Error updating schedule: ", error);
+        alert("スケジュールの更新中にエラーが発生しました。");
       }
-
-      // 変更されたスケジュールが割り当てられた未完了タスクRedux Stateを動的に更新
-      dispatch(inCompletedTaskUpdateSchedule(updateSchedule));
-
-      // 変更されたスケジュールが割り当てられた完了タスクRedux Stateを動的に更新
-      dispatch(completedTaskUpdateSchedule(updateSchedule));
     }
 
     // 編集状態をクリア
@@ -115,41 +119,52 @@ const ScheduleTab: React.FC = () => {
     );
     // 上記ポップアップへのアクションがYesの場合
     if (isConfirmed) {
-      // 削除対象スケジュールに割り当てられているタスクを全て削除
-      // 未完了タスクから対象抽出
-      const deleteInCompletedTaskItems = inCompletedTaskItems.filter(
-        (inCompletedTaskItem) =>
-          inCompletedTaskItem.schedule.id === deleteSchedule.id
-      );
-      // 未完了タスク削除関数の定義
-      const inCompletedTaskPromises = deleteInCompletedTaskItems.map(
-        async (inCompletedTaskItem) => {
-          dispatch(inCompletedTaskDelete(inCompletedTaskItem));
-          await taskApi.taskDelete(inCompletedTaskItem);
-        }
-      );
-      // 完了タスクから対象抽出
-      const deleteCompletedTaskItems = completedTaskItems.filter(
-        (completedTaskItem) =>
-          completedTaskItem.schedule.id === deleteSchedule.id
-      );
-      // 完了タスク削除関数の定義
-      const completedTaskPromises = deleteCompletedTaskItems.map(
-        async (completedTaskItem) => {
-          dispatch(completedTaskDelete(completedTaskItem));
-          await taskApi.taskDelete(completedTaskItem);
-        }
-      );
-      // 全てのタスク削除処理が完了するのを待つ（削除対象のスケジュールに紐づくスケジュールを先に消しておかないと、タスクのスケジュール参照先がなくなりエラーとなるため。）
-      await Promise.all([...inCompletedTaskPromises, ...completedTaskPromises]);
+      try {
+        // 削除対象スケジュールに割り当てられているタスクを全て削除
+        // 未完了タスクから対象抽出
+        const deleteInCompletedTaskItems = inCompletedTaskItems.filter(
+          (inCompletedTaskItem) =>
+            inCompletedTaskItem.schedule.id === deleteSchedule.id
+        );
+        // 未完了タスク削除関数の定義
+        const inCompletedTaskPromises = deleteInCompletedTaskItems.map(
+          async (inCompletedTaskItem) => {
+            dispatch(inCompletedTaskDelete(inCompletedTaskItem));
+            await taskApi.taskDelete(inCompletedTaskItem);
+          }
+        );
+        // 完了タスクから対象抽出
+        const deleteCompletedTaskItems = completedTaskItems.filter(
+          (completedTaskItem) =>
+            completedTaskItem.schedule.id === deleteSchedule.id
+        );
+        // 完了タスク削除関数の定義
+        const completedTaskPromises = deleteCompletedTaskItems.map(
+          async (completedTaskItem) => {
+            dispatch(completedTaskDelete(completedTaskItem));
+            await taskApi.taskDelete(completedTaskItem);
+          }
+        );
+        // 全てのタスク削除処理が完了するのを待つ（削除対象のスケジュールに紐づくスケジュールを先に消しておかないと、タスクのスケジュール参照先がなくなりエラーとなるため。）
+        await Promise.all([
+          ...inCompletedTaskPromises,
+          ...completedTaskPromises,
+        ]);
 
-      // 詳細表示タスクに割り当てられている場合、詳細表示タスクをnullにする。
-      if (showTaskDetail && showTaskDetail.schedule.id === deleteSchedule.id) {
-        setShowTaskDetail(null);
+        // 詳細表示タスクに割り当てられている場合、詳細表示タスクをnullにする。
+        if (
+          showTaskDetail &&
+          showTaskDetail.schedule.id === deleteSchedule.id
+        ) {
+          setShowTaskDetail(null);
+        }
+
+        // DB,Redux Stateから削除
+        dispatch(deleteScheduleThunk(deleteSchedule));
+      } catch (error) {
+        console.error("Error deleting schedule: ", error);
+        alert("スケジュールの削除中にエラーが発生しました。");
       }
-
-      // DB,Redux Stateから削除
-      dispatch(deleteScheduleThunk(deleteSchedule));
     }
   };
 
@@ -175,7 +190,7 @@ const ScheduleTab: React.FC = () => {
       >
         {schedules.map((schedule, index) => (
           <div className="block" style={{ whiteSpace: "nowrap" }} key={index}>
-        {/* スケジュール名編集中はinput BOXを表示。通常は、スケジュール名と編集、削除ボタンを表示　*/}
+            {/* スケジュール名編集中はinput BOXを表示。通常は、スケジュール名と編集、削除ボタンを表示　*/}
             {editScheduleId === schedule.id ? (
               <input
                 type="text"

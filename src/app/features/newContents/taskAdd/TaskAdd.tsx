@@ -18,7 +18,6 @@ import AddButton from "@/app/components/button/AddButton";
 // 新規タスク追加画面
 const TaskAdd: React.FC = () => {
   // サインイン情報取得
-  const [user] = useAuthState(auth);
   const userId = auth.currentUser!.uid;
   // Reduxのdispatchを使用可能にする
   const dispatch = useDispatch();
@@ -40,49 +39,54 @@ const TaskAdd: React.FC = () => {
   } = useForm<inputTaskItem>({ mode: "onSubmit" });
 
   const onSubmit = async (taskItem: inputTaskItem) => {
-    // フォーム入力値のcategoryのidをもとに、APIでカテゴリを取得（フォーム詳細が閉じられたままタイトルのみで送られてきた場合は、デフォルトカテゴリを登録）
-    const category: Category = formOpen
-      ? await taskApi.categoryGetById(Number(taskItem.category))
-      : { id: 1, userId: userId, name: "None", orderIndex: 1 };
-    // フォーム入力値のscheduleのidをもとに、APIでスケジュールを取得（フォーム詳細が閉じられたままタイトルのみで送られてきた場合は、デフォルトスケジュールで登録）
-    const schedule: Schedule = formOpen
-      ? await taskApi.scheduleGetById(Number(taskItem.schedule))
-      : { id: 1, userId: userId, name: "None", orderIndex: 1 };
+    try {
+      // フォーム入力値のcategoryのidをもとに、APIでカテゴリを取得（フォーム詳細が閉じられたままタイトルのみで送られてきた場合は、デフォルトカテゴリを登録）
+      const category: Category = formOpen
+        ? await taskApi.categoryGetById(Number(taskItem.category))
+        : { id: 1, userId: userId, name: "None", orderIndex: 1 };
+      // フォーム入力値のscheduleのidをもとに、APIでスケジュールを取得（フォーム詳細が閉じられたままタイトルのみで送られてきた場合は、デフォルトスケジュールで登録）
+      const schedule: Schedule = formOpen
+        ? await taskApi.scheduleGetById(Number(taskItem.schedule))
+        : { id: 1, userId: userId, name: "None", orderIndex: 1 };
 
-    // APIから新規タスク用のorderIndexを取得（並び替えに使用）
-    let orderIndex = await taskApi.maxTaskOrderIndexGet(userId);
-    if (orderIndex) {
-      orderIndex += 1;
-    } else {
-      orderIndex = 1;
+      // APIから新規タスク用のorderIndexを取得（並び替えに使用）
+      let orderIndex = await taskApi.maxTaskOrderIndexGet(userId);
+      if (orderIndex) {
+        orderIndex += 1;
+      } else {
+        orderIndex = 1;
+      }
+      // 新しいタスクオブジェクトを作成
+      const newTask: TaskItem = formOpen
+        ? {
+            userId: userId,
+            title: taskItem.title,
+            deadLine: taskItem.deadLine,
+            category: category,
+            schedule: schedule,
+            memo: taskItem.memo,
+            isCompleted: false,
+            orderIndex: orderIndex,
+          }
+        : // フォーム詳細が閉じられたままタイトルのみで送られてきた場合
+          {
+            userId: userId,
+            title: taskItem.title,
+            deadLine: "",
+            category: category,
+            schedule: schedule,
+            memo: "",
+            isCompleted: false,
+            orderIndex: orderIndex,
+          };
+      // 新規タスクをDB, 未完了タスクRedux Stateに登録
+      dispatch(addInCompletedTaskItemThunk({ userId, newTask }));
+      // formをリセット
+      reset();
+    } catch (error) {
+      console.error("Error adding new task: ", error);
+      alert("新規タスクの追加中にエラーが発生しました。");
     }
-    // 新しいタスクオブジェクトを作成
-    const newTask: TaskItem = formOpen
-      ? {
-          userId: userId,
-          title: taskItem.title,
-          deadLine: taskItem.deadLine,
-          category: category,
-          schedule: schedule,
-          memo: taskItem.memo,
-          isCompleted: false,
-          orderIndex: orderIndex,
-        }
-      : // フォーム詳細が閉じられたままタイトルのみで送られてきた場合
-        {
-          userId: userId,
-          title: taskItem.title,
-          deadLine: "",
-          category: category,
-          schedule: schedule,
-          memo: "",
-          isCompleted: false,
-          orderIndex: orderIndex,
-        };
-    // 新規タスクをDB, 未完了タスクRedux Stateに登録
-    dispatch(addInCompletedTaskItemThunk({ userId, newTask }));
-    // formをリセット
-    reset();
   };
 
   return (

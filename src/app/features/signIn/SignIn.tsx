@@ -7,9 +7,6 @@ import { FcGoogle } from "react-icons/fc";
 
 // サインインページ
 const SignIn = () => {
-  // サインイン情報を取得
-  const [user] = useAuthState(auth);
-
   // サインインボタン押下時
   const signInWithGoogle = () => {
     // Googleアカウント認証を実行（認証されると上記userがtrueになる。）
