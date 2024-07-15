@@ -1,12 +1,12 @@
 "use client";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "./firebase";
 
 import Main from "./Main";
 import SignIn from "./features/signIn/SignIn";
-import { auth } from "./firebase";
 
 const Top = () => {
-  // サインイン情報取得
+  // サインイン情報取得（サインイン時はuserがtrue）
   const [user] = useAuthState(auth);
 
   return (
