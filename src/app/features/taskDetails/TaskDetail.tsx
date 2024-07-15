@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useDispatch } from "react-redux";
 import { BiDetail } from "react-icons/bi";
+import { MdOutlineExpandLess, MdOutlineExpandMore } from "react-icons/md";
 
 import {
   showTaskDetailContext,
@@ -8,8 +9,6 @@ import {
   taskDetailOpenContext,
 } from "../../Main";
 import {
-  completedTaskDelete,
-  completedTaskUpdate,
   deleteCompletedTaskItemThunk,
   updateCompletedTaskItemThunk,
 } from "../../slices/completedTaskSlice";
@@ -18,26 +17,23 @@ import {
   updateInCompletedTaskItemThunk,
 } from "../../slices/inCompletedTaskSlice";
 import { useSelector } from "../../store/store";
-import { MdOutlineExpandLess, MdOutlineExpandMore } from "react-icons/md";
 
 // タスク詳細コンポーネント
 const TaskDetail = () => {
+  // Reduxのdispatchを使用可能にする
   const dispatch = useDispatch();
 
   // 詳細表示タスクStateを定義
   const { showTaskDetail, setShowTaskDetail } = useContext(
     showTaskDetailContext
   );
-
   // 詳細表示タスク編集状態管理Stateを定義
   const { setShowTaskDetailEditing } = useContext(showTaskDetailEditingContext);
-
   // 詳細表示展開Stateを定義
   const { taskDetailOpen, setTaskDetailOpen } = useContext(
     taskDetailOpenContext
   );
-
-  // カテゴリとスケジュールStateを取得
+  // カテゴリとスケジュールRedux Stateを取得
   const categories = useSelector((state) => state.categories);
   const schedules = useSelector((state) => state.schedules);
 
@@ -77,25 +73,24 @@ const TaskDetail = () => {
       const selectedCategory = categories.find(
         (category) => category.id == value
       );
-      // 更新内容を一時的に保存するオブジェクト
+      // 更新内容を一時的に保存するオブジェクトに格納
       updatedDetail = { ...showTaskDetail, [field]: selectedCategory };
       // 編集対象がスケジュールの場合、選択されたスケジュールidに一致するスケジュールオブジェクトを取得
     } else if (field === "schedule") {
       const selectedSchedule = schedules.find(
         (schedule) => schedule.id == value
       );
-      // 更新内容を一時的に保存するオブジェクト
+      // 更新内容を一時的に保存するオブジェクトに格納
       updatedDetail = { ...showTaskDetail, [field]: selectedSchedule };
     } else {
       // 更新内容を一時的に保存するオブジェクト
       updatedDetail = { ...showTaskDetail, [field]: value };
     }
-
-    // Contextの更新
+    // 詳細表示タスクStateの更新
     setShowTaskDetail(updatedDetail);
     // 編集状態のトグル
     toggleEditOff(field);
-    // 未完了or完了タスクStateに保存
+    // DBと未完了or完了タスクRedux Stateに保存
     updatedDetail.isCompleted
       ? dispatch(updateCompletedTaskItemThunk(updatedDetail))
       : dispatch(updateInCompletedTaskItemThunk(updatedDetail));
@@ -107,7 +102,7 @@ const TaskDetail = () => {
     const isConfirmed = window.confirm("本当にこのタスクを削除しますか？");
     // 上記ポップアップへのアクションがYesの場合
     if (isConfirmed) {
-      // 完了フラグに応じて、完了タスクState or 未完了タスクStateから、対象のタスクを削除
+      // DBと、完了or未完了タスクRedux Stateから、対象のタスクを削除
       showTaskDetail!.isCompleted
         ? dispatch(deleteCompletedTaskItemThunk(showTaskDetail))
         : dispatch(deleteInCompletedTaskItemThunk(showTaskDetail));
@@ -124,8 +119,9 @@ const TaskDetail = () => {
               <BiDetail size={35} />
               <h1 className=" mr-1 ">Task Detail</h1>
             </div>
-
+            {/* 画面横幅が1280以下の時だけ、タスク詳細画面を開閉可能にする。 */}
             {window.innerWidth <= 1280 ? (
+              // 開閉ボタン
               <button
                 onClick={() => {
                   setTaskDetailOpen(!taskDetailOpen);
@@ -143,6 +139,7 @@ const TaskDetail = () => {
             )}
           </div>
         </div>
+        {/* タスク詳細画面が開いている時だけ表示、詳細テーブルを表示。項目をクリックするとInputBoxになり、編集可能に。 */}
         {taskDetailOpen ? (
           <div className=" mt-6 ">
             <table className="min-w-full leading-normal border ">
@@ -342,6 +339,7 @@ const TaskDetail = () => {
                 </tr>
               </tbody>
             </table>
+            {/* 詳細表示タスクがある時のみ、削除ボタンを表示 */}
             {showTaskDetail ? (
               <div className=" flex justify-end">
                 <button

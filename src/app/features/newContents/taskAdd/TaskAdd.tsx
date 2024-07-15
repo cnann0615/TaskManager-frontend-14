@@ -1,35 +1,34 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
+import { auth } from "@/app/firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
 import {
   MdOutlineExpandLess,
   MdOutlineExpandMore,
   MdOutlineAddTask,
 } from "react-icons/md";
 
-import {
-  addInCompletedTaskItemThunk,
-  inCompletedTaskAdd,
-} from "../../../slices/inCompletedTaskSlice";
+import { addInCompletedTaskItemThunk } from "../../../slices/inCompletedTaskSlice";
 import taskApi from "../../../api/task";
 import { useSelector } from "../../../store/store";
 import { Category, Schedule, TaskItem, inputTaskItem } from "../../../@types";
 import AddButton from "@/app/components/button/AddButton";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "@/app/firebase";
 
 // 新規タスク追加画面
 const TaskAdd: React.FC = () => {
-  const dispatch = useDispatch();
+  // サインイン情報取得
   const [user] = useAuthState(auth);
   const userId = auth.currentUser!.uid;
+  // Reduxのdispatchを使用可能にする
+  const dispatch = useDispatch();
 
   // フォーム展開State
   const [formOpen, setFormOpen] = useState(false);
 
-  // カテゴリStateを取得
+  // カテゴリRedux Stateを取得
   const categories = useSelector((state) => state.categories);
-  // スケジュールStateを取得
+  // スケジュールRedux Stateを取得
   const schedules = useSelector((state) => state.schedules);
 
   // useFormを利用したフォームの処理
@@ -41,11 +40,11 @@ const TaskAdd: React.FC = () => {
   } = useForm<inputTaskItem>({ mode: "onSubmit" });
 
   const onSubmit = async (taskItem: inputTaskItem) => {
-    // フォーム入力値のcategoryのidをもとに、APIでカテゴリを取得（フォーム詳細が閉じられたままタイトルのみで送られてきた場合は、Noneで登録）
+    // フォーム入力値のcategoryのidをもとに、APIでカテゴリを取得（フォーム詳細が閉じられたままタイトルのみで送られてきた場合は、デフォルトカテゴリを登録）
     const category: Category = formOpen
       ? await taskApi.categoryGetById(Number(taskItem.category))
       : { id: 1, userId: userId, name: "None", orderIndex: 1 };
-    // フォーム入力値のscheduleのidをもとに、APIでスケジュールを取得（フォーム詳細が閉じられたままタイトルのみで送られてきた場合は、Noneで登録）
+    // フォーム入力値のscheduleのidをもとに、APIでスケジュールを取得（フォーム詳細が閉じられたままタイトルのみで送られてきた場合は、デフォルトスケジュールで登録）
     const schedule: Schedule = formOpen
       ? await taskApi.scheduleGetById(Number(taskItem.schedule))
       : { id: 1, userId: userId, name: "None", orderIndex: 1 };
@@ -80,7 +79,9 @@ const TaskAdd: React.FC = () => {
           isCompleted: false,
           orderIndex: orderIndex,
         };
+    // 新規タスクをDB, 未完了タスクRedux Stateに登録
     dispatch(addInCompletedTaskItemThunk({ userId, newTask }));
+    // formをリセット
     reset();
   };
 
@@ -109,6 +110,7 @@ const TaskAdd: React.FC = () => {
             />
           </label>
         </div>
+        {/* フォーム展開Stateがtrueの時のみTitle以外のフォームを表示 */}
         {formOpen ? (
           <div>
             <div className="mb-4">
@@ -144,7 +146,7 @@ const TaskAdd: React.FC = () => {
                   {...register("schedule")}
                   className="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                 >
-                  {/* useEffect内で取得したカテゴリを表示 */}
+                  {/* useEffect内で取得したスケジュールを表示 */}
                   {schedules.map((schedule) => (
                     <option key={schedule.id} value={schedule.id}>
                       {schedule.name}

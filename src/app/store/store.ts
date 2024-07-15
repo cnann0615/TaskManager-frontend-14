@@ -24,5 +24,5 @@ export const store = configureStore({
 
 // storeのgetStateメソッドの戻り値の型を利用して、アプリケーション全体で利用するRootState型を作成
 export type RootState = ReturnType<typeof store.getState>;
-// 新たに定義したRootState型を用いて、型情報付きのuseSelectorフックを宣言。これにより、useSelectorがstoreのstateを正しく型推論できるようになる。
+// 上記で定義したRootState型を用いて、型情報付きのuseSelectorフックを宣言。これにより、useSelectorがstoreのstateを正しく型推論できるようになる。
 export const useSelector: TypedUseSelectorHook<RootState> = rawUseSelector;

@@ -1,19 +1,21 @@
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { MdOutlineCategory } from "react-icons/md";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "@/app/firebase";
 
 import AddButton from "@/app/components/button/AddButton";
 import { Category } from "../../../@types";
 import taskApi from "../../../api/task";
-import { addCategoryThunk, categoryAdd } from "../../../slices/categorySlice";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "@/app/firebase";
+import { addCategoryThunk } from "../../../slices/categorySlice";
 
 // 新規カテゴリ追加画面
 const CategoryAdd: React.FC = () => {
-  const dispatch = useDispatch();
+  // サインイン情報取得
   const [user] = useAuthState(auth);
   const userId = auth.currentUser!.uid;
+  // Reduxのdispatchを使用可能にする
+  const dispatch = useDispatch();
 
   // useFormを使用したフォームの処理///////////
   const {
@@ -37,7 +39,7 @@ const CategoryAdd: React.FC = () => {
       name: category.name,
       orderIndex: orderIndex,
     };
-    // 新規タスクをDB,Stateに反映
+    // 新規カテゴリをDB,カテゴリRedux Stateに反映
     dispatch(addCategoryThunk({ userId, newCategory }));
     reset();
   };

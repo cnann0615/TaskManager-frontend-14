@@ -1,10 +1,10 @@
-import { TaskItem } from "../@types";
 import { createSlice, Dispatch } from "@reduxjs/toolkit";
+
+import { TaskItem } from "../@types";
 import taskApi from "../api/task";
 import { inCompletedTaskAdd } from "./inCompletedTaskSlice";
 
-
-// 完了タスクState///////////////////////////////////////////////////
+// 完了タスクRedux State///////////////////////////////////////////////////
 
 // 初期値
 const initialState: TaskItem[] = [];
@@ -13,18 +13,15 @@ export const completedTaskItemsSlice = createSlice({
   name: "completedTaskItems",
   initialState,
   reducers: {
-    // タスク追加
+    // 追加
     completedTaskAdd: (state, action) => {
       state.push(action.payload);
     },
 
-    // タスク更新
+    // 更新
     completedTaskUpdate: (state, action) => {
-      // action.payloadからidと更新するデータを取得
       const { id, ...updatedData } = action.payload;
-      // 更新するタスクのインデックスを見つける
       const index = state.findIndex((task) => task.id === id);
-      // インデックスが見つかった場合、そのタスクを更新
       if (index !== -1) {
         state[index] = {
           ...state[index],
@@ -63,37 +60,37 @@ export const completedTaskItemsSlice = createSlice({
   },
 });
 
-// ReduxThunk 完了タスク取得＆Stateに反映
+// ReduxThunk //////////////////////////////
+///DBから完了タスク取得＆Redux Stateに反映
 const getAllCompletedTaskItemsThunk = (payload: string) => {
   return async (dispatch: Dispatch, getState: TaskItem) => {
-    // 完了タスク取得
     const completedTaskItems: TaskItem[] = await taskApi.completedTaskGet(
       payload
     );
-    // 取得した完了タスクを完了タスクStateに反映
     completedTaskItems.forEach((completedTaskItem) =>
       dispatch(completedTaskAdd(completedTaskItem))
     );
   };
 };
-// タスク更新をDB,Stateに反映
+// タスク更新をDB,Redux Stateに反映
 const updateCompletedTaskItemThunk = (payload: TaskItem) => {
   return async (dispatch: Dispatch, getState: TaskItem) => {
     dispatch(completedTaskUpdate(payload));
     await taskApi.updateTask(payload);
   };
 };
-// 完了→未完了処理をDB,Stateに反映
+// 完了→未完了処理をDB,Redux Stateに反映（完了Redux Stateから削除し、未完了Reduc Stateに登録）
 const switchInCompletedThunk = (payload: TaskItem) => {
   return async (dispatch: Dispatch, getState: TaskItem) => {
     dispatch(completedTaskDelete(payload));
+    // 完了フラグを切り替え
     const switchTask = { ...payload, isCompleted: false };
     dispatch(inCompletedTaskAdd(switchTask));
     await taskApi.updateTask(switchTask);
   };
 };
 
-// 削除をDB,Stateに反映
+// 削除をDB,Redux Stateに反映
 const deleteCompletedTaskItemThunk = (payload: TaskItem) => {
   return async (dispatch: Dispatch, getState: TaskItem) => {
     dispatch(completedTaskDelete(payload));

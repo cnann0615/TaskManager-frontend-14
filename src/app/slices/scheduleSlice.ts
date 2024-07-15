@@ -1,9 +1,9 @@
-import { Schedule } from "../@types";
 import { createSlice, Dispatch } from "@reduxjs/toolkit";
-import taskApi from "../api/task";
-import { SetFieldValue } from "react-hook-form";
 
-// カテゴリState///////////////////////////////////////////////////////////
+import { Schedule } from "../@types";
+import taskApi from "../api/task";
+
+// スケジュールRedux State///////////////////////////////////////////////////////////
 
 // 初期値
 const initialState: Schedule[] = [];
@@ -12,18 +12,14 @@ export const schedulesSlice = createSlice({
   name: "schedules",
   initialState,
   reducers: {
-    // カテゴリ追加
+    // 追加
     scheduleAdd: (state, action) => {
       state.push(action.payload);
     },
-
-    // カテゴリ更新
+    // 更新
     scheduleUpdate: (state, action) => {
-      // action.payloadからidと更新するデータを取得
       const { id, ...updatedData } = action.payload;
-      // 更新するタスクのインデックスを見つける
       const index = state.findIndex((schedule) => schedule.id === id);
-      // インデックスが見つかった場合、そのタスクを更新
       if (index !== -1) {
         state[index] = {
           ...state[index],
@@ -32,7 +28,7 @@ export const schedulesSlice = createSlice({
       }
     },
 
-    // カテゴリ削除
+    // 削除
     scheduleDelete: (state, action) => {
       const deleteSchedule = action.payload;
       const index = state.findIndex(
@@ -46,16 +42,14 @@ export const schedulesSlice = createSlice({
 });
 
 // ReduxThunk //////////////////////////////
-// 全スケジュール取得＆Stateに反映
+// DBから全スケジュール取得＆Redux Stateに反映
 const getAllSchedulesThunk = (payload: string) => {
   return async (dispatch: Dispatch, getState: Schedule) => {
-    // DBから取得
     const schedules: Schedule[] = await taskApi.scheduleGetAll(payload);
-    // 取得したカテゴリをStateに反映
     schedules.forEach((schedule) => dispatch(scheduleAdd(schedule)));
   };
 };
-// 新規スケジュール登録
+// 新規スケジュール登録（DB, Rudex State)
 const addScheduleThunk = ({
   userId,
   newSchedule,
@@ -64,28 +58,27 @@ const addScheduleThunk = ({
   newSchedule: Schedule;
 }) => {
   return async (dispatch: Dispatch, getState: Schedule) => {
+    // idが空の状態の新規スケジュールをDBに登録し、結果を得る
     const scheduleAddSuccess: Schedule = await taskApi.scheduleAdd(newSchedule);
+    // 登録成功した場合、idが付与された新規スケジュール（直近に登録されたスケジュール）をDBから取得
     if (scheduleAddSuccess) {
       const _newSchedule: Schedule = await taskApi.latestScheduleGet(userId);
+      // idが付与された状態でRedux Stateに反映
       dispatch(scheduleAdd(_newSchedule));
     }
   };
 };
-// カテゴリ更新
+// スケジュール更新
 const updateScheduleThunk = (payload: Schedule) => {
   return async (dispatch: Dispatch, getState: Schedule) => {
-    // DBを更新
     await taskApi.updateSchedule(payload);
-    // Stateを更新
     dispatch(scheduleUpdate(payload));
   };
 };
 // スケジュール削除
 const deleteScheduleThunk = (payload: Schedule) => {
   return async (dispatch: Dispatch, getState: Schedule) => {
-    // DBから削除
-    const hoge = await taskApi.scheduleDelete(payload);
-    // Stateから削除
+    await taskApi.scheduleDelete(payload);
     dispatch(scheduleDelete(payload));
   };
 };
@@ -99,4 +92,5 @@ export {
 
 export const { scheduleAdd, scheduleUpdate, scheduleDelete } =
   schedulesSlice.actions;
+
 export default schedulesSlice.reducer;

@@ -1,11 +1,5 @@
 "use client";
-import React, {
-  useState,
-  createContext,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-} from "react";
+import React, { useState, createContext, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { MdOutlineExpandMore, MdOutlineExpandLess } from "react-icons/md";
 import { TbCategoryPlus } from "react-icons/tb";
@@ -14,7 +8,14 @@ import { auth } from "./firebase";
 
 import TaskList from "./features/taskList/TaskList";
 import TaskDetail from "./features/taskDetails/TaskDetail";
-import { Category, Schedule, TaskItem } from "./@types";
+import {
+  Category,
+  Schedule,
+  ShowTaskDetail,
+  ShowTaskDetailEditing,
+  taskDetailOpen,
+  TaskItem,
+} from "./@types";
 import taskApi from "./api/task";
 import { getAllInCompletedTaskItemsThunk } from "./slices/inCompletedTaskSlice";
 import { getAllCompletedTaskItemsThunk } from "./slices/completedTaskSlice";
@@ -23,23 +24,11 @@ import { getAllSchedulesThunk } from "./slices/scheduleSlice";
 import NewContents from "./features/newContents/NewContents";
 import Account from "./features/account/Account";
 
-// 詳細表示タスクContextで使用する型を定義
-type ShowTaskDetail = {
-  showTaskDetail: TaskItem | any;
-  setShowTaskDetail: Dispatch<SetStateAction<TaskItem | any>>;
-};
-
 // 詳細表示対象タスクContextを作成
 export const showTaskDetailContext = createContext<ShowTaskDetail>({
   showTaskDetail: null, //初期値はnull
   setShowTaskDetail: () => {}, // この関数はダミー。実際にはuseStateによって提供される関数に置き換わる。
 });
-
-// 詳細表示タスク編集状態管理Contextで使用する型を定義
-type ShowTaskDetailEditing = {
-  showTaskDetailEditing: TaskItem | any;
-  setShowTaskDetailEditing: Dispatch<SetStateAction<TaskItem | any>>;
-};
 
 // 詳細表示対象タスク編集状態管理Contextを作成
 export const showTaskDetailEditingContext =
@@ -48,13 +37,7 @@ export const showTaskDetailEditingContext =
     setShowTaskDetailEditing: () => {}, // この関数はダミー。実際にはuseStateによって提供される関数に置き換わる。
   });
 
-// 詳細表示画面展開Contextで使用する型を定義
-type taskDetailOpen = {
-  taskDetailOpen: boolean;
-  setTaskDetailOpen: Dispatch<SetStateAction<boolean>>;
-};
-
-// 詳細表示展開Contextを作成
+// 詳細表示画面展開Contextを作成
 export const taskDetailOpenContext = createContext<taskDetailOpen>({
   taskDetailOpen: false, //初期値はfalse
   setTaskDetailOpen: () => {}, // この関数はダミー。実際にはuseStateによって提供される関数に置き換わる。
@@ -107,7 +90,7 @@ export default function Main() {
 
   return (
     <>
-      {/* 詳細表示タスクはメインページ内の全コンポーネントで使用 */}
+      {/* 詳細表示タスクStateはメインページ内の全コンポーネントで使用 */}
       <showTaskDetailContext.Provider
         value={{ showTaskDetail, setShowTaskDetail }}
       >
