@@ -69,6 +69,16 @@ const InCompletedTaskList: React.FC = () => {
     });
   };
 
+  // タスクを完了に切り替える
+  const handleSwitchCompleted = async (task: TaskItem) => {
+    try {
+      dispatch(switchCompletedThunk(task));
+    } catch (error) {
+      console.error("Error switching task to completed: ", error);
+      alert("タスクの完了への切り替え中にエラーが発生しました。");
+    }
+  };
+
   return (
     <>
       <div className="mt-4">
@@ -85,7 +95,7 @@ const InCompletedTaskList: React.FC = () => {
               key={index}
             >
               <button
-                onClick={() => dispatch(switchCompletedThunk(task))}
+                onClick={() => handleSwitchCompleted(task)}
                 className="text-xl text-blue-500 hover:text-blue-700 font-bold"
               >
                 ◻︎

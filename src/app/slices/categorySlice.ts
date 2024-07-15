@@ -1,5 +1,4 @@
 import { createSlice, Dispatch } from "@reduxjs/toolkit";
-
 import { Category } from "../@types";
 import taskApi from "../api/task";
 
@@ -46,10 +45,16 @@ export const categoriesSlice = createSlice({
 // DBから全カテゴリ取得＆Redux Stateに反映
 const getAllCategoriesThunk = (payload: string) => {
   return async (dispatch: Dispatch, getState: Category) => {
-    const categories: Category[] = await taskApi.categoryGetAll(payload);
-    categories.forEach((category) => dispatch(categoryAdd(category)));
+    try {
+      const categories: Category[] = await taskApi.categoryGetAll(payload);
+      categories.forEach((category) => dispatch(categoryAdd(category)));
+    } catch (error) {
+      console.error("Error fetching categories: ", error);
+      alert("カテゴリの取得中にエラーが発生しました。");
+    }
   };
 };
+
 // 新規カテゴリ登録（DB, Rudex State)
 const addCategoryThunk = ({
   userId,
@@ -59,29 +64,47 @@ const addCategoryThunk = ({
   newCategory: Category;
 }) => {
   return async (dispatch: Dispatch, getState: Category) => {
-    // idが空の状態の新規カテゴリをDBに登録し、結果を得る
-    const categoryAddSuccess: Category = await taskApi.categoryAdd(newCategory);
-    // 登録成功した場合、idが付与された新規カテゴリ（直近に登録されたカテゴリ）をDBから取得
-    console.log(categoryAddSuccess);
-    if (categoryAddSuccess) {
-      const _newCategory: Category = await taskApi.latestCategoryGet(userId);
-      // idが付与された状態でRedux Stateに反映
-      dispatch(categoryAdd(_newCategory));
+    try {
+      // idが空の状態の新規カテゴリをDBに登録し、結果を得る
+      const categoryAddSuccess: Category = await taskApi.categoryAdd(
+        newCategory
+      );
+      // 登録成功した場合、idが付与された新規カテゴリ（直近に登録されたカテゴリ）をDBから取得
+      if (categoryAddSuccess) {
+        const _newCategory: Category = await taskApi.latestCategoryGet(userId);
+        // idが付与された状態でRedux Stateに反映
+        dispatch(categoryAdd(_newCategory));
+      }
+    } catch (error) {
+      console.error("Error adding category: ", error);
+      alert("カテゴリの追加中にエラーが発生しました。");
     }
   };
 };
+
 // カテゴリ更新
 const updateCategoryThunk = (payload: Category) => {
   return async (dispatch: Dispatch, getState: Category) => {
-    const hoge = await taskApi.updateCategory(payload);
-    dispatch(categoryUpdate(payload));
+    try {
+      await taskApi.updateCategory(payload);
+      dispatch(categoryUpdate(payload));
+    } catch (error) {
+      console.error("Error updating category: ", error);
+      alert("カテゴリの更新中にエラーが発生しました。");
+    }
   };
 };
-// スケジュール削除
+
+// カテゴリ削除
 const deleteCategoryThunk = (payload: Category) => {
   return async (dispatch: Dispatch, getState: Category) => {
-    await taskApi.categoryDelete(payload);
-    dispatch(categoryUpdate(payload));
+    try {
+      await taskApi.categoryDelete(payload);
+      dispatch(categoryDelete(payload));
+    } catch (error) {
+      console.error("Error deleting category: ", error);
+      alert("カテゴリの削除中にエラーが発生しました。");
+    }
   };
 };
 

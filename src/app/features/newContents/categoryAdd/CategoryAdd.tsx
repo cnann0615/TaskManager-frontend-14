@@ -12,7 +12,6 @@ import { addCategoryThunk } from "../../../slices/categorySlice";
 // 新規カテゴリ追加画面
 const CategoryAdd: React.FC = () => {
   // サインイン情報取得
-  const [user] = useAuthState(auth);
   const userId = auth.currentUser!.uid;
   // Reduxのdispatchを使用可能にする
   const dispatch = useDispatch();
@@ -26,22 +25,27 @@ const CategoryAdd: React.FC = () => {
   } = useForm<Category>({ mode: "onSubmit" });
 
   const onSubmit = async (category: Category) => {
-    // APIから新規タスク用のorderIndexを取得
-    let orderIndex = await taskApi.maxCategoryOrderIndexGet(userId);
-    if (orderIndex) {
-      orderIndex += 1;
-    } else {
-      orderIndex = 1;
+    try {
+      // APIから新規タスク用のorderIndexを取得
+      let orderIndex = await taskApi.maxCategoryOrderIndexGet(userId);
+      if (orderIndex) {
+        orderIndex += 1;
+      } else {
+        orderIndex = 1;
+      }
+      // 新しいカテゴリオブジェクトを作成
+      const newCategory: Category = {
+        userId: userId,
+        name: category.name,
+        orderIndex: orderIndex,
+      };
+      // 新規カテゴリをDB,カテゴリRedux Stateに反映
+      dispatch(addCategoryThunk({ userId, newCategory }));
+      reset();
+    } catch (error) {
+      console.error("Error adding new category: ", error);
+      alert("新規カテゴリの追加中にエラーが発生しました。");
     }
-    // 新しいカテゴリオブジェクトを作成
-    const newCategory: Category = {
-      userId: userId,
-      name: category.name,
-      orderIndex: orderIndex,
-    };
-    // 新規カテゴリをDB,カテゴリRedux Stateに反映
-    dispatch(addCategoryThunk({ userId, newCategory }));
-    reset();
   };
 
   return (

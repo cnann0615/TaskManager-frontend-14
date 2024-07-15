@@ -24,7 +24,6 @@ import {
 // カテゴリのタブリスト
 const CategoryTab: React.FC = () => {
   // サインイン情報取得
-  const [user] = useAuthState(auth);
   const userId = auth.currentUser!.uid;
   // Reduxのdispatchを使用可能にする
   const dispatch = useDispatch();
@@ -76,31 +75,36 @@ const CategoryTab: React.FC = () => {
         orderIndex: editCategoryOrderIndex!,
       };
 
-      // DB,Redux Stateに反映
-      dispatch(updateCategoryThunk(updateCategory));
+      try {
+        // DB,Redux Stateに反映
+        dispatch(updateCategoryThunk(updateCategory));
 
-      // 詳細表示されているタスクのカテゴリを動的に更新
-      if (showTaskDetail) {
-        let updateShowTaskDetail = { ...showTaskDetail };
-        // 更新したカテゴリが詳細表示対象のタスクのカテゴリだった場合、カテゴリ名を動的に更新する
-        if (showTaskDetail.category.id === updateCategory.id) {
-          updateShowTaskDetail = {
-            ...showTaskDetail,
-            category: {
-              id: updateCategory.id,
-              name: updateCategory.name,
-              orderIndex: updateCategory.orderIndex!,
-            },
-          };
+        // 詳細表示されているタスクのカテゴリを動的に更新
+        if (showTaskDetail) {
+          let updateShowTaskDetail = { ...showTaskDetail };
+          // 更新したカテゴリが詳細表示対象のタスクのカテゴリだった場合、カテゴリ名を動的に更新する
+          if (showTaskDetail.category.id === updateCategory.id) {
+            updateShowTaskDetail = {
+              ...showTaskDetail,
+              category: {
+                id: updateCategory.id,
+                name: updateCategory.name,
+                orderIndex: updateCategory.orderIndex!,
+              },
+            };
+          }
+          setShowTaskDetail(updateShowTaskDetail);
         }
-        setShowTaskDetail(updateShowTaskDetail);
+
+        // 変更されたカテゴリが割り当てられた未完了タスクRedux Stateを動的に更新
+        dispatch(inCompletedTaskUpdateCategory(updateCategory));
+
+        // 変更されたカテゴリが割り当てられた完了タスクRedux Stateを動的に更新
+        dispatch(completedTaskUpdateCategory(updateCategory));
+      } catch (error) {
+        console.error("Error updating category: ", error);
+        alert("カテゴリの更新中にエラーが発生しました。");
       }
-
-      // 変更されたカテゴリが割り当てられた未完了タスクRedux Stateを動的に更新
-      dispatch(inCompletedTaskUpdateCategory(updateCategory));
-
-      // 変更されたカテゴリが割り当てられた完了タスクRedux Stateを動的に更新
-      dispatch(completedTaskUpdateCategory(updateCategory));
     }
     // 編集状態をクリア
     setEditCategoryId(null);
@@ -114,45 +118,57 @@ const CategoryTab: React.FC = () => {
     );
     // 上記ポップアップへのアクションがYesの場合
     if (isConfirmed) {
-      // 削除対象カテゴリに割り当てられているタスクを全て削除
-      // 未完了タスクから対象抽出
-      const deleteInCompletedTaskItems = inCompletedTaskItems.filter(
-        (inCompletedTaskItem) =>
-          inCompletedTaskItem.category.id === deleteCategory.id
-      );
-      // 未完了タスク削除関数の定義
-      const inCompletedTaskPromises = deleteInCompletedTaskItems.map(
-        async (inCompletedTaskItem) => {
-          dispatch(inCompletedTaskDelete(inCompletedTaskItem));
-          await taskApi.taskDelete(inCompletedTaskItem);
+      try {
+        // 削除対象カテゴリに割り当てられているタスクを全て削除
+        // 未完了タスクから対象抽出
+        const deleteInCompletedTaskItems = inCompletedTaskItems.filter(
+          (inCompletedTaskItem) =>
+            inCompletedTaskItem.category.id === deleteCategory.id
+        );
+        // 未完了タスク削除関数の定義
+        const inCompletedTaskPromises = deleteInCompletedTaskItems.map(
+          async (inCompletedTaskItem) => {
+            dispatch(inCompletedTaskDelete(inCompletedTaskItem));
+            await taskApi.taskDelete(inCompletedTaskItem);
+          }
+        );
+
+        // 完了タスクから対象抽出
+        const deleteCompletedTaskItems = completedTaskItems.filter(
+          (completedTaskItem) =>
+            completedTaskItem.category.id === deleteCategory.id
+        );
+        // 完了タスク削除関数の定義
+        const completedTaskPromises = deleteCompletedTaskItems.map(
+          async (completedTaskItem) => {
+            dispatch(completedTaskDelete(completedTaskItem));
+            await taskApi.taskDelete(completedTaskItem);
+          }
+        );
+
+        // 全てのタスク削除処理が完了するのを待つ（削除対象のカテゴリに紐づくタスクを先に消しておかないと、タスクのカテゴリ参照先がなくなりエラーとなるため。）
+        await Promise.all([
+          ...inCompletedTaskPromises,
+          ...completedTaskPromises,
+        ]);
+
+        // 詳細表示タスクに割り当てられている場合、詳細表示タスクをnullにする。
+        if (
+          showTaskDetail &&
+          showTaskDetail.category.id === deleteCategory.id
+        ) {
+          setShowTaskDetail(null);
         }
-      );
 
-      // 完了タスクから対象抽出
-      const deleteCompletedTaskItems = completedTaskItems.filter(
-        (completedTaskItem) =>
-          completedTaskItem.category.id === deleteCategory.id
-      );
-      // 完了タスク関数の定義
-      const completedTaskPromises = deleteCompletedTaskItems.map(
-        async (completedTaskItem) => {
-          dispatch(completedTaskDelete(completedTaskItem));
-          await taskApi.taskDelete(completedTaskItem);
-        }
-      );
-
-      // 全てのタスク削除処理が完了するのを待つ（削除対象のカテゴリに紐づくタスクを先に消しておかないと、タスクのカテゴリ参照先がなくなりエラーとなるため。）
-      await Promise.all([...inCompletedTaskPromises, ...completedTaskPromises]);
-
-      // 詳細表示タスクに割り当てられている場合、詳細表示タスクをnullにする。
-      if (showTaskDetail && showTaskDetail.category.id === deleteCategory.id) {
-        setShowTaskDetail(null);
+        // DB,Redux Stateから削除
+        dispatch(deleteCategoryThunk(deleteCategory));
+      } catch (error) {
+        console.error("Error deleting category: ", error);
+        alert("カテゴリの削除中にエラーが発生しました。");
       }
-
-      // DB,Redux Stateから削除
-      dispatch(deleteCategoryThunk(deleteCategory));
     }
   };
+
   return (
     <div className="ml-10 border-b border-gray-300">
       <button

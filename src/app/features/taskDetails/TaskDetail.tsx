@@ -59,54 +59,64 @@ const TaskDetail = () => {
 
   // 編集内容を保存し、編集モードを終了する関数
   const saveEdit = async (field: string, value: any) => {
-    // 更新内容を一時的に保存するオブジェクト
-    let updatedDetail = { ...showTaskDetail };
-
-    // タイトルが空で送られてきた時は元のタイトルに戻して処理終了
-    if (field === "title" && value === "") {
-      toggleEditOff(field);
-      return;
-    }
-
-    // 編集対象がカテゴリの場合、選択されたカテゴリidに一致するカテゴリオブジェクトを取得
-    if (field === "category") {
-      const selectedCategory = categories.find(
-        (category) => category.id == value
-      );
-      // 更新内容を一時的に保存するオブジェクトに格納
-      updatedDetail = { ...showTaskDetail, [field]: selectedCategory };
-      // 編集対象がスケジュールの場合、選択されたスケジュールidに一致するスケジュールオブジェクトを取得
-    } else if (field === "schedule") {
-      const selectedSchedule = schedules.find(
-        (schedule) => schedule.id == value
-      );
-      // 更新内容を一時的に保存するオブジェクトに格納
-      updatedDetail = { ...showTaskDetail, [field]: selectedSchedule };
-    } else {
+    try {
       // 更新内容を一時的に保存するオブジェクト
-      updatedDetail = { ...showTaskDetail, [field]: value };
+      let updatedDetail = { ...showTaskDetail };
+
+      // タイトルが空で送られてきた時は元のタイトルに戻して処理終了
+      if (field === "title" && value === "") {
+        toggleEditOff(field);
+        return;
+      }
+
+      // 編集対象がカテゴリの場合、選択されたカテゴリidに一致するカテゴリオブジェクトを取得
+      if (field === "category") {
+        const selectedCategory = categories.find(
+          (category) => category.id == value
+        );
+        // 更新内容を一時的に保存するオブジェクトに格納
+        updatedDetail = { ...showTaskDetail, [field]: selectedCategory };
+        // 編集対象がスケジュールの場合、選択されたスケジュールidに一致するスケジュールオブジェクトを取得
+      } else if (field === "schedule") {
+        const selectedSchedule = schedules.find(
+          (schedule) => schedule.id == value
+        );
+        // 更新内容を一時的に保存するオブジェクトに格納
+        updatedDetail = { ...showTaskDetail, [field]: selectedSchedule };
+      } else {
+        // 更新内容を一時的に保存するオブジェクト
+        updatedDetail = { ...showTaskDetail, [field]: value };
+      }
+      // 詳細表示タスクStateの更新
+      setShowTaskDetail(updatedDetail);
+      // 編集状態のトグル
+      toggleEditOff(field);
+      // DBと未完了or完了タスクRedux Stateに保存
+      updatedDetail.isCompleted
+        ? dispatch(updateCompletedTaskItemThunk(updatedDetail))
+        : dispatch(updateInCompletedTaskItemThunk(updatedDetail));
+    } catch (error) {
+      console.error("Error updating task: ", error);
+      alert("タスクの更新中にエラーが発生しました。");
     }
-    // 詳細表示タスクStateの更新
-    setShowTaskDetail(updatedDetail);
-    // 編集状態のトグル
-    toggleEditOff(field);
-    // DBと未完了or完了タスクRedux Stateに保存
-    updatedDetail.isCompleted
-      ? dispatch(updateCompletedTaskItemThunk(updatedDetail))
-      : dispatch(updateInCompletedTaskItemThunk(updatedDetail));
   };
 
   // タスクの削除
   const deleteTask = async () => {
-    // 確認ポップアップを表示
-    const isConfirmed = window.confirm("本当にこのタスクを削除しますか？");
-    // 上記ポップアップへのアクションがYesの場合
-    if (isConfirmed) {
-      // DBと、完了or未完了タスクRedux Stateから、対象のタスクを削除
-      showTaskDetail!.isCompleted
-        ? dispatch(deleteCompletedTaskItemThunk(showTaskDetail))
-        : dispatch(deleteInCompletedTaskItemThunk(showTaskDetail));
-      setShowTaskDetail(null);
+    try {
+      // 確認ポップアップを表示
+      const isConfirmed = window.confirm("本当にこのタスクを削除しますか？");
+      // 上記ポップアップへのアクションがYesの場合
+      if (isConfirmed) {
+        // DBと、完了or未完了タスクRedux Stateから、対象のタスクを削除
+        showTaskDetail!.isCompleted
+          ? dispatch(deleteCompletedTaskItemThunk(showTaskDetail))
+          : dispatch(deleteInCompletedTaskItemThunk(showTaskDetail));
+        setShowTaskDetail(null);
+      }
+    } catch (error) {
+      console.error("Error deleting task: ", error);
+      alert("タスクの削除中にエラーが発生しました。");
     }
   };
 

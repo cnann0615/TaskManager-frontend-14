@@ -1,5 +1,4 @@
 import { createSlice, Dispatch } from "@reduxjs/toolkit";
-
 import { TaskItem } from "../@types";
 import taskApi from "../api/task";
 import { inCompletedTaskAdd } from "./inCompletedTaskSlice";
@@ -64,37 +63,59 @@ export const completedTaskItemsSlice = createSlice({
 ///DBから完了タスク取得＆Redux Stateに反映
 const getAllCompletedTaskItemsThunk = (payload: string) => {
   return async (dispatch: Dispatch, getState: TaskItem) => {
-    const completedTaskItems: TaskItem[] = await taskApi.completedTaskGet(
-      payload
-    );
-    completedTaskItems.forEach((completedTaskItem) =>
-      dispatch(completedTaskAdd(completedTaskItem))
-    );
+    try {
+      const completedTaskItems: TaskItem[] = await taskApi.completedTaskGet(
+        payload
+      );
+      completedTaskItems.forEach((completedTaskItem) =>
+        dispatch(completedTaskAdd(completedTaskItem))
+      );
+    } catch (error) {
+      console.error("Error fetching completed tasks: ", error);
+      alert("完了タスクの取得中にエラーが発生しました。");
+    }
   };
 };
+
 // タスク更新をDB,Redux Stateに反映
 const updateCompletedTaskItemThunk = (payload: TaskItem) => {
   return async (dispatch: Dispatch, getState: TaskItem) => {
-    dispatch(completedTaskUpdate(payload));
-    await taskApi.updateTask(payload);
+    try {
+      dispatch(completedTaskUpdate(payload));
+      await taskApi.updateTask(payload);
+    } catch (error) {
+      console.error("Error updating completed task: ", error);
+      alert("完了タスクの更新中にエラーが発生しました。");
+    }
   };
 };
-// 完了→未完了処理をDB,Redux Stateに反映（完了Redux Stateから削除し、未完了Reduc Stateに登録）
+
+// 完了→未完了処理をDB,Redux Stateに反映（完了Redux Stateから削除し、未完了Redux Stateに登録）
 const switchInCompletedThunk = (payload: TaskItem) => {
   return async (dispatch: Dispatch, getState: TaskItem) => {
-    dispatch(completedTaskDelete(payload));
-    // 完了フラグを切り替え
-    const switchTask = { ...payload, isCompleted: false };
-    dispatch(inCompletedTaskAdd(switchTask));
-    await taskApi.updateTask(switchTask);
+    try {
+      dispatch(completedTaskDelete(payload));
+      // 完了フラグを切り替え
+      const switchTask = { ...payload, isCompleted: false };
+      dispatch(inCompletedTaskAdd(switchTask));
+      await taskApi.updateTask(switchTask);
+    } catch (error) {
+      console.error("Error switching task to incomplete: ", error);
+      alert("タスクの未完了への切り替え中にエラーが発生しました。");
+    }
   };
 };
 
 // 削除をDB,Redux Stateに反映
 const deleteCompletedTaskItemThunk = (payload: TaskItem) => {
   return async (dispatch: Dispatch, getState: TaskItem) => {
-    dispatch(completedTaskDelete(payload));
-    await taskApi.taskDelete(payload);
+    try {
+      dispatch(completedTaskDelete(payload));
+      await taskApi.taskDelete(payload);
+    } catch (error) {
+      console.error("Error deleting completed task: ", error);
+      alert("完了タスクの削除中にエラーが発生しました。");
+    }
   };
 };
 
@@ -112,4 +133,5 @@ export const {
   completedTaskUpdateSchedule,
   completedTaskDelete,
 } = completedTaskItemsSlice.actions;
+
 export default completedTaskItemsSlice.reducer;
