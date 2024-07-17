@@ -1,9 +1,6 @@
 "use client";
 import React, { useState, createContext, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { MdOutlineExpandMore, MdOutlineExpandLess } from "react-icons/md";
-import { TbCategoryPlus } from "react-icons/tb";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase";
 
 import TaskList from "./features/taskList/TaskList";
@@ -23,6 +20,7 @@ import { getAllCategoriesThunk } from "./slices/categorySlice";
 import { getAllSchedulesThunk } from "./slices/scheduleSlice";
 import NewContents from "./features/newContents/NewContents";
 import Account from "./features/account/Account";
+import ErrorBoundary from "./components/errorBoundary/ErrorBoundary";
 
 // 詳細表示対象タスクContextを作成
 export const showTaskDetailContext = createContext<ShowTaskDetail>({
@@ -49,9 +47,6 @@ export default function Main() {
 
   // Reduxのdispatchを使用可能にする
   const dispatch = useDispatch();
-
-  // New Contents画面展開State定義
-  const [addOpen, setAddOpen] = useState(true);
 
   // 詳細表示タスクState定義
   const [showTaskDetail, setShowTaskDetail] = useState<TaskItem | any>(null);
@@ -102,30 +97,13 @@ export default function Main() {
       >
         <main className=" mx-10 md:mx-20 my-4">
           {/* アカウント情報表示 */}
-          <Account />
-          <div className=" bg-gray-50 mx-auto my-4 p-4 border rounded-lg shadow">
-            <div>
-              <div className=" flex items-center gap-2 text-blue-500 text-2xl m-2 font-bold">
-                <TbCategoryPlus size={35} />
-                {/* New Contents画面の展開ボタン */}
-                <h1>New Contents</h1>
-                <button
-                  onClick={() => {
-                    setAddOpen(!addOpen);
-                  }}
-                  className=""
-                >
-                  {addOpen ? (
-                    <MdOutlineExpandLess size={35} />
-                  ) : (
-                    <MdOutlineExpandMore size={35} />
-                  )}
-                </button>
-              </div>
-            </div>
-            {/* New Contents画面が展開されている時は、New Task, New Category, New Scheduleフォームを表示 */}
-            {addOpen ? <NewContents /> : ""}
-          </div>
+          <ErrorBoundary>
+            <Account />
+          </ErrorBoundary>
+          <ErrorBoundary>
+            <NewContents />
+          </ErrorBoundary>
+
           {/* 詳細表示画面展開Stateと、詳細表示タスク編集状態管理Stateは、Task List、Task Detailコンポーネントで使用。 */}
           <taskDetailOpenContext.Provider
             value={{ taskDetailOpen, setTaskDetailOpen }}
@@ -135,9 +113,13 @@ export default function Main() {
             >
               <div className="xl:flex xl:gap-8">
                 {/* Task List画面 */}
-                <TaskList />
+                <ErrorBoundary>
+                  <TaskList />
+                </ErrorBoundary>
                 {/* Task Detail画面 */}
-                <TaskDetail />
+                <ErrorBoundary>
+                  <TaskDetail />
+                </ErrorBoundary>
               </div>
             </showTaskDetailEditingContext.Provider>
           </taskDetailOpenContext.Provider>
