@@ -10,11 +10,11 @@ const Account = () => {
   const hours = new Date().getHours();
   let greeting;
   if (hours < 10) {
-    greeting = "おはようございます。";
+    greeting = "Good morning";
   } else if (hours < 18) {
-    greeting = "こんにちは。";
+    greeting = "Good afternoon";
   } else {
-    greeting = "こんばんは。";
+    greeting = "Good evening";
   }
 
   // サインイン情報取得
@@ -36,7 +36,7 @@ const Account = () => {
     <div className="flex justify-between">
       <div className="flex items-center">
         <p className="ml-3">
-          {user?.displayName}さん、{greeting}
+          {greeting}, {user?.displayName}！
         </p>
       </div>
       <div className="flex gap-2 justify-end">

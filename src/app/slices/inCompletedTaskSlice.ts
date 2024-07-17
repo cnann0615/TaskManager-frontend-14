@@ -94,7 +94,7 @@ const addInCompletedTaskItemThunk = ({
       dispatch(inCompletedTaskAdd(_newTask));
     } catch (error) {
       console.error("Error adding task: ", error);
-      alert("タスクの追加中にエラーが発生しました。");
+      alert("未完了タスクの追加中にエラーが発生しました。");
     }
   };
 };
@@ -107,7 +107,7 @@ const updateInCompletedTaskItemThunk = (payload: TaskItem) => {
       await taskApi.updateTask(payload);
     } catch (error) {
       console.error("Error updating task: ", error);
-      alert("タスクの更新中にエラーが発生しました。");
+      alert("未完了タスクの更新中にエラーが発生しました。");
     }
   };
 };
@@ -136,7 +136,7 @@ const deleteInCompletedTaskItemThunk = (payload: TaskItem) => {
       await taskApi.taskDelete(payload);
     } catch (error) {
       console.error("Error deleting task: ", error);
-      alert("タスクの削除中にエラーが発生しました。");
+      alert("未完了タスクの削除中にエラーが発生しました。");
     }
   };
 };
