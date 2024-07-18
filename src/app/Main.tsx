@@ -91,20 +91,19 @@ export default function Main() {
 
   return (
     <>
-      {/* 詳細表示タスクStateはメインページ内の全コンポーネントで使用 */}
-      <showTaskDetailContext.Provider
-        value={{ showTaskDetail, setShowTaskDetail }}
-      >
-        <main className=" mx-10 md:mx-20 my-4">
-          {/* アカウント情報表示 */}
-          <ErrorBoundary>
-            <Account />
-          </ErrorBoundary>
-          <ErrorBoundary>
-            <NewContents />
-          </ErrorBoundary>
+      <main className=" mx-10 md:mx-20 my-4">
+        {/* アカウント情報表示 */}
+        <ErrorBoundary>
+          <Account />
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <NewContents />
+        </ErrorBoundary>
 
-          {/* 詳細表示画面展開Stateと、詳細表示タスク編集状態管理Stateは、Task List、Task Detailコンポーネントで使用。 */}
+        {/* 詳細表示タスクStateと、詳細表示画面展開Stateと、詳細表示タスク編集状態管理Stateは、Task List、Task Detailコンポーネントで使用。 */}
+        <showTaskDetailContext.Provider
+          value={{ showTaskDetail, setShowTaskDetail }}
+        >
           <taskDetailOpenContext.Provider
             value={{ taskDetailOpen, setTaskDetailOpen }}
           >
@@ -123,8 +122,8 @@ export default function Main() {
               </div>
             </showTaskDetailEditingContext.Provider>
           </taskDetailOpenContext.Provider>
-        </main>
-      </showTaskDetailContext.Provider>
+        </showTaskDetailContext.Provider>
+      </main>
     </>
   );
 }

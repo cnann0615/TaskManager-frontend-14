@@ -9,14 +9,19 @@ import {
   MdOutlineAddTask,
 } from "react-icons/md";
 
-import { addInCompletedTaskItemThunk } from "../../../slices/inCompletedTaskSlice";
-import taskApi from "../../../api/task";
-import { useSelector } from "../../../store/store";
-import { Category, Schedule, TaskItem, inputTaskItem } from "../../../@types";
+import { addInCompletedTaskItemThunk } from "../../../../slices/inCompletedTaskSlice";
+import taskApi from "../../../../api/task";
+import { useSelector } from "../../../../store/store";
+import {
+  Category,
+  Schedule,
+  TaskItem,
+  inputTaskItem,
+} from "../../../../@types";
 import AddButton from "@/app/components/button/AddButton";
 
 // 新規タスク追加画面
-const TaskAdd: React.FC = () => {
+const TaskAdd: React.FC = React.memo(() => {
   // サインイン情報取得
   const userId = auth.currentUser!.uid;
   // Reduxのdispatchを使用可能にする
@@ -199,6 +204,6 @@ const TaskAdd: React.FC = () => {
       </form>
     </div>
   );
-};
+});
 
 export default TaskAdd;

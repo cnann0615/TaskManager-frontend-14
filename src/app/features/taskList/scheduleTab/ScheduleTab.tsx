@@ -1,28 +1,29 @@
+import React from "react";
 import { useDispatch } from "react-redux";
 import { useContext, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/app/firebase";
 
-import { useSelector } from "../../store/store";
-import { tabScheduleContext } from "./TaskList";
-import { Schedule } from "../../@types";
+import { useSelector } from "../../../store/store";
+import { tabScheduleContext } from "../TaskList";
+import { Schedule } from "../../../@types";
 import {
   deleteScheduleThunk,
   updateScheduleThunk,
-} from "../../slices/scheduleSlice";
-import taskApi from "../../api/task";
-import { showTaskDetailContext } from "../../Main";
+} from "../../../slices/scheduleSlice";
+import taskApi from "../../../api/task";
+import { showTaskDetailContext } from "../../../Main";
 import {
   inCompletedTaskDelete,
   inCompletedTaskUpdateSchedule,
-} from "../../slices/inCompletedTaskSlice";
+} from "../../../slices/inCompletedTaskSlice";
 import {
   completedTaskDelete,
   completedTaskUpdateSchedule,
-} from "../../slices/completedTaskSlice";
+} from "../../../slices/completedTaskSlice";
 
 // スケジュールのタブリスト
-const ScheduleTab: React.FC = () => {
+const ScheduleTab: React.FC = React.memo(() => {
   // サインイン情報取得
   const userId = auth.currentUser!.uid;
 
@@ -246,6 +247,6 @@ const ScheduleTab: React.FC = () => {
       </div>
     </div>
   );
-};
+});
 
 export default ScheduleTab;

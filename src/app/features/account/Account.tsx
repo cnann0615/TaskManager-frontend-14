@@ -1,3 +1,4 @@
+import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { IoIosLogOut } from "react-icons/io";
 
@@ -5,7 +6,7 @@ import { auth } from "@/app/firebase";
 
 // サインインアカウント情報を表示
 
-const Account = () => {
+const Account = React.memo(() => {
   // 挨拶メッセージ定義
   const hours = new Date().getHours();
   let greeting;
@@ -59,6 +60,6 @@ const Account = () => {
       </div>
     </div>
   );
-};
+});
 
 export default Account;

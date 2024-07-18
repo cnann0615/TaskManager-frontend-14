@@ -1,28 +1,29 @@
 import { useContext, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/app/firebase";
-import { useSelector } from "../../store/store";
-import { tabCategoryContext } from "./TaskList";
+import { useSelector } from "../../../store/store";
+import { tabCategoryContext } from "../TaskList";
 import { useDispatch } from "react-redux";
 
-import { Category } from "../../@types";
+import { Category } from "../../../@types";
 import {
   deleteCategoryThunk,
   updateCategoryThunk,
-} from "../../slices/categorySlice";
-import taskApi from "../../api/task";
-import { showTaskDetailContext } from "../../Main";
+} from "../../../slices/categorySlice";
+import taskApi from "../../../api/task";
+import { showTaskDetailContext } from "../../../Main";
 import {
   inCompletedTaskDelete,
   inCompletedTaskUpdateCategory,
-} from "../../slices/inCompletedTaskSlice";
+} from "../../../slices/inCompletedTaskSlice";
 import {
   completedTaskDelete,
   completedTaskUpdateCategory,
-} from "../../slices/completedTaskSlice";
+} from "../../../slices/completedTaskSlice";
+import React from "react";
 
 // カテゴリのタブリスト
-const CategoryTab: React.FC = () => {
+const CategoryTab: React.FC = React.memo(() => {
   // サインイン情報取得
   const userId = auth.currentUser!.uid;
   // Reduxのdispatchを使用可能にする
@@ -236,6 +237,6 @@ const CategoryTab: React.FC = () => {
       </div>
     </div>
   );
-};
+});
 
 export default CategoryTab;

@@ -2,10 +2,10 @@ import React, { useState, createContext } from "react";
 import { MdOutlineExpandLess, MdOutlineExpandMore } from "react-icons/md";
 import { GoTasklist } from "react-icons/go";
 
-import CompletedTaskList from "./CompletedTaskList";
-import InCompletedTaskList from "./InCompletedTaskList";
-import CategoryTab from "./CategoryTab";
-import ScheduleTab from "./ScheduleTab";
+import CompletedTaskList from "./completedTaskList/CompletedTaskList";
+import InCompletedTaskList from "./inCompletedTaskList/InCompletedTaskList";
+import CategoryTab from "./categoryTab/CategoryTab";
+import ScheduleTab from "./scheduleTab/ScheduleTab";
 import { TabCategory, TabSchedule } from "@/app/@types";
 
 // タブカテゴリContextを作成
@@ -20,7 +20,7 @@ export const tabScheduleContext = createContext<TabSchedule>({
   setTabSchedule: () => {},
 });
 
-const TaskList: React.FC = () => {
+const TaskList: React.FC = React.memo(() => {
   // タスクリスト画面展開State
   const [taskListOpen, setTaskListOpen] = useState(true);
 
@@ -84,6 +84,6 @@ const TaskList: React.FC = () => {
       </tabCategoryContext.Provider>
     </div>
   );
-};
+});
 
 export default TaskList;

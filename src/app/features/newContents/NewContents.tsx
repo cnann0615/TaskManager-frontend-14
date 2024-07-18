@@ -5,7 +5,7 @@ import { MdOutlineExpandLess, MdOutlineExpandMore } from "react-icons/md";
 import NewContentsList from "./newContentsList/NewContentsList";
 
 // NewContentsコンポーネント
-const NewContents = () => {
+const NewContents = React.memo(() => {
   // New Contents画面展開State定義
   const [addOpen, setAddOpen] = useState(true);
   return (
@@ -33,6 +33,6 @@ const NewContents = () => {
       {addOpen && <NewContentsList />}
     </div>
   );
-};
+});
 
 export default NewContents;

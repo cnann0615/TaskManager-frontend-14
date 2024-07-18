@@ -1,18 +1,19 @@
+import React from "react";
 import { useContext } from "react";
 import { useDispatch } from "react-redux";
 
-import { useSelector } from "../../store/store";
-import { tabCategoryContext, tabScheduleContext } from "./TaskList";
-import { TaskItem } from "../../@types";
-import { switchCompletedThunk } from "../../slices/inCompletedTaskSlice";
+import { useSelector } from "../../../store/store";
+import { tabCategoryContext, tabScheduleContext } from "../TaskList";
+import { TaskItem } from "../../../@types";
+import { switchCompletedThunk } from "../../../slices/inCompletedTaskSlice";
 import {
   showTaskDetailContext,
   showTaskDetailEditingContext,
   taskDetailOpenContext,
-} from "../../Main";
+} from "../../../Main";
 
 // 未完了タスクリスト
-const InCompletedTaskList: React.FC = () => {
+const InCompletedTaskList: React.FC = React.memo(() => {
   // Reduxのdispatchを使用可能にする
   const dispatch = useDispatch();
 
@@ -116,6 +117,6 @@ const InCompletedTaskList: React.FC = () => {
       <span id="dummy"></span>
     </>
   );
-};
+});
 
 export default InCompletedTaskList;
