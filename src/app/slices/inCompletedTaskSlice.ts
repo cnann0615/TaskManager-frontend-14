@@ -20,7 +20,7 @@ export const inCompletedTaskItemsSlice = createSlice({
     inCompletedTaskUpdate: (state, action) => {
       const { id, ...updatedData } = action.payload;
       const index = state.findIndex(
-        (inCompletedTaskItem) => inCompletedTaskItem.id === id
+        (inCompletedTaskItem: TaskItem) => inCompletedTaskItem.id === id
       );
       if (index !== -1) {
         state[index] = {
@@ -32,7 +32,7 @@ export const inCompletedTaskItemsSlice = createSlice({
     // タスクのカテゴリ名を更新（特定のカテゴリが割り当てられているものを一括して更新）
     inCompletedTaskUpdateCategory: (state, action) => {
       const updateCategory = action.payload;
-      state.forEach((inCompletedTaskItem) => {
+      state.forEach((inCompletedTaskItem: TaskItem) => {
         if (inCompletedTaskItem.category.id === updateCategory.id) {
           inCompletedTaskItem.category.name = updateCategory.name;
         }
@@ -41,7 +41,7 @@ export const inCompletedTaskItemsSlice = createSlice({
     // タスクのスケジュール名を更新（特定のスケジュールが割り当てられているものを一括して更新）
     inCompletedTaskUpdateSchedule: (state, action) => {
       const updateSchedule = action.payload;
-      state.forEach((inCompletedTaskItem) => {
+      state.forEach((inCompletedTaskItem: TaskItem) => {
         if (inCompletedTaskItem.schedule.id === updateSchedule.id) {
           inCompletedTaskItem.schedule.name = updateSchedule.name;
         }
@@ -50,7 +50,9 @@ export const inCompletedTaskItemsSlice = createSlice({
     // タスク削除
     inCompletedTaskDelete: (state, action) => {
       const deleteTask = action.payload;
-      const index = state.findIndex((task) => task.id === deleteTask.id);
+      const index = state.findIndex(
+        (task: TaskItem) => task.id === deleteTask.id
+      );
       if (index !== -1) {
         state.splice(index, 1);
       }

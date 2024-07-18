@@ -19,7 +19,7 @@ export const categoriesSlice = createSlice({
     // 更新
     categoryUpdate: (state, action) => {
       const { id, ...updatedData } = action.payload;
-      const index = state.findIndex((category) => category.id === id);
+      const index = state.findIndex((category: Category) => category.id === id);
       if (index !== -1) {
         state[index] = {
           ...state[index],
@@ -32,7 +32,7 @@ export const categoriesSlice = createSlice({
     categoryDelete: (state, action) => {
       const deleteCategory = action.payload;
       const index = state.findIndex(
-        (category) => category.id === deleteCategory.id
+        (category: Category) => category.id === deleteCategory.id
       );
       if (index !== -1) {
         state.splice(index, 1);

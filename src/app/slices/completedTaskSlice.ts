@@ -20,7 +20,7 @@ export const completedTaskItemsSlice = createSlice({
     // 更新
     completedTaskUpdate: (state, action) => {
       const { id, ...updatedData } = action.payload;
-      const index = state.findIndex((task) => task.id === id);
+      const index = state.findIndex((task: TaskItem) => task.id === id);
       if (index !== -1) {
         state[index] = {
           ...state[index],
@@ -32,7 +32,7 @@ export const completedTaskItemsSlice = createSlice({
     // タスクのカテゴリ名を更新（特定のカテゴリが割り当てられているものを一括して更新）
     completedTaskUpdateCategory: (state, action) => {
       const updateCategory = action.payload;
-      state.forEach((completedTaskItem) => {
+      state.forEach((completedTaskItem: TaskItem) => {
         if (completedTaskItem.category.id === updateCategory.id) {
           completedTaskItem.category.name = updateCategory.name;
         }
@@ -41,7 +41,7 @@ export const completedTaskItemsSlice = createSlice({
     // タスクのスケジュール名を更新（特定のスケジュールが割り当てられているものを一括して更新）
     completedTaskUpdateSchedule: (state, action) => {
       const updateSchedule = action.payload;
-      state.forEach((completedTaskItem) => {
+      state.forEach((completedTaskItem: TaskItem) => {
         if (completedTaskItem.schedule.id === updateSchedule.id) {
           completedTaskItem.schedule.name = updateSchedule.name;
         }
@@ -51,7 +51,9 @@ export const completedTaskItemsSlice = createSlice({
     // タスク削除
     completedTaskDelete: (state, action) => {
       const deleteTask = action.payload;
-      const index = state.findIndex((task) => task.id === deleteTask.id);
+      const index = state.findIndex(
+        (task: TaskItem) => task.id === deleteTask.id
+      );
       if (index !== -1) {
         state.splice(index, 1); // stateを直接操作してタスクを削除する
       }

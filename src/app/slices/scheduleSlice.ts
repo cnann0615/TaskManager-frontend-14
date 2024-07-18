@@ -18,7 +18,7 @@ export const schedulesSlice = createSlice({
     // 更新
     scheduleUpdate: (state, action) => {
       const { id, ...updatedData } = action.payload;
-      const index = state.findIndex((schedule) => schedule.id === id);
+      const index = state.findIndex((schedule: Schedule) => schedule.id === id);
       if (index !== -1) {
         state[index] = {
           ...state[index],
@@ -31,7 +31,7 @@ export const schedulesSlice = createSlice({
     scheduleDelete: (state, action) => {
       const deleteSchedule = action.payload;
       const index = state.findIndex(
-        (schedule) => schedule.id === deleteSchedule.id
+        (schedule: Schedule) => schedule.id === deleteSchedule.id
       );
       if (index !== -1) {
         state.splice(index, 1);
