@@ -19,7 +19,7 @@ import {
 import { useSelector } from "../../store/store";
 
 // タスク詳細コンポーネント
-const TaskDetail = () => {
+const TaskDetail = React.memo(() => {
   // Reduxのdispatchを使用可能にする
   const dispatch = useDispatch();
 
@@ -370,6 +370,6 @@ const TaskDetail = () => {
       </div>
     </>
   );
-};
+});
 
 export default TaskDetail;

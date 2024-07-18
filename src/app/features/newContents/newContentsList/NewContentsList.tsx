@@ -1,9 +1,9 @@
 import React from "react";
-import TaskAdd from "../taskAdd/TaskAdd";
-import CategoryAdd from "../categoryAdd/CategoryAdd";
-import ScheduleAdd from "../scheduleAdd/ScheduleAdd";
+import TaskAdd from "./taskAdd/TaskAdd";
+import CategoryAdd from "./categoryAdd/CategoryAdd";
+import ScheduleAdd from "./scheduleAdd/ScheduleAdd";
 
-const NewContentsList = () => {
+const NewContentsList = React.memo(() => {
   return (
     <div className=" xl:flex xl:gap-x-7 p-4 ">
       {/* New Task */}
@@ -20,6 +20,6 @@ const NewContentsList = () => {
       </div>
     </div>
   );
-};
+});
 
 export default NewContentsList;
