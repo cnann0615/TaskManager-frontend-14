@@ -6,7 +6,7 @@ import { auth } from "@/app/firebase";
 
 import { useSelector } from "../../../store/store";
 import { tabScheduleContext } from "../TaskList";
-import { Schedule } from "../../../@types";
+import { Schedule, TaskItem } from "../../../@types";
 import {
   deleteScheduleThunk,
   updateScheduleThunk,
@@ -124,24 +124,24 @@ const ScheduleTab: React.FC = React.memo(() => {
         // 削除対象スケジュールに割り当てられているタスクを全て削除
         // 未完了タスクから対象抽出
         const deleteInCompletedTaskItems = inCompletedTaskItems.filter(
-          (inCompletedTaskItem) =>
+          (inCompletedTaskItem: TaskItem) =>
             inCompletedTaskItem.schedule.id === deleteSchedule.id
         );
         // 未完了タスク削除関数の定義
         const inCompletedTaskPromises = deleteInCompletedTaskItems.map(
-          async (inCompletedTaskItem) => {
+          async (inCompletedTaskItem: TaskItem) => {
             dispatch(inCompletedTaskDelete(inCompletedTaskItem));
             await taskApi.taskDelete(inCompletedTaskItem);
           }
         );
         // 完了タスクから対象抽出
         const deleteCompletedTaskItems = completedTaskItems.filter(
-          (completedTaskItem) =>
+          (completedTaskItem: TaskItem) =>
             completedTaskItem.schedule.id === deleteSchedule.id
         );
         // 完了タスク削除関数の定義
         const completedTaskPromises = deleteCompletedTaskItems.map(
-          async (completedTaskItem) => {
+          async (completedTaskItem: TaskItem) => {
             dispatch(completedTaskDelete(completedTaskItem));
             await taskApi.taskDelete(completedTaskItem);
           }
@@ -189,7 +189,7 @@ const ScheduleTab: React.FC = React.memo(() => {
         className="inline-block"
         style={{ display: "flex", flexDirection: "column" }}
       >
-        {schedules.map((schedule, index) => (
+        {schedules.map((schedule: Schedule, index: number) => (
           <div className="block" style={{ whiteSpace: "nowrap" }} key={index}>
             {/* スケジュール名編集中はinput BOXを表示。通常は、スケジュール名と編集、削除ボタンを表示　*/}
             {editScheduleId === schedule.id ? (

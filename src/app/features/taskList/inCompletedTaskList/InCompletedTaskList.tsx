@@ -35,18 +35,18 @@ const InCompletedTaskList: React.FC = React.memo(() => {
           inCompletedTaskItems
         : // スケジュールのみ指定がある場合
           inCompletedTaskItems.filter(
-            (inCompletedTaskItem) =>
+            (inCompletedTaskItem: TaskItem) =>
               inCompletedTaskItem.schedule.id == tabSchedule
           )
       : tabSchedule === 0
       ? // カテゴリのみ指定がある場合
         inCompletedTaskItems.filter(
-          (inCompletedTaskItem) =>
+          (inCompletedTaskItem: TaskItem) =>
             inCompletedTaskItem.category.id == tabCategory
         )
       : // カテゴリもスケジュールも指定がある場合
         inCompletedTaskItems.filter(
-          (inCompletedTaskItem) =>
+          (inCompletedTaskItem: TaskItem) =>
             inCompletedTaskItem.category.id == tabCategory &&
             inCompletedTaskItem.schedule.id == tabSchedule
         );
@@ -90,7 +90,7 @@ const InCompletedTaskList: React.FC = React.memo(() => {
           ) : (
             ""
           )}
-          {filteredInCompletedTaskItems.map((task, index) => (
+          {filteredInCompletedTaskItems.map((task: TaskItem, index: number) => (
             <li
               className="bg-white flex items-center justify-between mb-2 px-2 py-3 border"
               key={index}

@@ -5,7 +5,7 @@ import { useSelector } from "../../../store/store";
 import { tabCategoryContext } from "../TaskList";
 import { useDispatch } from "react-redux";
 
-import { Category } from "../../../@types";
+import { Category, TaskItem } from "../../../@types";
 import {
   deleteCategoryThunk,
   updateCategoryThunk,
@@ -123,12 +123,12 @@ const CategoryTab: React.FC = React.memo(() => {
         // 削除対象カテゴリに割り当てられているタスクを全て削除
         // 未完了タスクから対象抽出
         const deleteInCompletedTaskItems = inCompletedTaskItems.filter(
-          (inCompletedTaskItem) =>
+          (inCompletedTaskItem: TaskItem) =>
             inCompletedTaskItem.category.id === deleteCategory.id
         );
         // 未完了タスク削除関数の定義
         const inCompletedTaskPromises = deleteInCompletedTaskItems.map(
-          async (inCompletedTaskItem) => {
+          async (inCompletedTaskItem: TaskItem) => {
             dispatch(inCompletedTaskDelete(inCompletedTaskItem));
             await taskApi.taskDelete(inCompletedTaskItem);
           }
@@ -136,12 +136,12 @@ const CategoryTab: React.FC = React.memo(() => {
 
         // 完了タスクから対象抽出
         const deleteCompletedTaskItems = completedTaskItems.filter(
-          (completedTaskItem) =>
+          (completedTaskItem: TaskItem) =>
             completedTaskItem.category.id === deleteCategory.id
         );
         // 完了タスク削除関数の定義
         const completedTaskPromises = deleteCompletedTaskItems.map(
-          async (completedTaskItem) => {
+          async (completedTaskItem: TaskItem) => {
             dispatch(completedTaskDelete(completedTaskItem));
             await taskApi.taskDelete(completedTaskItem);
           }
@@ -183,7 +183,7 @@ const CategoryTab: React.FC = React.memo(() => {
         All
       </button>
       <div className="inline-block">
-        {categories.map((category, index) => (
+        {categories.map((category: Category, index: number) => (
           <div className="inline-block" key={index}>
             {/* カテゴリ名編集中はinput BOXを表示。通常は、カテゴリ名と編集、削除ボタンを表示　*/}
 
