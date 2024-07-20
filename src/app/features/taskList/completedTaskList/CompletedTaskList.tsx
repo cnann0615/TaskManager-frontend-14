@@ -14,7 +14,6 @@ import {
 
 // 完了タスクリスト
 const CompletedTaskList: React.FC = React.memo(() => {
-  // Reduxのdispatchを使用可能にする
   const dispatch = useDispatch();
 
   // 完了タスクRedux Stateを取得

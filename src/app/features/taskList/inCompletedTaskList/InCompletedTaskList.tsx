@@ -14,7 +14,6 @@ import {
 
 // 未完了タスクリスト
 const InCompletedTaskList: React.FC = React.memo(() => {
-  // Reduxのdispatchを使用可能にする
   const dispatch = useDispatch();
 
   // 未完了タスクRedux Stateを取得

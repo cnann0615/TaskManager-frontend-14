@@ -29,8 +29,7 @@ const TaskList: React.FC = React.memo(() => {
   const [tabSchedule, setTabSchedule] = useState<number>(0);
 
   return (
-    <div className="bg-gray-50 mx-auto mt-4 p-4 border rounded-lg shadow xl:w-2/5">
-      {/* タブカテゴリSteteとタブスケジュールStateは、TaskListコンポーネント全体で使用。（一番外側にラップ） */}
+    <div className="bg-gray-50 mx-auto mt-4 p-4 border rounded-lg shadow xl:w-[45%]">
       <tabCategoryContext.Provider value={{ tabCategory, setTabCategory }}>
         <tabScheduleContext.Provider value={{ tabSchedule, setTabSchedule }}>
           <div>
@@ -40,7 +39,6 @@ const TaskList: React.FC = React.memo(() => {
                   <GoTasklist size={35} />
                   <h1 className=" mr-1 ">Task List</h1>
                 </div>
-                {/* 画面横幅が1280以下の時だけ、タスクリスト画面を開閉可能にする。 */}
                 {window.innerWidth <= 1280 ? (
                   // 開閉ボタン
                   <button
@@ -60,18 +58,13 @@ const TaskList: React.FC = React.memo(() => {
                 )}
               </div>
             </div>
-            {/* タスクリスト画面が開いている時だけ、タスクリスト＋タブを表示 */}
             {taskListOpen ? (
               <div className=" mt-6">
-                {/* カテゴリのタブ */}
                 <CategoryTab />
                 <div className=" flex">
-                  {/* スケジュールのタブ */}
                   <ScheduleTab />
                   <div className="px-5 py-2 w-[90%]">
-                    {/* 未完了タスクリスト */}
                     <InCompletedTaskList />
-                    {/* 完了タスクリスト */}
                     <CompletedTaskList />
                   </div>
                 </div>

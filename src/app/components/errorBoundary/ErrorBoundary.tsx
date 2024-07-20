@@ -7,6 +7,7 @@ interface ErrorFallbackProps {
   resetErrorBoundary: () => void;
 }
 
+// フォールバックUI
 const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error }) => {
   const resetErrorBoundary = () => {
     window.location.reload();

@@ -20,7 +20,6 @@ import { useSelector } from "../../store/store";
 
 // タスク詳細コンポーネント
 const TaskDetail = React.memo(() => {
-  // Reduxのdispatchを使用可能にする
   const dispatch = useDispatch();
 
   // 詳細表示タスクStateを定義
@@ -60,7 +59,6 @@ const TaskDetail = React.memo(() => {
   // 編集内容を保存し、編集モードを終了する関数
   const saveEdit = async (field: string, value: any) => {
     try {
-      // 更新内容を一時的に保存するオブジェクト
       let updatedDetail = { ...showTaskDetail };
 
       // タイトルが空で送られてきた時は元のタイトルに戻して処理終了
@@ -104,7 +102,6 @@ const TaskDetail = React.memo(() => {
   // タスクの削除
   const deleteTask = async () => {
     try {
-      // 確認ポップアップを表示
       const isConfirmed = window.confirm("本当にこのタスクを削除しますか？");
       // 上記ポップアップへのアクションがYesの場合
       if (isConfirmed) {
@@ -122,14 +119,13 @@ const TaskDetail = React.memo(() => {
 
   return (
     <>
-      <div className=" bg-gray-50 mx-auto mt-4 p-4 border shadow xl:w-3/5  overflow-hidden rounded-lg">
+      <div className=" bg-gray-50 mx-auto mt-4 p-4 border shadow xl:w-[55%]  overflow-hidden rounded-lg">
         <div>
           <div className=" flex items-center text-blue-500 text-2xl m-2 font-bold">
             <div className=" flex items-center gap-2">
               <BiDetail size={35} />
               <h1 className=" mr-1 ">Task Detail</h1>
             </div>
-            {/* 画面横幅が1280以下の時だけ、タスク詳細画面を開閉可能にする。 */}
             {window.innerWidth <= 1280 ? (
               // 開閉ボタン
               <button

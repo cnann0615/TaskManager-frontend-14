@@ -11,13 +11,11 @@ const Top = () => {
 
   return (
     <div className="">
-      {/* サインイン時はタスクアプリページを表示*/}
       {user ? (
         <>
           <Main />
         </>
       ) : (
-        // サインアウト時は、サインインページを表示
         <div className=" mt-[15%]">
           <SignIn />
         </div>

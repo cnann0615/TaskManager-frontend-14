@@ -24,10 +24,7 @@ import {
 
 // スケジュールのタブリスト
 const ScheduleTab: React.FC = React.memo(() => {
-  // サインイン情報取得
   const userId = auth.currentUser!.uid;
-
-  // Reduxのdispatchを使用可能にする
   const dispatch = useDispatch();
 
   // 必要なRedux Stateを取得
@@ -108,13 +105,11 @@ const ScheduleTab: React.FC = React.memo(() => {
       }
     }
 
-    // 編集状態をクリア
     setEditScheduleId(null);
   };
 
   // スケジュール削除
   const deleteSchedule = async (deleteSchedule: Schedule) => {
-    // 確認ポップアップを表示
     const isConfirmed = window.confirm(
       "スケジュールに割り当てられたタスクも削除されます。本当に削除しますか？"
     );

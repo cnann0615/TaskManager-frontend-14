@@ -7,6 +7,8 @@ import { auth } from "@/app/firebase";
 // サインインアカウント情報を表示
 
 const Account = React.memo(() => {
+  const [user] = useAuthState(auth);
+
   // 挨拶メッセージ定義
   const hours = new Date().getHours();
   let greeting;
@@ -18,10 +20,6 @@ const Account = React.memo(() => {
     greeting = "Good evening";
   }
 
-  // サインイン情報取得
-  const [user] = useAuthState(auth);
-
-  // サインアウトボタンが押されたらサインアウトする
   const signOut = async () => {
     try {
       await auth.signOut();
@@ -41,7 +39,6 @@ const Account = React.memo(() => {
         </p>
       </div>
       <div className="flex gap-2 justify-end">
-        {/* アイコン（Googleアカウントのアイコン） */}
         {user?.photoURL && (
           <img
             src={user.photoURL}
@@ -49,7 +46,6 @@ const Account = React.memo(() => {
             className="size-12 rounded-full"
           />
         )}
-        {/* サインアウトボタン */}
         <button
           className="flex justify-center items-center gap-2"
           onClick={signOut}

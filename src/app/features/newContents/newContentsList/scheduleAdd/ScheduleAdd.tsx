@@ -12,9 +12,7 @@ import { addScheduleThunk } from "../../../../slices/scheduleSlice";
 
 // 新規スケジュール追加画面
 const ScheduleAdd: React.FC = React.memo(() => {
-  // サインイン情報取得
   const userId = auth.currentUser!.uid;
-  // Reduxのdispatchを使用可能にする
   const dispatch = useDispatch();
 
   // useFormを使用したフォームの処理///////////

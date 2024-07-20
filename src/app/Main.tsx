@@ -42,10 +42,8 @@ export const taskDetailOpenContext = createContext<taskDetailOpen>({
 });
 
 export default function Main() {
-  // サインイン情報取得
   const userId = auth.currentUser!.uid;
 
-  // Reduxのdispatchを使用可能にする
   const dispatch = useDispatch();
 
   // 詳細表示タスクState定義
@@ -92,7 +90,6 @@ export default function Main() {
   return (
     <>
       <main className=" mx-10 md:mx-20 my-4">
-        {/* アカウント情報表示 */}
         <ErrorBoundary>
           <Account />
         </ErrorBoundary>
@@ -100,7 +97,6 @@ export default function Main() {
           <NewContents />
         </ErrorBoundary>
 
-        {/* 詳細表示タスクStateと、詳細表示画面展開Stateと、詳細表示タスク編集状態管理Stateは、Task List、Task Detailコンポーネントで使用。 */}
         <showTaskDetailContext.Provider
           value={{ showTaskDetail, setShowTaskDetail }}
         >
@@ -111,11 +107,9 @@ export default function Main() {
               value={{ showTaskDetailEditing, setShowTaskDetailEditing }}
             >
               <div className="xl:flex xl:gap-8">
-                {/* Task List画面 */}
                 <ErrorBoundary>
                   <TaskList />
                 </ErrorBoundary>
-                {/* Task Detail画面 */}
                 <ErrorBoundary>
                   <TaskDetail />
                 </ErrorBoundary>

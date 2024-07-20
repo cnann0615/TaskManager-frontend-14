@@ -26,7 +26,6 @@ import React from "react";
 const CategoryTab: React.FC = React.memo(() => {
   // サインイン情報取得
   const userId = auth.currentUser!.uid;
-  // Reduxのdispatchを使用可能にする
   const dispatch = useDispatch();
 
   // 必要なStateを取得
@@ -113,7 +112,6 @@ const CategoryTab: React.FC = React.memo(() => {
 
   // カテゴリ削除
   const deleteCategory = async (deleteCategory: Category) => {
-    // 確認ポップアップを表示
     const isConfirmed = window.confirm(
       "カテゴリに割り当てられたタスクも削除されます。本当に削除しますか？"
     );

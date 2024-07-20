@@ -22,9 +22,7 @@ import AddButton from "@/app/components/button/AddButton";
 
 // 新規タスク追加画面
 const TaskAdd: React.FC = React.memo(() => {
-  // サインイン情報取得
   const userId = auth.currentUser!.uid;
-  // Reduxのdispatchを使用可能にする
   const dispatch = useDispatch();
 
   // フォーム展開State
