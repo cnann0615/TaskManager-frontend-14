@@ -322,7 +322,7 @@ const TaskDetail = React.memo(() => {
                             e: React.FocusEvent<HTMLTextAreaElement, Element>
                           ) => saveEdit("memo", e.target.value)}
                           autoFocus
-                          className="w-full h-80 rounded-md border-gray-300 focus:outline-none bg-gray-50"
+                          className="p-2 w-full h-80 rounded-md border-gray-300 focus:outline-none bg-gray-50"
                         />
                       ) : (
                         // \nを改行タグ(<br />)に変換して表示

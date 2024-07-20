@@ -1,42 +1,46 @@
-import React, { Component, ReactNode, ErrorInfo } from "react";
+import React from "react";
+import { ErrorBoundary as ReactErrorBoundary } from "react-error-boundary";
 
-// ErrorBoundaryのクラスコンポーネント
+// エラーフォールバックコンポーネントの型定義
+interface ErrorFallbackProps {
+  error: Error;
+  resetErrorBoundary: () => void;
+}
 
+const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error }) => {
+  const resetErrorBoundary = () => {
+    window.location.reload();
+  };
+  return (
+    <div
+      role="alert"
+      className="w-[90%] h-96 flex flex-col items-center justify-center bg-red-100 p-4"
+    >
+      <h1 className="text-red-700 font-bold text-2xl mb-4">
+        An error has occurred
+      </h1>
+      <p className="text-red-600 mb-4">{error.message}</p>
+      <button
+        onClick={resetErrorBoundary}
+        className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-700"
+      >
+        Reload Page
+      </button>
+    </div>
+  );
+};
+
+// ErrorBoundaryコンポーネントの型定義
 interface ErrorBoundaryProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
-interface ErrorBoundaryState {
-  hasError: boolean;
-}
-
-class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  constructor(props: ErrorBoundaryProps) {
-    super(props);
-    this.state = { hasError: false };
-  }
-
-  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
-    // エラーステートを更新してフォールバックUIを表示
-    return { hasError: true };
-  }
-
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // エラー情報を取得できる
-    console.error("ErrorBoundary caught an error", error, errorInfo);
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return (
-        <h1 className="text-red-700 font-bold">
-          An error has occurred. Please refresh the page.
-        </h1>
-      );
-    }
-
-    return this.props.children;
-  }
-}
+const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({ children }) => {
+  return (
+    <ReactErrorBoundary FallbackComponent={ErrorFallback}>
+      {children}
+    </ReactErrorBoundary>
+  );
+};
 
 export default ErrorBoundary;
