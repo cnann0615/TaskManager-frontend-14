@@ -368,4 +368,5 @@ const TaskDetail = React.memo(() => {
   );
 });
 
+TaskDetail.displayName = "TaskDetail";
 export default TaskDetail;

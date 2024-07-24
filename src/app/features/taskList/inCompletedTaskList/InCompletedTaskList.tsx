@@ -118,4 +118,5 @@ const InCompletedTaskList: React.FC = React.memo(() => {
   );
 });
 
+InCompletedTaskList.displayName = "InCompletedTaskList";
 export default InCompletedTaskList;

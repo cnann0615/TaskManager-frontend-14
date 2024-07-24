@@ -19,4 +19,5 @@ const NewContentsList = React.memo(() => {
   );
 });
 
+NewContentsList.displayName = "NewContentsList";
 export default NewContentsList;
