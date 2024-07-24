@@ -58,4 +58,5 @@ const Account = React.memo(() => {
   );
 });
 
+Account.displayName = "Account";
 export default Account;

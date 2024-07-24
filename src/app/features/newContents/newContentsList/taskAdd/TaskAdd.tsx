@@ -204,4 +204,5 @@ const TaskAdd: React.FC = React.memo(() => {
   );
 });
 
+TaskAdd.displayName = "TaskAdd";
 export default TaskAdd;

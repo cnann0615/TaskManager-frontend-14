@@ -81,4 +81,5 @@ const CategoryAdd: React.FC = React.memo(() => {
   );
 });
 
+CategoryAdd.displayName = "CategoryAdd";
 export default CategoryAdd;

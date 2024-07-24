@@ -80,4 +80,5 @@ const ScheduleAdd: React.FC = React.memo(() => {
   );
 });
 
+ScheduleAdd.displayName = "ScheduleAdd";
 export default ScheduleAdd;
