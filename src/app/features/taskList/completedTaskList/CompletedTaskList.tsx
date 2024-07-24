@@ -114,4 +114,5 @@ const CompletedTaskList: React.FC = React.memo(() => {
   );
 });
 
+CompletedTaskList.displayName = "CompletedTaskList";
 export default CompletedTaskList;

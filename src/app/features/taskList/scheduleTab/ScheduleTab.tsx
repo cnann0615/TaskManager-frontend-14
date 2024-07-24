@@ -244,4 +244,5 @@ const ScheduleTab: React.FC = React.memo(() => {
   );
 });
 
+ScheduleTab.displayName = "ScheduleTab";
 export default ScheduleTab;

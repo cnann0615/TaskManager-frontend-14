@@ -237,4 +237,5 @@ const CategoryTab: React.FC = React.memo(() => {
   );
 });
 
+CategoryTab.displayName = "CategoryTab";
 export default CategoryTab;

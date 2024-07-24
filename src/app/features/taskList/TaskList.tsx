@@ -79,4 +79,5 @@ const TaskList: React.FC = React.memo(() => {
   );
 });
 
+TaskList.displayName = "TaskList";
 export default TaskList;
