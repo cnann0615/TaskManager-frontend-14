@@ -100,7 +100,7 @@ const CompletedTaskList: React.FC = React.memo(() => {
             </button>
             <span
               onClick={() => openTaskDetail(task)}
-              className="cursor-pointer hover:bg-gray-100 flex-grow mx-2 line-through"
+              className="cursor-pointer hover:bg-gray-100 flex-grow mx-2 line-through font-bold"
             >
               {task.title}
             </span>

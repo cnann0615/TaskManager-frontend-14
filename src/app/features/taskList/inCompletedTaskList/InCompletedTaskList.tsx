@@ -102,7 +102,7 @@ const InCompletedTaskList: React.FC = React.memo(() => {
               </button>
               <span
                 onClick={() => openTaskDetail(task)}
-                className="cursor-pointer hover:bg-gray-100 flex-grow mx-2"
+                className="cursor-pointer hover:bg-gray-100 flex-grow mx-2 font-bold"
               >
                 {task.title}
               </span>
