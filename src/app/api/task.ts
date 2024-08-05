@@ -1,7 +1,8 @@
 import axios from "axios";
 import { TaskItem, Category, Schedule } from "../@types";
 
-const ENDPOINT_URL = "http://localhost:8080/taskAPI";
+const ENDPOINT_URL =
+  "https://task-manager-backend-a6fff3b275a2.herokuapp.com/taskAPI";
 
 const taskApi = {
   // 取得////////////////////////////////
