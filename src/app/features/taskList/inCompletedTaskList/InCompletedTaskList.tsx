@@ -82,7 +82,9 @@ const InCompletedTaskList: React.FC = React.memo(() => {
   return (
     <>
       <div className="mt-4">
-        <h2 className="text-xl font-bold mb-2">Incomplete Task</h2>
+        <h2 className="text-xl font-bold mb-2 text-gray-700">
+          Incomplete Task
+        </h2>
         <ul className="list-none w-full">
           {filteredInCompletedTaskItems.length == 0 ? (
             <div className="mt-5 mb-10 text-gray-500">No Task</div>
