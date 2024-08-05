@@ -306,7 +306,7 @@ const TaskDetail = React.memo(() => {
                 </tr>
                 {/* メモ */}
                 <tr>
-                  <td className="px-7 py-5 border-b border-gray-200 bg-white text-sm h-96 font-bold">
+                  <td className="px-7 py-5 border-b border-gray-200 bg-white text-sm h-52 md:h-96 font-bold">
                     Memo
                   </td>
                   {showTaskDetail ? (
