@@ -98,15 +98,14 @@ const CompletedTaskList: React.FC = React.memo(() => {
             >
               ☑︎
             </button>
-            <span
-              onClick={() => openTaskDetail(task)}
-              className="cursor-pointer hover:bg-gray-100 flex-grow mx-2 line-through font-bold"
-            >
-              {task.title}
-            </span>
-            <span className="text-left w-32">
-              〆 {task.deadLine ? task.deadLine : "None"}
-            </span>
+            <div onClick={() => openTaskDetail(task)}>
+              <span className="cursor-pointer hover:bg-gray-100 flex-grow mx-2 line-through font-bold">
+                {task.title}
+              </span>
+              <span className="text-left w-32">
+                〆 {task.deadLine ? task.deadLine : "None"}
+              </span>
+            </div>
           </li>
         ))}
       </ul>
