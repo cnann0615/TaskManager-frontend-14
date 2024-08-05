@@ -89,7 +89,7 @@ export default function Main() {
 
   return (
     <>
-      <main className=" mx-10 md:mx-20 my-4">
+      <main className=" mx-5 md:mx-20 my-4">
         <ErrorBoundary>
           <Account />
         </ErrorBoundary>
