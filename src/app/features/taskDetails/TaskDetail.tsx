@@ -151,10 +151,10 @@ const TaskDetail = React.memo(() => {
             <table className="min-w-full leading-normal border ">
               <thead>
                 <tr>
-                  <th className=" w-1/6 sm:w-1/5 px-7 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  <th className=" w-1/7 sm:w-1/5 px-7 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     Column
                   </th>
-                  <th className=" w-5/6 sm:w-4/5 px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  <th className=" w-6/7 sm:w-4/5 px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     Contents
                   </th>
                 </tr>
