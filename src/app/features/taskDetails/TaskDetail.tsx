@@ -328,7 +328,7 @@ const TaskDetail = React.memo(() => {
                       )}
                     </td>
                   ) : (
-                    <td className=" block md:table-cell px-5 py-5 border-b border-gray-200 bg-white text-sm w-full md:w-4/5">
+                    <td className=" block md:table-cell h-[380px] md:h-[450px] px-7 py-5 border-b border-gray-200 bg-white text-sm w-full md:w-4/5">
                       <p className="pl-1">ー</p>
                     </td>
                   )}

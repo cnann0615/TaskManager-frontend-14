@@ -35,7 +35,7 @@ const SignIn = () => {
         </h3>
         <div className="flex items-center gap-3 mb-8">
           <MdOutlineTaskAlt className=" size-10  md:size-20" />
-          <h1 className="text-4xl md:text-7xl font-bold ">Task Manager！</h1>
+          <h1 className="text-3xl md:text-7xl font-bold ">Task Manager！</h1>
         </div>
         {/* サインインボタン */}
         <button
