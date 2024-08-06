@@ -194,7 +194,7 @@ const CategoryTab: React.FC = React.memo(() => {
   };
 
   return (
-    <div className="ml-10 border-b border-gray-300">
+    <div className="ml-10 border-b border-gray-300 ">
       <div className=" text-right">
         <button
           className=" mr-3 text-gray-400 hover:text-black"
