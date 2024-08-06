@@ -51,7 +51,7 @@ const CategoryAdd: React.FC = React.memo(() => {
     <div>
       <div className=" flex items-center gap-2">
         <MdOutlineCategory size={25} />
-        <h3 className="font-bold">New Category</h3>
+        <h3 className="font-bold border-b-4 border-teal-300">New Category</h3>
       </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
