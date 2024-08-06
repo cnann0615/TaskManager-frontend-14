@@ -96,7 +96,7 @@ const TaskAdd: React.FC = React.memo(() => {
     <div>
       <div className=" flex items-center gap-2">
         <MdOutlineAddTask size={25} />
-        <h3 className="font-bold">New Task</h3>
+        <h3 className="font-bold border-b-4 border-gray-300">New Task</h3>
       </div>
       <form
         onSubmit={handleSubmit(onSubmit)}

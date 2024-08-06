@@ -43,6 +43,31 @@ const CategoryTab: React.FC = React.memo(() => {
     setTabCategory(id);
   };
 
+  // カテゴリタブページネーション機能////////////////
+
+  // 現在のページをStateで管理（初期値は１）
+  const [currentPage, setCurrentPage] = useState(1);
+  // ページ数を取得
+  const totalPages = Math.ceil(categories.length / 4);
+
+  // ページ切り替え関数
+  const handlePageChange = (action: string) => {
+    let _currentPage = currentPage;
+    if (action === "next") {
+      if (currentPage < totalPages) {
+        setCurrentPage(_currentPage + 1);
+      }
+    } else {
+      if (currentPage > 1) {
+        setCurrentPage(_currentPage - 1);
+      }
+    }
+  };
+  // ページに表示されるトップのindexを取得
+  const startIndex = (currentPage - 1) * 4;
+  // カテゴリのうち、ページに表示するもののみを切り抜く
+  const selectedCategories = categories.slice(startIndex, startIndex + 4);
+
   // カテゴリ名編集機能//////////////////
 
   // タブからカテゴリ名を変更した際に詳細表示中タスクのカテゴリ名も変更する必要があるため、詳細表示タスクStateの値と更新用関数を定義
@@ -170,6 +195,21 @@ const CategoryTab: React.FC = React.memo(() => {
 
   return (
     <div className="ml-10 border-b border-gray-300">
+      <div className=" text-right">
+        <button
+          className=" mr-3 text-gray-400 hover:text-black"
+          onClick={() => handlePageChange("back")}
+        >
+          ＜
+        </button>
+        <span className=" text-gray-700">Tab</span>
+        <button
+          className=" ml-3 text-gray-400 hover:text-black"
+          onClick={() => handlePageChange("next")}
+        >
+          ＞
+        </button>
+      </div>
       <button
         onClick={() => switchTab(0)}
         className={`bg-teal-100 hover:bg-teal-300 text-black py-2 px-4 rounded-t focus:outline-none focus:shadow-outline mr-[6.5px] ${
@@ -181,7 +221,7 @@ const CategoryTab: React.FC = React.memo(() => {
         All
       </button>
       <div className="inline-block">
-        {categories.map((category: Category, index: number) => (
+        {selectedCategories.map((category: Category, index: number) => (
           <div className="inline-block" key={index}>
             {/* カテゴリ名編集中はinput BOXを表示。通常は、カテゴリ名と編集、削除ボタンを表示　*/}
 

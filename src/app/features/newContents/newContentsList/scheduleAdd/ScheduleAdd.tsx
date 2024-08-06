@@ -51,7 +51,7 @@ const ScheduleAdd: React.FC = React.memo(() => {
     <div>
       <div className="flex items-center gap-2">
         <GrSchedules size={25} />
-        <h3 className="font-bold">New Schedule</h3>
+        <h3 className="font-bold border-b-4 border-purple-300">New Schedule</h3>
       </div>
       <form
         onSubmit={handleSubmit(onSubmit)}

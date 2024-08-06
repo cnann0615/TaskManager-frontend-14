@@ -149,24 +149,14 @@ const TaskDetail = React.memo(() => {
         {taskDetailOpen ? (
           <div className=" mt-6 ">
             <table className="min-w-full leading-normal border ">
-              <thead>
-                <tr>
-                  <th className=" w-1/6 sm:w-1/5 px-7 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Column
-                  </th>
-                  <th className=" w-5/6 sm:w-4/5 px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Contents
-                  </th>
-                </tr>
-              </thead>
               <tbody>
                 {/* タイトル */}
                 <tr className="h-20">
-                  <td className="px-7 py-5 border-b border-gray-200 bg-white text-sm font-bold">
+                  <th className=" block md:table-cell bg-gray-100 px-6 py-1 md:py-5 border-b border-gray-200 text-sm font-bold w-full md:w-1/5 text-left md:text-center">
                     Title
-                  </td>
+                  </th>
                   {showTaskDetail ? (
-                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                    <td className=" block md:table-cell px-7 py-5 border-b border-gray-200 bg-white text-sm w-full md:w-4/5">
                       {editing.title ? (
                         <input
                           type="text"
@@ -187,18 +177,18 @@ const TaskDetail = React.memo(() => {
                       )}
                     </td>
                   ) : (
-                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                    <td className=" block md:table-cell px-5 py-5 border-b border-gray-200 bg-white text-sm w-full md:w-4/5">
                       <p className="pl-1">ー</p>
                     </td>
                   )}
                 </tr>
                 {/* 期日 */}
                 <tr className="h-20">
-                  <td className="px-7 py-5 border-b border-gray-200 bg-white text-sm font-bold">
+                  <th className=" block md:table-cell  bg-gray-100 px-6 py-1 md:py-5 border-b border-gray-200 text-sm font-bold w-full md:w-1/5 text-left md:text-center">
                     Dead Line
-                  </td>
+                  </th>
                   {showTaskDetail ? (
-                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                    <td className=" block md:table-cell px-7 py-5 border-b border-gray-200 bg-white text-sm w-full md:w-4/5">
                       {editing.deadLine ? (
                         <input
                           type="date"
@@ -221,18 +211,18 @@ const TaskDetail = React.memo(() => {
                       )}
                     </td>
                   ) : (
-                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                    <td className=" block md:table-cell px-5 py-5 border-b border-gray-200 bg-white text-sm w-full md:w-4/5">
                       <p className="pl-1">ー</p>
                     </td>
                   )}
                 </tr>
                 {/* カテゴリ */}
                 <tr className="h-20">
-                  <td className="px-7 py-5 border-b border-gray-200 bg-white text-sm font-bold">
+                  <th className=" block md:table-cell  bg-gray-100 px-6 py-1 md:py-5 border-b border-gray-200 text-sm font-bold w-full md:w-1/5 text-left md:text-center">
                     Category
-                  </td>
+                  </th>
                   {showTaskDetail ? (
-                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                    <td className=" block md:table-cell px-7 py-5 border-b border-gray-200 bg-white text-sm w-full md:w-4/5">
                       {editing.category ? (
                         <select
                           defaultValue={showTaskDetail!.category.id}
@@ -260,18 +250,18 @@ const TaskDetail = React.memo(() => {
                       )}
                     </td>
                   ) : (
-                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                    <td className=" block md:table-cell px-5 py-5 border-b border-gray-200 bg-white text-sm w-full md:w-4/5">
                       <p className="pl-1">ー</p>
                     </td>
                   )}
                 </tr>
                 {/* スケジュール */}
                 <tr className="h-20">
-                  <td className="px-7 py-5 border-b border-gray-200 bg-white text-sm font-bold">
+                  <th className=" block md:table-cell  bg-gray-100 px-6 py-1 md:py-5 border-b border-gray-200 text-sm font-bold w-full md:w-1/5 text-left md:text-center">
                     Schedule
-                  </td>
+                  </th>
                   {showTaskDetail ? (
-                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                    <td className=" block md:table-cell px-7 py-5 border-b border-gray-200 bg-white text-sm w-full md:w-4/5">
                       {editing.schedule ? (
                         <select
                           defaultValue={showTaskDetail!.schedule.id}
@@ -299,18 +289,18 @@ const TaskDetail = React.memo(() => {
                       )}
                     </td>
                   ) : (
-                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                    <td className=" block md:table-cell px-5 py-5 border-b border-gray-200 bg-white text-sm w-full md:w-4/5">
                       <p className="pl-1">ー</p>
                     </td>
                   )}
                 </tr>
                 {/* メモ */}
                 <tr>
-                  <td className="px-7 py-5 border-b border-gray-200 bg-white text-sm h-52 md:h-96 font-bold">
+                  <th className=" block md:table-cell bg-gray-100 px-6 py-1 md:py-5 border-b border-gray-200 text-sm font-bold w-full md:w-1/5 text-left md:text-center">
                     Memo
-                  </td>
+                  </th>
                   {showTaskDetail ? (
-                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm h-96">
+                    <td className=" block md:table-cell h-[380px] md:h-[450px] px-7 py-5 border-b border-gray-200 bg-white text-sm w-full md:w-4/5">
                       {editing.memo ? (
                         <textarea
                           defaultValue={showTaskDetail!.memo}
@@ -318,7 +308,7 @@ const TaskDetail = React.memo(() => {
                             e: React.FocusEvent<HTMLTextAreaElement, Element>
                           ) => saveEdit("memo", e.target.value)}
                           autoFocus
-                          className="p-2 w-full h-80 rounded-md border-gray-300 focus:outline-none bg-gray-50"
+                          className="p-2 w-full h-[340px] md:h-[400px] rounded-md border-gray-300 focus:outline-none bg-gray-50"
                         />
                       ) : (
                         // \nを改行タグ(<br />)に変換して表示
@@ -338,7 +328,7 @@ const TaskDetail = React.memo(() => {
                       )}
                     </td>
                   ) : (
-                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                    <td className=" block md:table-cell px-5 py-5 border-b border-gray-200 bg-white text-sm w-full md:w-4/5">
                       <p className="pl-1">ー</p>
                     </td>
                   )}

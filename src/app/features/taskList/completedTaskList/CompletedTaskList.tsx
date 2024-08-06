@@ -80,7 +80,7 @@ const CompletedTaskList: React.FC = React.memo(() => {
 
   return (
     <div className="mt-6">
-      <h2 className="text-lg font-bold mb-2 text-gray-500">Completed Task</h2>
+      <h2 className="text-lg font-bold mb-2 text-gray-500">Completed</h2>
       <ul className="list-none w-full">
         {filteredCompletedTaskItems.length == 0 ? (
           <div className="mt-5 mb-10 text-gray-500">No Task</div>
