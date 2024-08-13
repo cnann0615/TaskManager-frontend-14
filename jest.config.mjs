@@ -12,6 +12,11 @@ const createJestConfig = nextJest({
 const config = {
   // Jestがテストを実行する環境を指定
   testEnvironment: "jest-environment-jsdom",
+
+  // テストのカバレッジを収集する設定
+  collectCoverage: true,
+  coverageDirectory: "coverage",
+  coverageReporters: ["html", "text"],
 };
 
 // 作成したJestのカスタム設定をエクスポートする
