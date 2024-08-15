@@ -1,9 +1,9 @@
-＜最終成果物＞
-サービス名：
+＜最終成果物＞<br>
+サービス名：<br>
 Task Manager
 
-ゲスト用 ID（体験版）:
-メール　 → 　cnann.0615.test@gmail.com
+ゲスト用 ID（体験版）:<br>
+メール　 → 　cnann.0615.test@gmail.com<br>
 パスワード　 → 　 testes0615
 
 URL：
@@ -25,31 +25,31 @@ https://github.com/cnann0615/TaskManager-backend
 
 ### 開発環境
 
-OS：macOS
+OS：macOS<br>
 IDE：フロントエンド → IntelliJ IDEA CE,　バックエンド　 → Visual Studio Code
 
 ### 使用技術
 
-＜フロントエンド＞
-言語：TypeScript
-フレームワーク：Next.js
-ライブラリ：React, Redux, Axios
-スタイル：Tailwind CSS
-テスト：JEST, React Testing Library 　 ← 実装中
-デプロイ：Vercel
-パッケージ管理ツール：npm
+＜フロントエンド＞<br>
+言語：TypeScript<br>
+フレームワーク：Next.js<br>
+ライブラリ：React, Redux, Axios<br>
+スタイル：Tailwind CSS<br>
+テスト：JEST, React Testing Library 　 ← 実装中<br>
+デプロイ：Vercel<br>
+パッケージ管理ツール：npm<br>
 
-＜バックエンド＞
-言語：Java
-フレームワーク：Spring Boot
-データベース：MySQL（Heroku JawsDB）
-デプロイ：Heroku
-パッケージ管理ツール：Maven
+＜バックエンド＞<br>
+言語：Java<br>
+フレームワーク：Spring Boot<br>
+データベース：MySQL（Heroku JawsDB）<br>
+デプロイ：Heroku<br>
+パッケージ管理ツール：Maven<br>
 
-＜その他＞
-GitHub（ソースコード管理）
-Firebase Authentication（認証）
-React icons（アイコン）
+＜その他＞<br>
+GitHub（ソースコード管理）<br>
+Firebase Authentication（認証）<br>
+React icons（アイコン）<br>
 
 などなど。。。
 
@@ -69,32 +69,32 @@ React icons（アイコン）
 
 ### ログイン
 
-ログインには Firebase Authentication を使用しました。
-Googole ログインのみに対応しています。
+ログインには Firebase Authentication を使用しました。<br>
+Googole ログインのみに対応しています。<br>
 
-https://firebase.google.com/?hl=ja
+https://firebase.google.com/?hl=ja<br>
 
 ![image.png](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3817219/560054cb-8ea2-ae21-f070-90fd5e2b33b9.png)
 
 ### 新規タスク追加
 
-新規タスクの追加はこのフォームから行います。
+新規タスクの追加はこのフォームから行います。<br>
 ![image.png](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3817219/89053edc-2458-7895-be33-e181c53396a9.png)
 
-「Detail ↓」　をクリックすると、詳細を入力するフォームが現れます。
-タイトルのみ必須入力となっています。
+「Detail ↓」　をクリックすると、詳細を入力するフォームが現れます。<br>
+タイトルのみ必須入力となっています。<br>
 ![image.png](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3817219/244a6b4b-b1e8-70db-e8f9-15de2674ec8c.png)
 
 ### 新規カテゴリ / スケジュール追加
 
-カテゴリとスケジュールは、タスクに紐づける情報となります。
+カテゴリとスケジュールは、タスクに紐づける情報となります。<br>
 仕事で Microsoft ToDo を使用しているのですが、１タスクにつき１リストしか割り当てができず、
-「業務の種類」と「いつやるか」の２つの属性を持たせて管理したいとずっと思っていました。
+「業務の種類」と「いつやるか」の２つの属性を持たせて管理したいとずっと思っていました。<br>
 
 そこで今回、「カテゴリ」と「スケジュール」の２つの属性をタスクにつけられるようにしました。
 ![image.png](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3817219/483e4d2c-6647-615b-3eb0-0c119508214a.png)
 
-追加したカテゴリ/スケジュールは、新規タスク追加フォームのプルダウンにて選択可能となります。
+追加したカテゴリ/スケジュールは、新規タスク追加フォームのプルダウンにて選択可能となります。<br>
 
 ![image.png](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3817219/8e5c353d-0aee-9d5b-a749-78e4ed1bd78f.png)
 
@@ -145,12 +145,12 @@ https://firebase.google.com/?hl=ja
 
 ## 最後に
 
-最後までお読みいただきありがとうございました。
+最後までお読みいただきありがとうございました。<br>
 
-この個人開発を通して、これまでインプットした内容をもとに、自力で実施に動くアプリケーションを作ることができ、とても自信がつきました。
+この個人開発を通して、これまでインプットした内容をもとに、自力で実施に動くアプリケーションを作ることができ、とても自信がつきました。<br>
 
-開発をする過程で様々なエラーにぶつかり、それを乗り越えることで、エンジニアとしてのレベルが上がっていくのを、身をもって体験することができました。
+開発をする過程で様々なエラーにぶつかり、それを乗り越えることで、エンジニアとしてのレベルが上がっていくのを、身をもって体験することができました。<br>
 
-今後もアウトプットをたくさんし、技術レベルを上げていきたいと思います！！！
+今後もアウトプットをたくさんし、技術レベルを上げていきたいと思います！！！<br>
 
 ありがとうございました！
