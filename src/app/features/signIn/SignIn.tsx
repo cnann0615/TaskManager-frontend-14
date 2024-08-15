@@ -47,6 +47,11 @@ const SignIn = () => {
             <h3 className=" text-lg md:text-2xl ">Sign In</h3>
           </div>
         </button>
+        <div className="mt-10">
+          <h3 className="text-lg font-bold">ゲスト用ID（体験版）</h3>
+          <p>メール：cnann.0615.test@gmail.com</p>
+          <p>パスワード：testes0615</p>
+        </div>
       </div>
     </div>
   );
