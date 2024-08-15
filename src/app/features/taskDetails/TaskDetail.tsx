@@ -165,20 +165,17 @@ const TaskDetail = React.memo(() => {
                             saveEdit("title", e.target.value)
                           }
                           autoFocus
-                          className="rounded-md border-none focus:outline-none bg-gray-50 py-2 pl-1"
+                          className="rounded-md border-none focus:outline-none bg-gray-50 py-2"
                         />
                       ) : (
-                        <div
-                          onClick={() => toggleEditOn("title")}
-                          className="pl-1"
-                        >
+                        <div onClick={() => toggleEditOn("title")}>
                           {showTaskDetail!.title}
                         </div>
                       )}
                     </td>
                   ) : (
                     <td className=" block md:table-cell px-5 py-5 border-b border-gray-200 bg-white text-sm w-full md:w-4/5">
-                      <p className="pl-1">ー</p>
+                      <p>ー</p>
                     </td>
                   )}
                 </tr>
@@ -197,13 +194,10 @@ const TaskDetail = React.memo(() => {
                             saveEdit("deadLine", e.target.value)
                           }
                           autoFocus
-                          className="rounded-md border-gray-300 focus:outline-none bg-gray-50 py-2 pl-1"
+                          className="rounded-md border-gray-300 focus:outline-none bg-gray-50 py-2"
                         />
                       ) : (
-                        <div
-                          onClick={() => toggleEditOn("deadLine")}
-                          className="pl-1"
-                        >
+                        <div onClick={() => toggleEditOn("deadLine")}>
                           {showTaskDetail!.deadLine
                             ? showTaskDetail!.deadLine
                             : "None"}
@@ -212,7 +206,7 @@ const TaskDetail = React.memo(() => {
                     </td>
                   ) : (
                     <td className=" block md:table-cell px-5 py-5 border-b border-gray-200 bg-white text-sm w-full md:w-4/5">
-                      <p className="pl-1">ー</p>
+                      <p>ー</p>
                     </td>
                   )}
                 </tr>
@@ -241,17 +235,14 @@ const TaskDetail = React.memo(() => {
                           ))}
                         </select>
                       ) : (
-                        <div
-                          onClick={() => toggleEditOn("category")}
-                          className="pl-1"
-                        >
+                        <div onClick={() => toggleEditOn("category")}>
                           {showTaskDetail!.category.name}
                         </div>
                       )}
                     </td>
                   ) : (
                     <td className=" block md:table-cell px-5 py-5 border-b border-gray-200 bg-white text-sm w-full md:w-4/5">
-                      <p className="pl-1">ー</p>
+                      <p>ー</p>
                     </td>
                   )}
                 </tr>
@@ -280,17 +271,14 @@ const TaskDetail = React.memo(() => {
                           ))}
                         </select>
                       ) : (
-                        <div
-                          onClick={() => toggleEditOn("schedule")}
-                          className="pl-1"
-                        >
+                        <div onClick={() => toggleEditOn("schedule")}>
                           {showTaskDetail!.schedule.name}
                         </div>
                       )}
                     </td>
                   ) : (
                     <td className=" block md:table-cell px-5 py-5 border-b border-gray-200 bg-white text-sm w-full md:w-4/5">
-                      <p className="pl-1">ー</p>
+                      <p>ー</p>
                     </td>
                   )}
                 </tr>
@@ -329,7 +317,7 @@ const TaskDetail = React.memo(() => {
                     </td>
                   ) : (
                     <td className=" block md:table-cell h-[380px] md:h-[450px] px-7 py-5 border-b border-gray-200 bg-white text-sm w-full md:w-4/5">
-                      <p className="pl-1">ー</p>
+                      <p>ー</p>
                     </td>
                   )}
                 </tr>
