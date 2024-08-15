@@ -302,7 +302,7 @@ const TaskDetail = React.memo(() => {
                         // \nを改行タグ(<br />)に変換して表示
                         <div
                           onClick={() => toggleEditOn("memo")}
-                          className="w-full h-80 rounded-md border-gray-300 focus:outline-none"
+                          className="p-2 w-full h-[340px] md:h-[400px] rounded-md border-gray-300 focus:outline-none bg-white"
                         >
                           {showTaskDetail!.memo
                             .split("\n")
