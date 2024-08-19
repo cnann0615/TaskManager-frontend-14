@@ -7,8 +7,7 @@ Task Manager（フロントエンド）
 メール　 → 　cnann.0615.test@gmail.com<br>
 パスワード　 → 　 testes0615
 
-URL：
-https://task-manager-frontend-14.vercel.app/
+URL（上記ゲスト用 ID でぜひ使ってみてください！）： https://task-manager-frontend-14.vercel.app/
 
 バックエンド リポジトリ：
 https://github.com/cnann0615/TaskManager-backend
