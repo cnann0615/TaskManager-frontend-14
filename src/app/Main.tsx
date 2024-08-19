@@ -59,7 +59,7 @@ export default function Main() {
   useEffect(() => {
     (async () => {
       try {
-        //　カテゴリとスケジュールの初期値「None」をDBに登録
+        //　カテゴリとスケジュールの初期値「None」をDBに登録（初回ログイン時のみ）
         const defaultCategory: Category = {
           userId: userId,
           name: "None",
