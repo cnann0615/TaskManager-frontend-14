@@ -83,8 +83,8 @@ const getAllCompletedTaskItemsThunk = (payload: string) => {
 const updateCompletedTaskItemThunk = (payload: TaskItem) => {
   return async (dispatch: Dispatch, getState: TaskItem) => {
     try {
-      dispatch(completedTaskUpdate(payload));
       await taskApi.updateTask(payload);
+      dispatch(completedTaskUpdate(payload));
     } catch (error) {
       console.error("Error updating completed task: ", error);
       alert("完了タスクの更新中にエラーが発生しました。");
@@ -96,11 +96,11 @@ const updateCompletedTaskItemThunk = (payload: TaskItem) => {
 const switchInCompletedThunk = (payload: TaskItem) => {
   return async (dispatch: Dispatch, getState: TaskItem) => {
     try {
-      dispatch(completedTaskDelete(payload));
       // 完了フラグを切り替え
       const switchTask = { ...payload, isCompleted: false };
-      dispatch(inCompletedTaskAdd(switchTask));
       await taskApi.updateTask(switchTask);
+      dispatch(completedTaskDelete(payload));
+      dispatch(inCompletedTaskAdd(switchTask));
     } catch (error) {
       console.error("Error switching task to incomplete: ", error);
       alert("タスクの未完了への切り替え中にエラーが発生しました。");
@@ -112,8 +112,8 @@ const switchInCompletedThunk = (payload: TaskItem) => {
 const deleteCompletedTaskItemThunk = (payload: TaskItem) => {
   return async (dispatch: Dispatch, getState: TaskItem) => {
     try {
-      dispatch(completedTaskDelete(payload));
       await taskApi.taskDelete(payload);
+      dispatch(completedTaskDelete(payload));
     } catch (error) {
       console.error("Error deleting completed task: ", error);
       alert("完了タスクの削除中にエラーが発生しました。");
