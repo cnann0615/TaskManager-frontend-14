@@ -1,9 +1,8 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useContext, useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "@/app/firebase";
 
+import { auth } from "@/app/firebase";
 import { useSelector } from "../../../store/store";
 import { tabScheduleContext } from "../TaskList";
 import { Schedule, TaskItem } from "../../../@types";
@@ -171,7 +170,7 @@ const ScheduleTab: React.FC = React.memo(() => {
     >
       <button
         onClick={() => switchTab(0)}
-        className={`bg-purple-100 hover:bg-purple-300 text-black py-4 px-2 rounded-l focus:outline-none focus:shadow-outline mb-[6.5px] ${
+        className={`bg-purple-100 hover:bg-purple-300 text-black rounded-l focus:outline-none focus:shadow-outline py-4 px-2 mb-[6.5px] ${
           tabSchedule === 0
             ? "font-bold bg-purple-300 border-b-2 border-purple-500"
             : "border-b-2 border-purple-300"
@@ -200,7 +199,7 @@ const ScheduleTab: React.FC = React.memo(() => {
             ) : (
               <button
                 onClick={() => switchTab(schedule.id!)}
-                className={` bg-purple-100 hover:bg-purple-300 text-black py-4 px-2 rounded-l focus:outline-none focus:shadow-outline ${
+                className={` bg-purple-100 hover:bg-purple-300 text-black rounded-l focus:outline-none focus:shadow-outline py-4 px-2 ${
                   tabSchedule === schedule.id
                     ? "font-bold bg-purple-300 border-b-2 border-purple-500 "
                     : " border-b-2 border-purple-300"
@@ -218,7 +217,7 @@ const ScheduleTab: React.FC = React.memo(() => {
                       e.stopPropagation(); // ボタン内のボタンのクリックイベントを阻止（スケジュール名編集ボタンとタブのクリックを独立させる）
                       editSchedule(schedule);
                     }}
-                    className="text-xs my-0 ml-3 opacity-50 hover:opacity-100 cursor-pointer mt-2"
+                    className="opacity-50 hover:opacity-100 cursor-pointer text-xs my-0 ml-3 mt-2"
                   >
                     ✏️
                   </span>
@@ -230,7 +229,7 @@ const ScheduleTab: React.FC = React.memo(() => {
                       e.stopPropagation(); // ボタン内のボタンのクリックイベントを阻止（カテゴリ名編集ボタンとタブのクリックを独立させる）
                       deleteSchedule(schedule);
                     }}
-                    className=" text-[5px] my-0 ml-3 opacity-50 hover:opacity-100 cursor-pointer mt-2"
+                    className=" text-[5px] opacity-50 hover:opacity-100 cursor-pointer my-0 ml-3 mt-2"
                   >
                     ❌
                   </span>

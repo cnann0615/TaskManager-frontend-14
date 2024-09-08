@@ -1,8 +1,8 @@
 "use client";
 import React, { useState, createContext, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { auth } from "./firebase";
 
+import { auth } from "./firebase";
 import TaskList from "./features/taskList/TaskList";
 import TaskDetail from "./features/taskDetails/TaskDetail";
 import {
@@ -89,7 +89,7 @@ export default function Main() {
 
   return (
     <>
-      <main className=" mx-5 md:mx-14 my-4">
+      <main className=" mx-5 my-4 md:mx-14">
         <ErrorBoundary>
           <Account />
         </ErrorBoundary>

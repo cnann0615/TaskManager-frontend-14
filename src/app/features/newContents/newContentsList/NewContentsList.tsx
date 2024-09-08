@@ -1,11 +1,12 @@
 import React from "react";
+
 import TaskAdd from "./taskAdd/TaskAdd";
 import CategoryAdd from "./categoryAdd/CategoryAdd";
 import ScheduleAdd from "./scheduleAdd/ScheduleAdd";
 
 const NewContentsList = React.memo(() => {
   return (
-    <div className=" xl:flex xl:gap-x-7 p-4 ">
+    <div className=" p-4 xl:flex xl:gap-x-7 ">
       <div className=" xl:w-2/4">
         <TaskAdd />
       </div>

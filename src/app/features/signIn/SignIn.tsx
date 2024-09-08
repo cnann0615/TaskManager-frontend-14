@@ -1,9 +1,9 @@
 "use client";
-import { auth, provider } from "@/app/firebase";
 import { signInWithPopup } from "firebase/auth";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { MdOutlineTaskAlt } from "react-icons/md";
 import { FcGoogle } from "react-icons/fc";
+
+import { auth, provider } from "@/app/firebase";
 
 // サインインページ
 const SignIn = () => {
@@ -30,17 +30,17 @@ const SignIn = () => {
   return (
     <div className="flex items-center justify-center">
       <div className="bg-white p-8 text-center">
-        <h3 className="text-gray-700 text-2xl md:text-5xl mb-8 font-bold ">
+        <h3 className="text-gray-700 font-bold text-2xl mb-8 md:text-5xl ">
           Get started with
         </h3>
         <div className="flex items-center gap-3 mb-8">
           <MdOutlineTaskAlt className=" size-10  md:size-20" />
-          <h1 className="text-3xl md:text-7xl font-bold ">Task Manager！</h1>
+          <h1 className="font-bold text-3xl md:text-7xl ">Task Manager！</h1>
         </div>
         {/* サインインボタン */}
         <button
           onClick={signInWithGoogle}
-          className="bg-white text-blue-500 font-bold py-2 px-4 rounded-xl hover:bg-gray-100 transition duration-300 border-2 border-gray-200"
+          className="bg-white text-blue-500 font-bold hover:bg-gray-100 border-2 border-gray-200 rounded-xl py-2 px-4 transition duration-300"
         >
           <div className=" flex items-center gap-2">
             <FcGoogle className=" size-6 md:size-12" />

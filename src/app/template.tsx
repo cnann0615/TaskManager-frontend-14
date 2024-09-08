@@ -1,4 +1,5 @@
 import React from "react";
+
 import StoreProvider from "./components/StoreProvider";
 
 // template.tsxは全てのコンポーネントをラップする。（layout.tsxよりは内側に位置する。）

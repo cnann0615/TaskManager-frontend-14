@@ -119,9 +119,9 @@ const TaskDetail = React.memo(() => {
 
   return (
     <>
-      <div className=" bg-gray-50 mx-auto mt-4 p-4 border shadow xl:w-[55%]  overflow-hidden rounded-lg">
+      <div className=" bg-gray-50 border rounded-lg shadow overflow-hidden mx-auto mt-4 p-4 xl:w-[55%] ">
         <div>
-          <div className=" flex items-center text-blue-500 text-2xl m-2 font-bold">
+          <div className=" text-blue-500 font-bold flex items-center text-2xl m-2">
             <div className=" flex items-center gap-2">
               <BiDetail size={35} />
               <h1 className=" mr-1 ">Task Detail</h1>
@@ -148,15 +148,15 @@ const TaskDetail = React.memo(() => {
         {/* タスク詳細画面が開いている時だけ表示、詳細テーブルを表示。項目をクリックするとInputBoxになり、編集可能に。 */}
         {taskDetailOpen ? (
           <div className=" mt-6 ">
-            <table className="min-w-full leading-normal border ">
+            <table className=" border leading-normal min-w-full">
               <tbody>
                 {/* タイトル */}
                 <tr className="h-20">
-                  <th className=" block md:table-cell bg-gray-100 px-6 py-1 md:py-5 border-b border-gray-200 text-sm font-bold w-full md:w-1/5 text-left md:text-center">
+                  <th className=" bg-gray-100 border-b border-gray-200 text-sm font-bold block px-6 py-1 w-full text-left md:text-center md:table-cell  md:py-5 md:w-1/5 ">
                     Title
                   </th>
                   {showTaskDetail ? (
-                    <td className=" block md:table-cell px-7 py-5 border-b border-gray-200 bg-white text-sm w-full md:w-4/5">
+                    <td className=" border-b border-gray-200 bg-white text-sm block px-7 py-5 w-full md:w-4/5 md:table-cell ">
                       {editing.title ? (
                         <input
                           type="text"
@@ -165,7 +165,7 @@ const TaskDetail = React.memo(() => {
                             saveEdit("title", e.target.value)
                           }
                           autoFocus
-                          className="rounded-md border-none focus:outline-none bg-gray-50 py-2"
+                          className="bg-gray-50 rounded-md border-none focus:outline-none py-2"
                         />
                       ) : (
                         <div onClick={() => toggleEditOn("title")}>
@@ -174,18 +174,18 @@ const TaskDetail = React.memo(() => {
                       )}
                     </td>
                   ) : (
-                    <td className=" block md:table-cell px-5 py-5 border-b border-gray-200 bg-white text-sm w-full md:w-4/5">
+                    <td className=" border-b border-gray-200 bg-white text-sm block px-5 py-5 w-full md:w-4/5 md:table-cell">
                       <p>ー</p>
                     </td>
                   )}
                 </tr>
                 {/* 期日 */}
                 <tr className="h-20">
-                  <th className=" block md:table-cell  bg-gray-100 px-6 py-1 md:py-5 border-b border-gray-200 text-sm font-bold w-full md:w-1/5 text-left md:text-center">
+                  <th className=" bg-gray-100 border-b border-gray-200 text-sm font-bold block px-6 py-1 w-full text-left md:text-center md:table-cell md:w-1/5 md:py-5">
                     Dead Line
                   </th>
                   {showTaskDetail ? (
-                    <td className=" block md:table-cell px-7 py-5 border-b border-gray-200 bg-white text-sm w-full md:w-4/5">
+                    <td className="border-b border-gray-200 bg-white text-sm block px-7 py-5 w-full md:w-4/5 md:table-cell">
                       {editing.deadLine ? (
                         <input
                           type="date"
@@ -194,7 +194,7 @@ const TaskDetail = React.memo(() => {
                             saveEdit("deadLine", e.target.value)
                           }
                           autoFocus
-                          className="rounded-md border-gray-300 focus:outline-none bg-gray-50 py-2"
+                          className=" bg-gray-50 rounded-md border-gray-300 focus:outline-none py-2"
                         />
                       ) : (
                         <div onClick={() => toggleEditOn("deadLine")}>
@@ -205,18 +205,18 @@ const TaskDetail = React.memo(() => {
                       )}
                     </td>
                   ) : (
-                    <td className=" block md:table-cell px-5 py-5 border-b border-gray-200 bg-white text-sm w-full md:w-4/5">
+                    <td className="border-b border-gray-200 bg-white text-sm block px-5 py-5 w-full md:w-4/5 md:table-cell">
                       <p>ー</p>
                     </td>
                   )}
                 </tr>
                 {/* カテゴリ */}
                 <tr className="h-20">
-                  <th className=" block md:table-cell  bg-gray-100 px-6 py-1 md:py-5 border-b border-gray-200 text-sm font-bold w-full md:w-1/5 text-left md:text-center">
+                  <th className=" bg-gray-100 border-b border-gray-200 text-sm font-bold block px-6 py-1 w-full text-left md:text-center md:table-cell md:py-5 md:w-1/5 ">
                     Category
                   </th>
                   {showTaskDetail ? (
-                    <td className=" block md:table-cell px-7 py-5 border-b border-gray-200 bg-white text-sm w-full md:w-4/5">
+                    <td className=" border-b border-gray-200 bg-white text-sm block px-7 py-5 w-full md:w-4/5 md:table-cell">
                       {editing.category ? (
                         <select
                           defaultValue={showTaskDetail!.category.id}
@@ -226,7 +226,7 @@ const TaskDetail = React.memo(() => {
                             saveEdit("category", e.target.value);
                           }}
                           autoFocus
-                          className="rounded-md border-gray-300 focus:outline-none bg-gray-50 py-2"
+                          className=" bg-gray-50 rounded-md border-gray-300 focus:outline-none py-2"
                         >
                           {categories.map((category) => (
                             <option key={category.id} value={category.id}>
@@ -241,18 +241,18 @@ const TaskDetail = React.memo(() => {
                       )}
                     </td>
                   ) : (
-                    <td className=" block md:table-cell px-5 py-5 border-b border-gray-200 bg-white text-sm w-full md:w-4/5">
+                    <td className=" border-b border-gray-200 bg-white text-sm block px-5 py-5 w-full md:w-4/5 md:table-cell">
                       <p>ー</p>
                     </td>
                   )}
                 </tr>
                 {/* スケジュール */}
                 <tr className="h-20">
-                  <th className=" block md:table-cell  bg-gray-100 px-6 py-1 md:py-5 border-b border-gray-200 text-sm font-bold w-full md:w-1/5 text-left md:text-center">
+                  <th className=" bg-gray-100 border-b border-gray-200 text-sm font-bold block px-6 py-1 w-full text-left md:text-center md:table-cell md:py-5 md:w-1/5">
                     Schedule
                   </th>
                   {showTaskDetail ? (
-                    <td className=" block md:table-cell px-7 py-5 border-b border-gray-200 bg-white text-sm w-full md:w-4/5">
+                    <td className=" border-b border-gray-200 bg-white text-sm block px-7 py-5 w-full md:w-4/5 md:table-cell">
                       {editing.schedule ? (
                         <select
                           defaultValue={showTaskDetail!.schedule.id}
@@ -262,7 +262,7 @@ const TaskDetail = React.memo(() => {
                             saveEdit("schedule", e.target.value);
                           }}
                           autoFocus
-                          className="rounded-md border-gray-300 focus:outline-none bg-gray-50 py-2"
+                          className=" bg-gray-50 rounded-md border-gray-300 focus:outline-nonepy-2"
                         >
                           {schedules.map((schedule) => (
                             <option key={schedule.id} value={schedule.id}>
@@ -277,18 +277,18 @@ const TaskDetail = React.memo(() => {
                       )}
                     </td>
                   ) : (
-                    <td className=" block md:table-cell px-5 py-5 border-b border-gray-200 bg-white text-sm w-full md:w-4/5">
+                    <td className="border-b border-gray-200 bg-white text-sm block px-5 py-5 w-full md:w-4/5 md:table-cell">
                       <p>ー</p>
                     </td>
                   )}
                 </tr>
                 {/* メモ */}
                 <tr>
-                  <th className=" block md:table-cell bg-gray-100 px-6 py-1 md:py-5 border-b border-gray-200 text-sm font-bold w-full md:w-1/5 text-left md:text-center">
+                  <th className=" bg-gray-100 border-b border-gray-200 text-sm font-bold block px-6 py-1 w-full text-left md:text-center md:table-cell md:py-5 md:w-1/5">
                     Memo
                   </th>
                   {showTaskDetail ? (
-                    <td className=" block md:table-cell h-[380px] md:h-[450px] px-7 py-5 border-b border-gray-200 bg-white text-sm w-full md:w-4/5">
+                    <td className="  border-b border-gray-200 bg-white text-sm block h-[380px] px-7 py-5w-full md:w-4/5 md:table-cell md:h-[450px]">
                       {editing.memo ? (
                         <textarea
                           defaultValue={showTaskDetail!.memo}
@@ -296,13 +296,13 @@ const TaskDetail = React.memo(() => {
                             e: React.FocusEvent<HTMLTextAreaElement, Element>
                           ) => saveEdit("memo", e.target.value)}
                           autoFocus
-                          className="p-2 w-full h-[340px] md:h-[400px] rounded-md border-gray-300 focus:outline-none bg-gray-50"
+                          className="bg-gray-50 rounded-md border-gray-300 focus:outline-none p-2 w-full h-[340px] md:h-[400px] "
                         />
                       ) : (
                         // \nを改行タグ(<br />)に変換して表示
                         <div
                           onClick={() => toggleEditOn("memo")}
-                          className="p-2 w-full h-[340px] md:h-[400px] rounded-md border-gray-300 focus:outline-none bg-white"
+                          className="rounded-md border-gray-300 focus:outline-none bg-white p-2 w-full h-[340px] md:h-[400px] "
                         >
                           {showTaskDetail!.memo
                             .split("\n")
@@ -316,7 +316,7 @@ const TaskDetail = React.memo(() => {
                       )}
                     </td>
                   ) : (
-                    <td className=" block md:table-cell h-[380px] md:h-[450px] px-7 py-5 border-b border-gray-200 bg-white text-sm w-full md:w-4/5">
+                    <td className=" border-b border-gray-200 bg-white text-sm block h-[380px] px-7 py-5 w-full md:w-4/5 md:table-cell md:h-[450px]">
                       <p>ー</p>
                     </td>
                   )}
@@ -328,7 +328,7 @@ const TaskDetail = React.memo(() => {
               <div className=" flex justify-end">
                 <button
                   type="submit"
-                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold rounded focus:outline-none focus:shadow-outline py-2 px-4"
                   onClick={deleteTask}
                 >
                   Delete

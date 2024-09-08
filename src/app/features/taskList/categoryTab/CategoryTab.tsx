@@ -1,10 +1,10 @@
+import React from "react";
 import { useContext, useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "@/app/firebase";
-import { useSelector } from "../../../store/store";
-import { tabCategoryContext } from "../TaskList";
 import { useDispatch } from "react-redux";
 
+import { useSelector } from "../../../store/store";
+import { tabCategoryContext } from "../TaskList";
+import { auth } from "@/app/firebase";
 import { Category, TaskItem } from "../../../@types";
 import {
   deleteCategoryThunk,
@@ -20,7 +20,6 @@ import {
   completedTaskDelete,
   completedTaskUpdateCategory,
 } from "../../../slices/completedTaskSlice";
-import React from "react";
 
 // カテゴリのタブリスト
 const CategoryTab: React.FC = React.memo(() => {
@@ -194,17 +193,17 @@ const CategoryTab: React.FC = React.memo(() => {
   };
 
   return (
-    <div className="ml-10 border-b border-gray-300 ">
+    <div className=" border-b border-gray-300 ml-10">
       <div className=" text-right">
         <button
-          className=" mr-3 text-gray-400 hover:text-black"
+          className=" text-gray-400 hover:text-black mr-3"
           onClick={() => handlePageChange("back")}
         >
           ＜
         </button>
         <span className=" text-gray-700">Tab</span>
         <button
-          className=" ml-3 text-gray-400 hover:text-black"
+          className=" text-gray-400 hover:text-black ml-3"
           onClick={() => handlePageChange("next")}
         >
           ＞
@@ -212,7 +211,7 @@ const CategoryTab: React.FC = React.memo(() => {
       </div>
       <button
         onClick={() => switchTab(0)}
-        className={`bg-teal-100 hover:bg-teal-300 text-black py-2 px-4 rounded-t focus:outline-none focus:shadow-outline mr-[6.5px] ${
+        className={`bg-teal-100 hover:bg-teal-300 text-black rounded-t focus:outline-none focus:shadow-outline py-2 px-4 mr-[6.5px] ${
           tabCategory === 0
             ? "font-bold bg-teal-300 border-b-2 border-teal-500"
             : "border-b-2 border-teal-300"
@@ -232,12 +231,12 @@ const CategoryTab: React.FC = React.memo(() => {
                 onChange={(e) => setEditCategoryName(e.target.value)}
                 onBlur={commitEdit}
                 autoFocus
-                className="py-2 px-4 rounded-t m-1"
+                className="rounded-t py-2 px-4 m-1"
               />
             ) : (
               <button
                 onClick={() => switchTab(category.id!)}
-                className={`bg-teal-100 hover:bg-teal-300 text-black py-2 px-4 rounded-t focus:outline-none focus:shadow-outline mr-[6.5px] ${
+                className={`bg-teal-100 hover:bg-teal-300 text-black rounded-t focus:outline-none focus:shadow-outline py-2 px-4 mr-[6.5px] ${
                   tabCategory === category.id
                     ? "font-bold bg-teal-300 border-b-2 border-teal-500"
                     : "border-b-2 border-teal-300"
@@ -251,7 +250,7 @@ const CategoryTab: React.FC = React.memo(() => {
                       e.stopPropagation(); // ボタン内のボタンのクリックイベントを阻止（カテゴリ名編集ボタンとタブのクリックを独立させる）
                       editCategory(category);
                     }}
-                    className="text-xs my-0 ml-3 opacity-50 hover:opacity-100 cursor-pointer"
+                    className="text-xs opacity-50 hover:opacity-100 cursor-pointer my-0 ml-3 "
                   >
                     ✏️
                   </span>
@@ -263,7 +262,7 @@ const CategoryTab: React.FC = React.memo(() => {
                       e.stopPropagation(); // ボタン内のボタンのクリックイベントを阻止（カテゴリ名編集ボタンとタブのクリックを独立させる）
                       deleteCategory(category);
                     }}
-                    className="text-[5px] my-0 ml-3 opacity-50 hover:opacity-100 cursor-pointer"
+                    className="text-[5px] opacity-50 hover:opacity-100 cursor-pointer my-0 ml-3 "
                   >
                     ❌
                   </span>

@@ -29,12 +29,12 @@ const TaskList: React.FC = React.memo(() => {
   const [tabSchedule, setTabSchedule] = useState<number>(0);
 
   return (
-    <div className="bg-gray-50 mx-auto mt-4 p-4 border rounded-lg shadow xl:w-[45%]">
+    <div className="bg-gray-50 rounded-lg border shadow mx-auto mt-4 p-4 xl:w-[45%]">
       <tabCategoryContext.Provider value={{ tabCategory, setTabCategory }}>
         <tabScheduleContext.Provider value={{ tabSchedule, setTabSchedule }}>
           <div>
             <div>
-              <div className=" flex items-center text-blue-500 text-2xl m-2 font-bold">
+              <div className="text-blue-500 text-2xl font-bold flex items-center m-2">
                 <div className=" flex items-center gap-2">
                   <GoTasklist size={35} />
                   <h1 className=" mr-1 ">Task List</h1>

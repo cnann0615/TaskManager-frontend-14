@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
-import { auth } from "@/app/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
 import {
   MdOutlineExpandLess,
   MdOutlineExpandMore,
   MdOutlineAddTask,
 } from "react-icons/md";
 
+import { auth } from "@/app/firebase";
 import { addInCompletedTaskItemThunk } from "../../../../slices/inCompletedTaskSlice";
 import taskApi from "../../../../api/task";
 import { useSelector } from "../../../../store/store";
@@ -100,10 +99,10 @@ const TaskAdd: React.FC = React.memo(() => {
       </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className=" bg-white mx-auto mt-4 mb-10 p-4 border rounded-lg shadow"
+        className=" bg-white border rounded-lg shadow mx-auto mt-4 mb-10 p-4"
       >
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
+          <label className="text-gray-700 text-sm font-bold block mb-2">
             <div className=" flex justify-between">
               <p>Title</p>
               <p className=" text-red-500 text-xs ">
@@ -113,7 +112,7 @@ const TaskAdd: React.FC = React.memo(() => {
             <input
               type="text"
               {...register("title", { required: "Title is required." })}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="text-gray-700 leading-tight focus:outline-none focus:shadow-outline shadow border rounded appearance-none w-full py-2 px-3 "
             />
           </label>
         </div>
@@ -121,21 +120,21 @@ const TaskAdd: React.FC = React.memo(() => {
         {formOpen ? (
           <div>
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
+              <label className="text-gray-700 text-sm font-bold block mb-2">
                 Dead Line
                 <input
                   type="date"
                   {...register("deadLine")}
-                  className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="text-gray-700 leading-tight focus:outline-none focus:shadow-outline shadow border rounded w-full py-2 px-3 "
                 />
               </label>
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
+              <label className="text-gray-700 text-sm font-bold block mb-2">
                 Category
                 <select
                   {...register("category")}
-                  className="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  className="bg-white border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 appearance-none block w-full py-3 px-4 pr-8 "
                 >
                   {/* useEffect内で取得したカテゴリを表示 */}
                   {categories.map((category) => (
@@ -147,11 +146,11 @@ const TaskAdd: React.FC = React.memo(() => {
               </label>
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
+              <label className="text-gray-700 text-sm font-bold block mb-2">
                 Schedule
                 <select
                   {...register("schedule")}
-                  className="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  className="bg-white border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 appearance-none block w-full py-3 px-4 pr-8"
                 >
                   {/* useEffect内で取得したスケジュールを表示 */}
                   {schedules.map((schedule) => (
@@ -163,11 +162,11 @@ const TaskAdd: React.FC = React.memo(() => {
               </label>
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
+              <label className="text-gray-700 text-sm font-bold block mb-2">
                 Memo
                 <textarea
                   {...register("memo")}
-                  className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="text-gray-700 leading-tight focus:outline-none focus:shadow-outline shadow border rounded w-full py-2 px-3 "
                 ></textarea>
               </label>
             </div>
