@@ -1,7 +1,7 @@
 "use client";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "./firebase";
 
+import { auth } from "./firebase";
 import Main from "./Main";
 import SignIn from "./features/signIn/SignIn";
 
@@ -10,7 +10,7 @@ const Top = () => {
   const [user] = useAuthState(auth);
 
   return (
-    <div className="">
+    <div>
       {user ? (
         <>
           <Main />

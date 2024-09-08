@@ -1,13 +1,13 @@
-import { configureStore } from "@reduxjs/toolkit";
-import completedTaskItemsReducer from "../slices/completedTaskSlice";
-import inCompletedTaskItemsReducer from "../slices/inCompletedTaskSlice";
-import categoriesReducer from "../slices/categorySlice";
-import schedulesReducer from "../slices/scheduleSlice";
-
 import {
   useSelector as rawUseSelector,
   TypedUseSelectorHook,
 } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
+
+import completedTaskItemsReducer from "../slices/completedTaskSlice";
+import inCompletedTaskItemsReducer from "../slices/inCompletedTaskSlice";
+import categoriesReducer from "../slices/categorySlice";
+import schedulesReducer from "../slices/scheduleSlice";
 
 export const store = configureStore({
   reducer: {

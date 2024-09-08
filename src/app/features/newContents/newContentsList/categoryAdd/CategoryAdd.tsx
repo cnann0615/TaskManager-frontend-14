@@ -1,14 +1,13 @@
+import React from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { MdOutlineCategory } from "react-icons/md";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "@/app/firebase";
 
+import { auth } from "@/app/firebase";
 import AddButton from "@/app/components/button/AddButton";
 import { Category } from "../../../../@types";
 import taskApi from "../../../../api/task";
 import { addCategoryThunk } from "../../../../slices/categorySlice";
-import React from "react";
 
 // 新規カテゴリ追加画面
 const CategoryAdd: React.FC = React.memo(() => {
@@ -55,10 +54,10 @@ const CategoryAdd: React.FC = React.memo(() => {
       </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white mx-auto mt-4 mb-10 p-4 border rounded-lg shadow"
+        className="bg-white border rounded-lg shadow mx-auto mt-4 mb-10 p-4 "
       >
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
+          <label className="text-gray-700 text-sm font-bold block mb-2">
             <div className=" flex justify-between">
               <p>Category</p>
               <p className="text-red-500 text-xs ">
@@ -69,7 +68,7 @@ const CategoryAdd: React.FC = React.memo(() => {
             <input
               type="text"
               {...register("name", { required: "Category is required." })}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="text-gray-700 leading-tight focus:outline-none focus:shadow-outline border rounded shadow appearance-none w-full py-2 px-3 "
             />
           </label>
         </div>

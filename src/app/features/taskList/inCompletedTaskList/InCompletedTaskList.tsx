@@ -82,16 +82,16 @@ const InCompletedTaskList: React.FC = React.memo(() => {
   return (
     <>
       <div className="mt-4">
-        <h2 className="text-lg font-bold mb-2 text-gray-500">Incomplete</h2>
+        <h2 className="text-gray-500 text-lg font-bold mb-2 ">Incomplete</h2>
         <ul className="list-none w-full">
           {filteredInCompletedTaskItems.length == 0 ? (
-            <div className="mt-5 mb-10 text-gray-500">No Task</div>
+            <div className="text-gray-500 mt-5 mb-10 ">No Task</div>
           ) : (
             ""
           )}
           {filteredInCompletedTaskItems.map((task: TaskItem, index: number) => (
             <li
-              className="bg-white flex items-center justify-between mb-2 px-2 py-3 border"
+              className="bg-white border flex items-center justify-between mb-2 px-2 py-3"
               key={index}
             >
               <button
@@ -102,7 +102,7 @@ const InCompletedTaskList: React.FC = React.memo(() => {
               </button>
               <span
                 onClick={() => openTaskDetail(task)}
-                className="cursor-pointer hover:bg-gray-100 flex-grow mx-2 font-bold"
+                className=" hover:bg-gray-100 font-bold cursor-pointer flex-grow mx-2"
               >
                 {task.title}
               </span>

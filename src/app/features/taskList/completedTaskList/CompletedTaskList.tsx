@@ -80,7 +80,7 @@ const CompletedTaskList: React.FC = React.memo(() => {
 
   return (
     <div className="mt-6">
-      <h2 className="text-lg font-bold mb-2 text-gray-500">Completed</h2>
+      <h2 className="text-lg font-bold text-gray-500 mb-2">Completed</h2>
       <ul className="list-none w-full">
         {filteredCompletedTaskItems.length == 0 ? (
           <div className="mt-5 mb-10 text-gray-500">No Task</div>
@@ -89,7 +89,7 @@ const CompletedTaskList: React.FC = React.memo(() => {
         )}
         {filteredCompletedTaskItems.map((task: TaskItem, index: number) => (
           <li
-            className="bg-white flex items-center justify-between mb-2 px-2 py-3 border"
+            className="bg-white border flex items-center justify-between mb-2 px-2 py-3 "
             key={index}
           >
             <button
@@ -100,7 +100,7 @@ const CompletedTaskList: React.FC = React.memo(() => {
             </button>
             <span
               onClick={() => openTaskDetail(task)}
-              className="cursor-pointer hover:bg-gray-100 flex-grow mx-2 line-through font-bold"
+              className="hover:bg-gray-100 line-through font-bold cursor-pointer flex-grow mx-2 "
             >
               {task.title}
             </span>
