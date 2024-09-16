@@ -25,7 +25,7 @@ const CompletedTaskList: React.FC = React.memo(() => {
 
   // リストに表示するタスクをtabCategoryとtabScheduleの値で絞って抽出（パターン）
 
-  // 全てのカテゴリのパターン
+  // 全てのカテゴリのパターン（０は全て）
   const filteredCompletedTaskItems =
     tabCategory === 0
       ? tabSchedule === 0

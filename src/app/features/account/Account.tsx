@@ -50,7 +50,7 @@ const Account = React.memo(() => {
           className="flex justify-center items-center gap-2"
           onClick={signOut}
         >
-          <p className="text-sm">Log Out</p>
+          <p className="text-sm">Sign Out</p>
           <IoIosLogOut size={25} />
         </button>
       </div>
