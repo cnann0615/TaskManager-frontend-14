@@ -126,23 +126,18 @@ const TaskDetail = React.memo(() => {
               <BiDetail size={35} />
               <h1 className=" mr-1 ">Task Detail</h1>
             </div>
-            {window.innerWidth <= 1280 ? (
-              // 開閉ボタン
-              <button
-                onClick={() => {
-                  setTaskDetailOpen(!taskDetailOpen);
-                }}
-                className=""
-              >
-                {taskDetailOpen ? (
-                  <MdOutlineExpandLess size={35} />
-                ) : (
-                  <MdOutlineExpandMore size={35} />
-                )}
-              </button>
-            ) : (
-              ""
-            )}
+            <button
+              onClick={() => {
+                setTaskDetailOpen(!taskDetailOpen);
+              }}
+              className=""
+            >
+              {taskDetailOpen ? (
+                <MdOutlineExpandLess size={35} />
+              ) : (
+                <MdOutlineExpandMore size={35} />
+              )}
+            </button>
           </div>
         </div>
         {/* タスク詳細画面が開いている時だけ表示、詳細テーブルを表示。項目をクリックするとInputBoxになり、編集可能に。 */}

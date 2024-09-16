@@ -39,23 +39,18 @@ const TaskList: React.FC = React.memo(() => {
                   <GoTasklist size={35} />
                   <h1 className=" mr-1 ">Task List</h1>
                 </div>
-                {window.innerWidth <= 1280 ? (
-                  // 開閉ボタン
-                  <button
-                    onClick={() => {
-                      setTaskListOpen(!taskListOpen);
-                    }}
-                    className=""
-                  >
-                    {taskListOpen ? (
-                      <MdOutlineExpandLess size={35} />
-                    ) : (
-                      <MdOutlineExpandMore size={35} />
-                    )}
-                  </button>
-                ) : (
-                  ""
-                )}
+                <button
+                  onClick={() => {
+                    setTaskListOpen(!taskListOpen);
+                  }}
+                  className=""
+                >
+                  {taskListOpen ? (
+                    <MdOutlineExpandLess size={35} />
+                  ) : (
+                    <MdOutlineExpandMore size={35} />
+                  )}
+                </button>
               </div>
             </div>
             {taskListOpen ? (

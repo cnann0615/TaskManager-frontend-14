@@ -25,8 +25,7 @@ const InCompletedTaskList: React.FC = React.memo(() => {
   const { tabSchedule } = useContext(tabScheduleContext);
 
   // リストに表示するタスクをtabCategoryとtabScheduleの値で絞って抽出（パターン）
-
-  // 全てのカテゴリのパターン
+  // 全てのカテゴリのパターン（０は全て）
   const filteredInCompletedTaskItems =
     tabCategory === 0
       ? tabSchedule === 0

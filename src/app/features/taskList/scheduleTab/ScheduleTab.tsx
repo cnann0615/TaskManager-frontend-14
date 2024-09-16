@@ -49,10 +49,10 @@ const ScheduleTab: React.FC = React.memo(() => {
   );
   // 編集中のスケジュールIDとスケジュール名を保持するためのState
   const [editScheduleId, setEditScheduleId] = useState<number | null>(null);
+  const [editScheduleName, setEditScheduleName] = useState("");
   const [editScheduleOrderIndex, setEditScheduleOrderIndex] = useState<
     number | null
   >(null);
-  const [editScheduleName, setEditScheduleName] = useState("");
 
   // スケジュール名変更ボタン押下時に、対象のスケジュールのIDと名前をStateにセット
   const editSchedule = (schedule: Schedule) => {

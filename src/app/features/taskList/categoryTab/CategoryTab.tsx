@@ -68,7 +68,6 @@ const CategoryTab: React.FC = React.memo(() => {
   const selectedCategories = categories.slice(startIndex, startIndex + 4);
 
   // カテゴリ名編集機能//////////////////
-
   // タブからカテゴリ名を変更した際に詳細表示中タスクのカテゴリ名も変更する必要があるため、詳細表示タスクStateの値と更新用関数を定義
   const { showTaskDetail, setShowTaskDetail } = useContext(
     showTaskDetailContext
@@ -76,10 +75,10 @@ const CategoryTab: React.FC = React.memo(() => {
 
   // 編集中のカテゴリIDとカテゴリ名を保持するためのState
   const [editCategoryId, setEditCategoryId] = useState<number | null>(null);
+  const [editCategoryName, setEditCategoryName] = useState("");
   const [editCategoryOrderIndex, setEditCategoryOrderIndex] = useState<
     number | null
   >(null);
-  const [editCategoryName, setEditCategoryName] = useState("");
 
   // カテゴリ名変更ボタン押下時に、対象のカテゴリのIDと名前をStateにセット
   const editCategory = (category: Category) => {
