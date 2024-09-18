@@ -57,6 +57,12 @@ type taskDetailOpen = {
   setTaskDetailOpen: Dispatch<SetStateAction<boolean>>;
 };
 
+// マストタスクContext
+type mustTask = {
+  mustTask: TaskItem | any;
+  setMustTask: Dispatch<SetStateAction<TaskItem | any>>;
+};
+
 // タブカテゴリContext
 type TabCategory = {
   tabCategory: number;

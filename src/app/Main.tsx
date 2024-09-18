@@ -7,6 +7,7 @@ import TaskList from "./features/taskList/TaskList";
 import TaskDetail from "./features/taskDetails/TaskDetail";
 import {
   Category,
+  mustTask,
   Schedule,
   ShowTaskDetail,
   ShowTaskDetailEditing,
@@ -27,18 +28,21 @@ export const showTaskDetailContext = createContext<ShowTaskDetail>({
   showTaskDetail: null, //初期値はnull
   setShowTaskDetail: () => {}, // この関数はダミー。実際にはuseStateによって提供される関数に置き換わる。
 });
-
 // 詳細表示対象タスク編集状態管理Contextを作成
 export const showTaskDetailEditingContext =
   createContext<ShowTaskDetailEditing>({
     showTaskDetailEditing: null, //初期値はnull
     setShowTaskDetailEditing: () => {}, // この関数はダミー。実際にはuseStateによって提供される関数に置き換わる。
   });
-
 // 詳細表示画面展開Contextを作成
 export const taskDetailOpenContext = createContext<taskDetailOpen>({
   taskDetailOpen: false, //初期値はfalse
   setTaskDetailOpen: () => {}, // この関数はダミー。実際にはuseStateによって提供される関数に置き換わる。
+});
+// マストタスクContextを作成
+export const mustTaskContext = createContext<mustTask>({
+  mustTask: null, //初期値はnull
+  setMustTask: () => {}, // この関数はダミー。実際にはuseStateによって提供される関数に置き換わる。
 });
 
 export default function Main() {
@@ -48,13 +52,13 @@ export default function Main() {
 
   // 詳細表示タスクState定義
   const [showTaskDetail, setShowTaskDetail] = useState<TaskItem | any>(null);
-
   // 詳細表示タスク編集状態管理State定義
   const [showTaskDetailEditing, setShowTaskDetailEditing] =
     useState<boolean>(false);
-
   // 詳細表示画面展開State定義
   const [taskDetailOpen, setTaskDetailOpen] = useState<boolean>(true);
+  // マストタスクState定義
+  const [mustTask, setMustTask] = useState<TaskItem | any>(null);
 
   useEffect(() => {
     (async () => {
@@ -106,14 +110,16 @@ export default function Main() {
             <showTaskDetailEditingContext.Provider
               value={{ showTaskDetailEditing, setShowTaskDetailEditing }}
             >
-              <div className="xl:flex xl:gap-8">
-                <ErrorBoundary>
-                  <TaskList />
-                </ErrorBoundary>
-                <ErrorBoundary>
-                  <TaskDetail />
-                </ErrorBoundary>
-              </div>
+              <mustTaskContext.Provider value={{ mustTask, setMustTask }}>
+                <div className="xl:flex xl:gap-8">
+                  <ErrorBoundary>
+                    <TaskList />
+                  </ErrorBoundary>
+                  <ErrorBoundary>
+                    <TaskDetail />
+                  </ErrorBoundary>
+                </div>
+              </mustTaskContext.Provider>
             </showTaskDetailEditingContext.Provider>
           </taskDetailOpenContext.Provider>
         </showTaskDetailContext.Provider>

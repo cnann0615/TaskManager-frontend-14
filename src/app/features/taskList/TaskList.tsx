@@ -7,6 +7,7 @@ import InCompletedTaskList from "./inCompletedTaskList/InCompletedTaskList";
 import CategoryTab from "./categoryTab/CategoryTab";
 import ScheduleTab from "./scheduleTab/ScheduleTab";
 import { TabCategory, TabSchedule } from "@/app/@types";
+import MustOne from "./mustOne/MustOne";
 
 // タブカテゴリContextを作成
 export const tabCategoryContext = createContext<TabCategory>({
@@ -54,16 +55,21 @@ const TaskList: React.FC = React.memo(() => {
               </div>
             </div>
             {taskListOpen ? (
-              <div className=" mt-6">
-                <CategoryTab />
-                <div className=" flex">
-                  <ScheduleTab />
-                  <div className="px-5 py-2 w-[90%]">
-                    <InCompletedTaskList />
-                    <CompletedTaskList />
+              <>
+                <div>
+                  <MustOne />
+                </div>
+                <div className=" mt-6">
+                  <CategoryTab />
+                  <div className=" flex">
+                    <ScheduleTab />
+                    <div className="px-5 py-2 w-[90%]">
+                      <InCompletedTaskList />
+                      <CompletedTaskList />
+                    </div>
                   </div>
                 </div>
-              </div>
+              </>
             ) : (
               ""
             )}

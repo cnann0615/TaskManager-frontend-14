@@ -7,6 +7,7 @@ import { tabCategoryContext, tabScheduleContext } from "../TaskList";
 import { TaskItem } from "../../../@types";
 import { switchInCompletedThunk } from "../../../slices/completedTaskSlice";
 import {
+  mustTaskContext,
   showTaskDetailContext,
   showTaskDetailEditingContext,
   taskDetailOpenContext,
@@ -22,6 +23,8 @@ const CompletedTaskList: React.FC = React.memo(() => {
   // タブカテゴリとタブスケジュール管理Stateの値を取得
   const { tabCategory } = useContext(tabCategoryContext);
   const { tabSchedule } = useContext(tabScheduleContext);
+  // マストタスクStateを取得
+  const { mustTask, setMustTask } = useContext(mustTaskContext);
 
   // リストに表示するタスクをtabCategoryとtabScheduleの値で絞って抽出（パターン）
 
@@ -72,6 +75,17 @@ const CompletedTaskList: React.FC = React.memo(() => {
   const handleSwitchInCompleted = async (task: TaskItem) => {
     try {
       dispatch(switchInCompletedThunk(task));
+      // マストタスクのカテゴリを動的に更新
+      if (mustTask) {
+        let updateMustTask = { ...mustTask };
+        if (mustTask.id === task.id) {
+          updateMustTask = {
+            ...mustTask,
+            isCompleted: false,
+          };
+        }
+        setMustTask(updateMustTask);
+      }
     } catch (error) {
       console.error("Error switching task to incomplete: ", error);
       alert("タスクの未完了への切り替え中にエラーが発生しました。");

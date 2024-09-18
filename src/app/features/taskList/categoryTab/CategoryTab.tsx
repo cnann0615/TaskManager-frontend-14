@@ -11,7 +11,7 @@ import {
   updateCategoryThunk,
 } from "../../../slices/categorySlice";
 import taskApi from "../../../api/task";
-import { showTaskDetailContext } from "../../../Main";
+import { mustTaskContext, showTaskDetailContext } from "../../../Main";
 import {
   inCompletedTaskDelete,
   inCompletedTaskUpdateCategory,
@@ -33,6 +33,9 @@ const CategoryTab: React.FC = React.memo(() => {
     (state) => state.inCompletedTaskItems
   );
   const completedTaskItems = useSelector((state) => state.completedTaskItems);
+
+  // マストタスクStateを取得
+  const { mustTask, setMustTask } = useContext(mustTaskContext);
 
   // タブカテゴリ管理State（どのタブが選択されているかを管理）
   const { tabCategory, setTabCategory } = useContext(tabCategoryContext);
@@ -118,6 +121,22 @@ const CategoryTab: React.FC = React.memo(() => {
           }
           setShowTaskDetail(updateShowTaskDetail);
         }
+        // マストタスクのカテゴリを動的に更新
+        if (mustTask) {
+          let updateMustTask = { ...mustTask };
+          // 更新したカテゴリが詳細表示対象のタスクのカテゴリだった場合、カテゴリ名を動的に更新する
+          if (mustTask.category.id === updateCategory.id) {
+            updateMustTask = {
+              ...mustTask,
+              category: {
+                id: updateCategory.id,
+                name: updateCategory.name,
+                orderIndex: updateCategory.orderIndex!,
+              },
+            };
+          }
+          setMustTask(updateMustTask);
+        }
 
         // 変更されたカテゴリが割り当てられた未完了タスクRedux Stateを動的に更新
         dispatch(inCompletedTaskUpdateCategory(updateCategory));
@@ -181,6 +200,10 @@ const CategoryTab: React.FC = React.memo(() => {
         ) {
           setShowTaskDetail(null);
         }
+        // マストタスクに割り当てられている場合、マストタスクをnullにする。
+        if (mustTask?.category.id === deleteCategory.id) {
+          setMustTask(null);
+        }
 
         // DB,Redux Stateから削除
         dispatch(deleteCategoryThunk(deleteCategory));
@@ -200,7 +223,7 @@ const CategoryTab: React.FC = React.memo(() => {
         >
           ＜
         </button>
-        <span className=" text-gray-700">Tab</span>
+        <span className=" text-gray-700 border-b-2 border-teal-300">Tab</span>
         <button
           className=" text-gray-400 hover:text-black ml-3"
           onClick={() => handlePageChange("next")}
