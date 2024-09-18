@@ -4,6 +4,7 @@ import { BiDetail } from "react-icons/bi";
 import { MdOutlineExpandLess, MdOutlineExpandMore } from "react-icons/md";
 
 import {
+  mustTaskContext,
   showTaskDetailContext,
   showTaskDetailEditingContext,
   taskDetailOpenContext,
@@ -32,6 +33,9 @@ const TaskDetail = React.memo(() => {
   const { taskDetailOpen, setTaskDetailOpen } = useContext(
     taskDetailOpenContext
   );
+  // マストタスクStateを取得
+  const { mustTask, setMustTask } = useContext(mustTaskContext);
+
   // カテゴリとスケジュールRedux Stateを取得
   const categories = useSelector((state) => state.categories);
   const schedules = useSelector((state) => state.schedules);
@@ -87,6 +91,10 @@ const TaskDetail = React.memo(() => {
       }
       // 詳細表示タスクStateの更新
       setShowTaskDetail(updatedDetail);
+      // マストタスクStateの更新
+      if (mustTask?.id === updatedDetail.id) {
+        setMustTask(updatedDetail);
+      }
       // 編集状態のトグル
       toggleEditOff(field);
       // DBと未完了or完了タスクRedux Stateに保存
@@ -110,6 +118,10 @@ const TaskDetail = React.memo(() => {
           ? dispatch(deleteCompletedTaskItemThunk(showTaskDetail))
           : dispatch(deleteInCompletedTaskItemThunk(showTaskDetail));
         setShowTaskDetail(null);
+        // マストタスクStateの削除
+        if (mustTask?.id === showTaskDetail.id) {
+          setMustTask(null);
+        }
       }
     } catch (error) {
       console.error("Error deleting task: ", error);
@@ -318,9 +330,16 @@ const TaskDetail = React.memo(() => {
                 </tr>
               </tbody>
             </table>
-            {/* 詳細表示タスクがある時のみ、削除ボタンを表示 */}
+            {/* 詳細表示タスクがある時のみ、削除ボタンとマストタスクボタンを表示 */}
             {showTaskDetail ? (
               <div className=" flex justify-end">
+                <button
+                  type="submit"
+                  className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold rounded focus:outline-none focus:shadow-outline py-2 px-4"
+                  onClick={() => setMustTask(showTaskDetail)}
+                >
+                  Must1！
+                </button>
                 <button
                   type="submit"
                   className="bg-red-500 hover:bg-red-700 text-white font-bold rounded focus:outline-none focus:shadow-outline py-2 px-4"

@@ -11,7 +11,7 @@ import {
   updateScheduleThunk,
 } from "../../../slices/scheduleSlice";
 import taskApi from "../../../api/task";
-import { showTaskDetailContext } from "../../../Main";
+import { mustTaskContext, showTaskDetailContext } from "../../../Main";
 import {
   inCompletedTaskDelete,
   inCompletedTaskUpdateSchedule,
@@ -32,6 +32,9 @@ const ScheduleTab: React.FC = React.memo(() => {
     (state) => state.inCompletedTaskItems
   );
   const completedTaskItems = useSelector((state) => state.completedTaskItems);
+
+  // マストタスクStateを取得
+  const { mustTask, setMustTask } = useContext(mustTaskContext);
 
   // タブスケジュール管理State（どのタブが選択されているかを管理）
   const { tabSchedule, setTabSchedule } = useContext(tabScheduleContext);
@@ -91,6 +94,22 @@ const ScheduleTab: React.FC = React.memo(() => {
             };
           }
           setShowTaskDetail(updateShowTaskDetail);
+        }
+        // マストタスクのスケジュールを動的に更新
+        if (mustTask) {
+          let updateMustTask = { ...mustTask };
+          // 更新したスケジュールが詳細表示対象のタスクのスケジュールだった場合、スケジュール名を動的に更新する
+          if (mustTask.schedule.id === updateSchedule.id) {
+            updateMustTask = {
+              ...mustTask,
+              schedule: {
+                id: updateSchedule.id,
+                name: updateSchedule.name,
+                orderIndex: updateSchedule.orderIndex!,
+              },
+            };
+          }
+          setMustTask(updateMustTask);
         }
 
         // 変更されたスケジュールが割り当てられた未完了タスクRedux Stateを動的に更新
@@ -152,6 +171,10 @@ const ScheduleTab: React.FC = React.memo(() => {
           showTaskDetail.schedule.id === deleteSchedule.id
         ) {
           setShowTaskDetail(null);
+        }
+        // マストタスクに割り当てられている場合、マストタスクをnullにする。
+        if (mustTask?.schedule.id === deleteSchedule.id) {
+          setMustTask(null);
         }
 
         // DB,Redux Stateから削除
