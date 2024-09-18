@@ -33,7 +33,7 @@ const MustOne = () => {
     <div className="mt-7 ml-10 mr-[7%]">
       <div className="flex items-center">
         <Image src={"/mustOne.png"} alt={"mustOne"} width={30} height={30} />
-        <h1 className="font-bold text-xl ml-1">Today's Must 1 !</h1>
+        <h1 className="font-bold text-xl ml-1">Today&apos;s Must 1 !</h1>
       </div>
       {mustTask === null ? (
         <p className="px-2 py-3">No Task</p>
