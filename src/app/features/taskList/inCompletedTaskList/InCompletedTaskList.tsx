@@ -53,7 +53,9 @@ const InCompletedTaskList: React.FC = React.memo(() => {
         );
 
   // タスク詳細表示処理
-  const { setShowTaskDetail } = useContext(showTaskDetailContext);
+  const { showTaskDetail, setShowTaskDetail } = useContext(
+    showTaskDetailContext
+  );
   // 詳細表示対象タスク編集状態管理State
   const { showTaskDetailEditing } = useContext(showTaskDetailEditingContext);
   // 詳細表示画面展開Stateを定義
@@ -85,6 +87,17 @@ const InCompletedTaskList: React.FC = React.memo(() => {
           };
         }
         setMustTask(updateMustTask);
+      }
+      // 詳細表示タスクのカテゴリを動的に更新
+      if (showTaskDetail) {
+        let updateShowTaskDetail = { ...showTaskDetail };
+        if (showTaskDetail.id === task.id) {
+          updateShowTaskDetail = {
+            ...showTaskDetail,
+            isCompleted: true,
+          };
+        }
+        setShowTaskDetail(updateShowTaskDetail);
       }
     } catch (error) {
       console.error("Error switching task to completed: ", error);

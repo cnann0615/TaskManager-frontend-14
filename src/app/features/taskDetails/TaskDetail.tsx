@@ -117,8 +117,9 @@ const TaskDetail = React.memo(() => {
         showTaskDetail!.isCompleted
           ? dispatch(deleteCompletedTaskItemThunk(showTaskDetail))
           : dispatch(deleteInCompletedTaskItemThunk(showTaskDetail));
+        // 詳細表示タスクStateをnullにする
         setShowTaskDetail(null);
-        // マストタスクStateの削除
+        // マストタスクStateをnullにする
         if (mustTask?.id === showTaskDetail.id) {
           setMustTask(null);
         }
